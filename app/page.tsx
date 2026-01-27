@@ -6,6 +6,7 @@ import SplashScreen from './components/SplashScreen';
 import Onboarding from './components/Onboarding';
 import Walkthrough from './components/ui/Walkthrough';
 import Tooltip from './components/ui/Tooltip';
+import HelpButton from './components/ui/HelpButton';
 import { Icons } from './components/Icons';
 import { PROMPT_TEMPLATES, TEMPLATE_CATEGORIES } from './components/PromptTemplates';
 import { DASHBOARD_WALKTHROUGH, TOOLTIPS } from './data/walkthrough-steps';
@@ -364,6 +365,11 @@ export default function Home() {
           onComplete={() => setShowWalkthrough(false)}
           storageKey="promptforge-dashboard-tour"
         />
+
+        {/* Help Button */}
+        {!showWalkthrough && !showOnboarding && (
+          <HelpButton onClick={handleShowHelp} label="Help" />
+        )}
       </main>
     </>
   );
