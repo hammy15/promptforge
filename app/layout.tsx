@@ -5,7 +5,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Prompt',
+  title: 'PromptForge App',
   description: 'Build, test, and optimize AI prompts with 24 powerful features',
   icons: {
     icon: '/favicon.ico',
