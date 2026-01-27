@@ -92,9 +92,9 @@ const EXPORT_FORMATS = [
 
 // Model recommendations based on complexity
 const MODEL_RECOMMENDATIONS = {
-  beginner: { model: 'claude-3-haiku-20240307', reason: 'Fast and cost-effective for simple tasks' },
+  beginner: { model: 'claude-3-5-haiku-20241022', reason: 'Fast and cost-effective for simple tasks' },
   intermediate: { model: 'claude-sonnet-4-20250514', reason: 'Balanced performance for standard analysis' },
-  advanced: { model: 'claude-opus-4-20250514', reason: 'Maximum capability for complex financial modeling' },
+  advanced: { model: 'claude-opus-4-5-20250514', reason: 'Maximum capability for complex financial modeling' },
 };
 
 function Playground() {
