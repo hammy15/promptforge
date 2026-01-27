@@ -11,6 +11,9 @@ import { detectPII, redactPII, detectInjection, getInjectionRiskLevel } from '@/
 import { extractVariables, substituteVariables } from '@/features/variable-system';
 import { calculateCost, MODEL_PRICING } from '@/features/cost-calculator';
 import AIAgentHelper from '../components/AIAgentHelper';
+import Walkthrough from '../components/ui/Walkthrough';
+import HelpButton from '../components/ui/HelpButton';
+import { PLAYGROUND_WALKTHROUGH } from '../data/walkthrough-steps';
 
 // Loading fallback component
 function PlaygroundLoading() {
@@ -133,6 +136,7 @@ function Playground() {
   const [history, setHistory] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState('claude-sonnet-4-20250514');
   const [showAgentHelper, setShowAgentHelper] = useState(false);
+  const [showWalkthrough, setShowWalkthrough] = useState(false);
 
   // Handle URL parameters for direct template access
   useEffect(() => {
@@ -156,6 +160,15 @@ function Playground() {
     const saved = localStorage.getItem('promptforge-history');
     if (saved) {
       setHistory(JSON.parse(saved));
+    }
+  }, []);
+
+  // Check if user has seen walkthrough
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem('promptforge-playground-tour');
+    if (!hasSeenTour) {
+      const timer = setTimeout(() => setShowWalkthrough(true), 500);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -429,7 +442,7 @@ function Playground() {
 
             {/* Mode Toggle */}
             <div className="flex items-center gap-4">
-              <div className="flex bg-[#0f2137] rounded-xl p-1 border border-[#1e3a5f]">
+              <div className="flex bg-[#0f2137] rounded-xl p-1 border border-[#1e3a5f]" data-tour="mode-toggle">
                 <button
                   onClick={() => setMode('simple')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
@@ -680,7 +693,7 @@ function Playground() {
               {currentStep === 'customize' && (
                 <div className="grid lg:grid-cols-2 gap-6">
                   {/* Left: Variables or Editor */}
-                  <div className="space-y-4">
+                  <div className="space-y-4" data-tour="variables-panel">
                     <div className="flex items-center justify-between">
                       <h2 className="text-xl font-bold text-white">
                         {selectedTemplate ? 'Financial Details' : 'Write Your Prompt'}
@@ -727,6 +740,7 @@ function Playground() {
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         className="input h-64 resize-none font-mono text-sm"
+                        data-tour="prompt-editor"
                         placeholder="Write your financial analysis prompt here...
 
 Tips for finance prompts:
@@ -758,7 +772,7 @@ Tips for finance prompts:
                   </div>
 
                   {/* Right: Preview */}
-                  <div className="space-y-4">
+                  <div className="space-y-4" data-tour="output-panel">
                     <div className="flex items-center justify-between">
                       <h2 className="text-xl font-bold text-white">Live Preview</h2>
                       <div className="flex items-center gap-2 text-sm text-[#64748b]">
@@ -969,6 +983,7 @@ Tips for finance prompts:
                       </span>
                       <button
                         onClick={handleCopy}
+                        data-tour="run-button"
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
                           copied ? 'bg-[#059669] text-white' : 'bg-[rgba(212,168,83,0.2)] text-[#d4a853] hover:bg-[rgba(212,168,83,0.3)]'
                         }`}
@@ -1072,6 +1087,20 @@ Tips for finance prompts:
             )}
           </div>
         </div>
+      )}
+
+      {/* Walkthrough */}
+      <Walkthrough
+        steps={PLAYGROUND_WALKTHROUGH}
+        isOpen={showWalkthrough}
+        onClose={() => setShowWalkthrough(false)}
+        onComplete={() => setShowWalkthrough(false)}
+        storageKey="promptforge-playground-tour"
+      />
+
+      {/* Help Button */}
+      {!showWalkthrough && (
+        <HelpButton onClick={() => setShowWalkthrough(true)} label="Help" />
       )}
     </div>
   );
@@ -1237,6 +1266,7 @@ function ExpertMode({
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
               className="bg-[#0f2137] border border-[#1e3a5f] rounded-lg px-3 py-2 text-sm text-white"
+              data-tour="model-selector"
             >
               {MODEL_PRICING.map((m) => (
                 <option key={m.id} value={m.id}>{m.name}</option>
@@ -1258,6 +1288,7 @@ function ExpertMode({
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           className="input h-96 resize-none font-mono text-sm"
+          data-tour="prompt-editor"
           placeholder="Enter your financial analysis prompt here...
 
 Expert tips:
@@ -1317,7 +1348,7 @@ Expert tips:
       </div>
 
       {/* Features Panel */}
-      <div className="space-y-4">
+      <div className="space-y-4" data-tour="variables-panel">
         <h2 className="text-xl font-bold text-white">Tools</h2>
 
         <div className="space-y-3">

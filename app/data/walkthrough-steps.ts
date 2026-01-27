@@ -34,42 +34,36 @@ export const BUILDER_WALKTHROUGH: WalkthroughStep[] = [
 export const PLAYGROUND_WALKTHROUGH: WalkthroughStep[] = [
   {
     title: 'Welcome to the Playground!',
-    content: 'This is where you can test and refine your prompts. You can write prompts, run them against AI models, and see the results instantly.',
+    content: 'This is where you can build and customize financial analysis prompts. Choose from templates or write your own, then copy them for use with any AI assistant.',
     position: 'center',
   },
   {
-    target: '[data-tour="prompt-editor"]',
-    title: 'Prompt Editor',
-    content: 'Write or paste your prompt here. This is what you\'ll send to the AI. The editor shows character count and estimates token usage.',
-    position: 'right',
-  },
-  {
-    target: '[data-tour="model-selector"]',
-    title: 'Choose Your Model',
-    content: 'Select which AI model to use. Different models have different strengths - some are faster, some are better at coding, some are better at creative writing.',
+    target: '[data-tour="mode-toggle"]',
+    title: 'Simple vs Expert Mode',
+    content: 'Simple mode guides you through templates step-by-step. Expert mode gives you full control with advanced tools for compression, security scanning, and more.',
     position: 'bottom',
   },
   {
     target: '[data-tour="variables-panel"]',
-    title: 'Variables',
-    content: 'Add variables to make your prompts reusable. Use {{variable_name}} in your prompt, and fill in different values each time you run it.',
+    title: 'Fill in the Details',
+    content: 'Customize your prompt by filling in variables like company names, dates, and financial metrics. Use {{variable}} syntax to create reusable templates.',
+    position: 'left',
+  },
+  {
+    target: '[data-tour="output-panel"]',
+    title: 'Live Preview',
+    content: 'See your prompt update in real-time as you make changes. The preview shows exactly what you\'ll copy to use with your AI assistant.',
     position: 'left',
   },
   {
     target: '[data-tour="run-button"]',
-    title: 'Run Your Prompt',
-    content: 'Click this button to send your prompt to the AI. The response will appear in the output panel. You can also use Cmd/Ctrl + Enter.',
+    title: 'Copy Your Prompt',
+    content: 'When you\'re happy with your prompt, click Copy to save it to your clipboard. Then paste it into Claude, ChatGPT, or any other AI assistant.',
     position: 'bottom',
   },
   {
-    target: '[data-tour="output-panel"]',
-    title: 'AI Response',
-    content: 'See the AI\'s response here. You can copy it, regenerate with different settings, or tweak your prompt and try again.',
-    position: 'left',
-  },
-  {
     title: 'You\'re Ready!',
-    content: 'That\'s everything you need to know. Start experimenting with different prompts and models. The more you practice, the better your prompts will become!',
+    content: 'Start by selecting an industry and template in Simple mode, or switch to Expert mode to write prompts from scratch. Click the help button anytime to see this tour again.',
     position: 'center',
   },
 ];
