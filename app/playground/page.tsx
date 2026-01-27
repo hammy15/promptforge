@@ -10,6 +10,7 @@ import { compressPrompt } from '@/features/smart-compression';
 import { detectPII, redactPII, detectInjection, getInjectionRiskLevel } from '@/features/security';
 import { extractVariables, substituteVariables } from '@/features/variable-system';
 import { calculateCost, MODEL_PRICING } from '@/features/cost-calculator';
+import AIAgentHelper from '../components/AIAgentHelper';
 
 // Loading fallback component
 function PlaygroundLoading() {
@@ -131,6 +132,7 @@ function Playground() {
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState('claude-sonnet-4-20250514');
+  const [showAgentHelper, setShowAgentHelper] = useState(false);
 
   // Handle URL parameters for direct template access
   useEffect(() => {
@@ -452,6 +454,13 @@ function Playground() {
                 </button>
               </div>
 
+              <button
+                onClick={() => setShowAgentHelper(!showAgentHelper)}
+                className={`p-2 transition-colors ${showAgentHelper ? 'text-[#d4a853]' : 'text-[#64748b] hover:text-[#d4a853]'}`}
+                title="AI Assistant"
+              >
+                <Icons.bot className="w-5 h-5" />
+              </button>
               <button
                 onClick={() => setShowHistory(!showHistory)}
                 className="p-2 text-[#64748b] hover:text-[#d4a853] transition-colors"
@@ -1430,6 +1439,13 @@ Expert tips:
           </p>
         </div>
       </div>
+
+      {/* AI Agent Helper */}
+      <AIAgentHelper
+        isOpen={showAgentHelper}
+        onClose={() => setShowAgentHelper(false)}
+        currentPrompt={prompt}
+      />
     </div>
   );
 }

@@ -85,15 +85,15 @@ export default function Home() {
               <Link href="/" className="px-4 py-2 text-white font-medium rounded-lg bg-[rgba(212,168,83,0.1)]">
                 Dashboard
               </Link>
+              <Link href="/prompts" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                Prompts
+              </Link>
+              <Link href="/prompts/create" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                Create
+              </Link>
               <Link href="/playground" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
                 Builder
               </Link>
-              <button className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
-                Library
-              </button>
-              <button className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
-                Research
-              </button>
             </div>
           </div>
 
