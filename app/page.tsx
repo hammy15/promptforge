@@ -85,14 +85,14 @@ export default function Home() {
               <Link href="/" className="px-4 py-2 text-white font-medium rounded-lg bg-[rgba(212,168,83,0.1)]">
                 Dashboard
               </Link>
-              <Link href="/prompts" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
-                Prompts
+              <Link href="/builder" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                Prompt Builder
               </Link>
-              <Link href="/prompts/create" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
-                Create
+              <Link href="/prompts" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                My Prompts
               </Link>
               <Link href="/playground" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
-                Builder
+                Playground
               </Link>
             </div>
           </div>
@@ -295,18 +295,18 @@ export default function Home() {
           <div className="mt-8 card card-gold p-8 bg-gradient-navy-gold">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">Ready to build?</h2>
+                <h2 className="text-2xl font-bold text-white mb-2">Build powerful prompts in 4 simple steps</h2>
                 <p className="text-[#94a3b8]">
-                  Create custom prompts or use our expert-crafted templates.
+                  Create prompts for Claude Code, ChatGPT, Gemini, or Grok - no prompt engineering experience needed.
                 </p>
               </div>
               <div className="flex gap-4">
-                <Link href="/playground" className="btn-primary">
-                  Open Builder
+                <Link href="/builder" className="btn-primary">
+                  Start Building
                   <Icons.arrowRight className="w-4 h-4 ml-2" />
                 </Link>
-                <Link href="/playground?mode=expert" className="btn-secondary">
-                  Expert Mode
+                <Link href="/playground" className="btn-secondary">
+                  Playground
                 </Link>
               </div>
             </div>
