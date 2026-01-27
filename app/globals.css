@@ -3,15 +3,50 @@
 @tailwind utilities;
 
 :root {
+  /* Primary: Deep Navy (professional, trustworthy) */
+  --navy-400: #627d98;
+  --navy-500: #486581;
+  --navy-600: #334e68;
+  --navy-700: #243b53;
+  --navy-800: #1a2f44;
+  --navy-900: #102a43;
+  --navy-950: #0a1929;
+
+  /* Accent: Refined Gold (premium, success) */
+  --gold-400: #f0c674;
+  --gold-500: #d4a853;
+  --gold-600: #b8953f;
+  --gold-700: #9c7f2e;
+
+  /* Secondary: Teal (growth, positive) */
+  --teal-400: #2dd4bf;
+  --teal-500: #14b8a6;
+  --teal-600: #0d9488;
+
+  /* Financial Semantics */
+  --profit: #059669;
+  --profit-light: #10b981;
+  --loss: #dc2626;
+  --loss-light: #ef4444;
+  --neutral: #6b7280;
+
+  /* Surfaces - Professional Dark */
+  --bg-dark: #0a1929;
+  --bg-card: #0f2137;
+  --bg-elevated: #162a45;
+  --bg-surface: #1a3352;
+  --border: #1e3a5f;
+  --border-light: #2d4a6f;
+
+  /* Text */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Legacy teal mapping for compatibility */
   --primary: #14b8a6;
   --primary-light: #2dd4bf;
   --primary-dark: #0d9488;
-  --bg-dark: #0a0a0f;
-  --bg-card: #12121a;
-  --bg-elevated: #1a1a24;
-  --border: #2a2a3a;
-  --text-primary: #f0f0f5;
-  --text-secondary: #8888a0;
 }
 
 * {
@@ -24,32 +59,59 @@ body {
   color: var(--text-primary);
 }
 
-/* Neumorphic shadows */
+/* Tabular numbers for financial data */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.font-mono-finance {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Professional Neumorphic shadows */
 .neu-shadow {
   box-shadow:
-    8px 8px 16px rgba(0, 0, 0, 0.4),
-    -4px -4px 12px rgba(255, 255, 255, 0.03);
+    8px 8px 20px rgba(0, 0, 0, 0.5),
+    -4px -4px 16px rgba(255, 255, 255, 0.02);
 }
 
 .neu-shadow-sm {
   box-shadow:
-    4px 4px 8px rgba(0, 0, 0, 0.3),
-    -2px -2px 6px rgba(255, 255, 255, 0.02);
+    4px 4px 10px rgba(0, 0, 0, 0.4),
+    -2px -2px 8px rgba(255, 255, 255, 0.02);
 }
 
 .neu-inset {
   box-shadow:
-    inset 4px 4px 8px rgba(0, 0, 0, 0.4),
-    inset -2px -2px 6px rgba(255, 255, 255, 0.02);
+    inset 4px 4px 10px rgba(0, 0, 0, 0.5),
+    inset -2px -2px 8px rgba(255, 255, 255, 0.01);
 }
 
-/* Glow effects */
+/* Professional glow effects */
+.glow-navy {
+  box-shadow: 0 0 20px rgba(72, 101, 129, 0.3);
+}
+
+.glow-gold {
+  box-shadow: 0 0 20px rgba(212, 168, 83, 0.3);
+}
+
+.glow-gold-lg {
+  box-shadow: 0 0 40px rgba(212, 168, 83, 0.4);
+}
+
 .glow-teal {
   box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
 }
 
-.glow-teal-lg {
-  box-shadow: 0 0 40px rgba(20, 184, 166, 0.4);
+.glow-profit {
+  box-shadow: 0 0 15px rgba(5, 150, 105, 0.3);
+}
+
+.glow-loss {
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
 }
 
 /* Animations */
@@ -93,6 +155,16 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
+@keyframes chartDraw {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .animate-fade-in { animation: fadeIn 0.5s ease-out; }
 .animate-fade-out { animation: fadeOut 0.5s ease-out forwards; }
 .animate-slide-up { animation: slideUp 0.5s ease-out; }
@@ -101,19 +173,33 @@ body {
 .animate-float { animation: float 3s ease-in-out infinite; }
 .animate-spin-slow { animation: spin 3s linear infinite; }
 .animate-scale-in { animation: scaleIn 0.3s ease-out; }
+.animate-chart-draw { animation: chartDraw 1s ease-out forwards; }
+.animate-count-up { animation: countUp 0.4s ease-out; }
 
-/* Gradient backgrounds */
+/* Professional gradient backgrounds */
 .bg-gradient-radial {
-  background: radial-gradient(ellipse at center, rgba(20, 184, 166, 0.1) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(72, 101, 129, 0.1) 0%, transparent 70%);
 }
 
 .bg-gradient-mesh {
   background:
-    radial-gradient(at 40% 20%, rgba(20, 184, 166, 0.15) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(45, 212, 191, 0.1) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(20, 184, 166, 0.1) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, rgba(13, 148, 136, 0.1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(20, 184, 166, 0.1) 0px, transparent 50%);
+    radial-gradient(at 40% 20%, rgba(72, 101, 129, 0.15) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(212, 168, 83, 0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(72, 101, 129, 0.1) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(20, 184, 166, 0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(72, 101, 129, 0.1) 0px, transparent 50%);
+}
+
+.bg-gradient-finance {
+  background: linear-gradient(135deg, var(--navy-950) 0%, var(--navy-900) 50%, var(--navy-800) 100%);
+}
+
+.bg-gradient-gold {
+  background: linear-gradient(135deg, var(--gold-600) 0%, var(--gold-500) 50%, var(--gold-400) 100%);
+}
+
+.bg-gradient-navy-gold {
+  background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 60%, rgba(212, 168, 83, 0.2) 100%);
 }
 
 /* Custom scrollbar */
@@ -132,36 +218,185 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
+  background: var(--navy-600);
 }
 
-/* Button styles */
+/* Button styles - Primary Gold */
 .btn-primary {
-  @apply px-6 py-3 bg-teal-500 hover:bg-teal-400 text-gray-900 font-semibold rounded-xl transition-all duration-200;
-  box-shadow: 0 4px 14px rgba(20, 184, 166, 0.4);
+  @apply px-6 py-3 font-semibold rounded-xl transition-all duration-200;
+  background: linear-gradient(135deg, var(--gold-500) 0%, var(--gold-600) 100%);
+  color: var(--navy-950);
+  box-shadow: 0 4px 14px rgba(212, 168, 83, 0.3);
 }
 
 .btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(212, 168, 83, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Button styles - Secondary */
+.btn-secondary {
+  @apply px-6 py-3 bg-transparent font-medium rounded-xl transition-all duration-200;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold-500);
+  color: var(--gold-400);
+}
+
+/* Button styles - Teal (for positive actions) */
+.btn-teal {
+  @apply px-6 py-3 font-semibold rounded-xl transition-all duration-200;
+  background: linear-gradient(135deg, var(--teal-500) 0%, var(--teal-600) 100%);
+  color: var(--navy-950);
+  box-shadow: 0 4px 14px rgba(20, 184, 166, 0.3);
+}
+
+.btn-teal:hover {
   box-shadow: 0 6px 20px rgba(20, 184, 166, 0.5);
   transform: translateY(-1px);
 }
 
-.btn-secondary {
-  @apply px-6 py-3 bg-transparent border border-gray-700 hover:border-teal-500 text-gray-300 hover:text-teal-400 font-medium rounded-xl transition-all duration-200;
-}
-
 /* Card styles */
 .card {
-  @apply bg-[#12121a] border border-[#2a2a3a] rounded-2xl;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
 }
 
 .card-elevated {
-  @apply bg-[#1a1a24] border border-[#2a2a3a] rounded-2xl;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+}
+
+.card-gold {
+  background: var(--bg-card);
+  border: 1px solid rgba(212, 168, 83, 0.3);
+  border-radius: 1rem;
+}
+
+.card:hover {
+  border-color: var(--border-light);
 }
 
 /* Input styles */
 .input {
-  @apply w-full p-4 bg-[#0a0a0f] border border-[#2a2a3a] rounded-xl text-white placeholder-gray-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500/30 transition-all duration-200;
+  @apply w-full p-4 rounded-xl transition-all duration-200;
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  border-color: var(--gold-500);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.1);
+}
+
+/* Financial data display */
+.metric-positive {
+  color: var(--profit-light);
+}
+
+.metric-negative {
+  color: var(--loss-light);
+}
+
+.metric-neutral {
+  color: var(--text-secondary);
+}
+
+.metric-highlight {
+  color: var(--gold-400);
+}
+
+/* Badge styles */
+.badge {
+  @apply px-2 py-1 text-xs font-medium rounded-full;
+}
+
+.badge-gold {
+  background: rgba(212, 168, 83, 0.15);
+  color: var(--gold-400);
+  border: 1px solid rgba(212, 168, 83, 0.3);
+}
+
+.badge-navy {
+  background: rgba(72, 101, 129, 0.15);
+  color: var(--navy-400);
+  border: 1px solid rgba(72, 101, 129, 0.3);
+}
+
+.badge-teal {
+  background: rgba(20, 184, 166, 0.15);
+  color: var(--teal-400);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+}
+
+.badge-profit {
+  background: rgba(5, 150, 105, 0.15);
+  color: var(--profit-light);
+  border: 1px solid rgba(5, 150, 105, 0.3);
+}
+
+.badge-loss {
+  background: rgba(220, 38, 38, 0.15);
+  color: var(--loss-light);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+/* Difficulty badges */
+.badge-beginner {
+  background: rgba(5, 150, 105, 0.15);
+  color: #10b981;
+}
+
+.badge-intermediate {
+  background: rgba(212, 168, 83, 0.15);
+  color: var(--gold-400);
+}
+
+.badge-advanced {
+  background: rgba(220, 38, 38, 0.15);
+  color: #f87171;
+}
+
+/* Output format badges */
+.badge-excel {
+  background: rgba(34, 139, 34, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 139, 34, 0.3);
+}
+
+.badge-powerpoint {
+  background: rgba(234, 88, 12, 0.15);
+  color: #fb923c;
+  border: 1px solid rgba(234, 88, 12, 0.3);
+}
+
+.badge-pdf {
+  background: rgba(220, 38, 38, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.badge-memo {
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.3);
 }
 
 /* Tooltip arrow */
@@ -174,4 +409,89 @@ body {
   border-right: none;
   border-bottom: none;
   transform: rotate(45deg);
+}
+
+/* Finance-specific table styles */
+.finance-table {
+  @apply w-full text-sm;
+  font-variant-numeric: tabular-nums;
+}
+
+.finance-table th {
+  @apply text-left py-3 px-4 font-medium;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.finance-table td {
+  @apply py-3 px-4;
+  border-bottom: 1px solid var(--border);
+}
+
+.finance-table tr:hover td {
+  background: rgba(72, 101, 129, 0.1);
+}
+
+/* KPI Card */
+.kpi-card {
+  @apply p-4 rounded-xl;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+
+.kpi-card-highlight {
+  border-color: rgba(212, 168, 83, 0.3);
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 168, 83, 0.05) 100%);
+}
+
+/* Progress indicator */
+.progress-bar {
+  @apply h-2 rounded-full overflow-hidden;
+  background: var(--bg-dark);
+}
+
+.progress-bar-fill {
+  @apply h-full rounded-full transition-all duration-500;
+  background: linear-gradient(90deg, var(--gold-600) 0%, var(--gold-400) 100%);
+}
+
+.progress-bar-teal .progress-bar-fill {
+  background: linear-gradient(90deg, var(--teal-600) 0%, var(--teal-400) 100%);
+}
+
+/* Sparkline styles */
+.sparkline {
+  stroke: var(--gold-500);
+  stroke-width: 2;
+  fill: none;
+}
+
+.sparkline-area {
+  fill: rgba(212, 168, 83, 0.1);
+}
+
+/* Category colors for finance templates */
+.category-financial-analysis {
+  --category-color: var(--gold-500);
+  --category-bg: rgba(212, 168, 83, 0.1);
+}
+
+.category-investment-research {
+  --category-color: var(--teal-500);
+  --category-bg: rgba(20, 184, 166, 0.1);
+}
+
+.category-strategy-planning {
+  --category-color: #8b5cf6;
+  --category-bg: rgba(139, 92, 246, 0.1);
+}
+
+.category-ma-deal-work {
+  --category-color: #f97316;
+  --category-bg: rgba(249, 115, 22, 0.1);
+}
+
+.category-professional-reporting {
+  --category-color: var(--navy-400);
+  --category-bg: rgba(72, 101, 129, 0.1);
 }

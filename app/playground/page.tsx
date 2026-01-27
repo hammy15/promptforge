@@ -2,28 +2,97 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { Icon } from '../components/Icons';
+import { useSearchParams } from 'next/navigation';
+import { Icons, Icon } from '../components/Icons';
 import { Tooltip, HelpTooltip } from '../components/Tooltip';
-import { PROMPT_TEMPLATES, TEMPLATE_CATEGORIES, PromptTemplate } from '../components/PromptTemplates';
+import { PROMPT_TEMPLATES, TEMPLATE_CATEGORIES, PromptTemplate, getTemplatesByCategory } from '../components/PromptTemplates';
 import { compressPrompt } from '@/features/smart-compression';
 import { detectPII, redactPII, detectInjection, getInjectionRiskLevel } from '@/features/security';
 import { extractVariables, substituteVariables } from '@/features/variable-system';
 import { calculateCost, MODEL_PRICING } from '@/features/cost-calculator';
 
 type Mode = 'simple' | 'expert';
-type Step = 'template' | 'customize' | 'optimize' | 'export';
+type Step = 'industry' | 'template' | 'customize' | 'review' | 'export';
+
+// Industry/use-case options for finance professionals
+const INDUSTRY_OPTIONS = [
+  {
+    id: 'ma',
+    name: 'M&A & Deal Work',
+    description: 'Investment memos, term sheets, due diligence',
+    icon: 'handshake',
+    color: '#d4a853',
+    categories: ['ma'],
+  },
+  {
+    id: 'research',
+    name: 'Investment Research',
+    description: 'Due diligence, competitive intel, sector analysis',
+    icon: 'search',
+    color: '#14b8a6',
+    categories: ['research'],
+  },
+  {
+    id: 'strategy',
+    name: 'Strategy & Planning',
+    description: 'SWOT analysis, business plans, OKRs',
+    icon: 'target',
+    color: '#8b5cf6',
+    categories: ['strategy'],
+  },
+  {
+    id: 'reporting',
+    name: 'Professional Reporting',
+    description: 'Board decks, investor updates, executive summaries',
+    icon: 'presentation',
+    color: '#f97316',
+    categories: ['reporting'],
+  },
+  {
+    id: 'analysis',
+    name: 'Financial Analysis',
+    description: 'DCF, comps, earnings analysis, sensitivity',
+    icon: 'chart',
+    color: '#059669',
+    categories: ['analysis'],
+  },
+];
+
+// Export format options
+const EXPORT_FORMATS = [
+  { id: 'copy', name: 'Copy to Clipboard', icon: 'copy', description: 'Copy prompt text' },
+  { id: 'excel', name: 'Excel-Ready', icon: 'spreadsheet', description: 'Formatted for spreadsheets' },
+  { id: 'powerpoint', name: 'PowerPoint-Ready', icon: 'presentation', description: 'Slide-friendly format' },
+  { id: 'memo', name: 'Memo Format', icon: 'document', description: 'Professional document' },
+  { id: 'pdf', name: 'PDF Export', icon: 'documentChart', description: 'Download as PDF' },
+];
+
+// Model recommendations based on complexity
+const MODEL_RECOMMENDATIONS = {
+  beginner: { model: 'claude-3-haiku-20240307', reason: 'Fast and cost-effective for simple tasks' },
+  intermediate: { model: 'claude-sonnet-4-20250514', reason: 'Balanced performance for standard analysis' },
+  advanced: { model: 'claude-opus-4-20250514', reason: 'Maximum capability for complex financial modeling' },
+};
 
 export default function Playground() {
+  const searchParams = useSearchParams();
+
   // Core state
   const [mode, setMode] = useState<Mode>('simple');
-  const [currentStep, setCurrentStep] = useState<Step>('template');
+  const [currentStep, setCurrentStep] = useState<Step>('industry');
   const [prompt, setPrompt] = useState('');
   const [originalPrompt, setOriginalPrompt] = useState('');
 
-  // Template state
+  // Industry & Template state
+  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<PromptTemplate | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [variableValues, setVariableValues] = useState<Record<string, string>>({});
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Export state
+  const [selectedExportFormat, setSelectedExportFormat] = useState('copy');
+  const [auditMode, setAuditMode] = useState(false);
 
   // Analysis state
   const [analysisResults, setAnalysisResults] = useState<{
@@ -39,6 +108,23 @@ export default function Playground() {
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState('claude-sonnet-4-20250514');
+
+  // Handle URL parameters for direct template access
+  useEffect(() => {
+    const templateId = searchParams.get('template');
+    const modeParam = searchParams.get('mode');
+
+    if (modeParam === 'expert') {
+      setMode('expert');
+    }
+
+    if (templateId) {
+      const template = PROMPT_TEMPLATES.find(t => t.id === templateId);
+      if (template) {
+        handleSelectTemplate(template);
+      }
+    }
+  }, [searchParams]);
 
   // Load history from localStorage
   useEffect(() => {
@@ -68,6 +154,26 @@ export default function Playground() {
     }
   }, [prompt, selectedModel]);
 
+  // Update model recommendation based on template difficulty
+  useEffect(() => {
+    if (selectedTemplate) {
+      const recommendation = MODEL_RECOMMENDATIONS[selectedTemplate.difficulty];
+      if (recommendation) {
+        setSelectedModel(recommendation.model);
+      }
+    }
+  }, [selectedTemplate]);
+
+  // Handle industry selection
+  const handleSelectIndustry = (industryId: string) => {
+    setSelectedIndustry(industryId);
+    const industry = INDUSTRY_OPTIONS.find(i => i.id === industryId);
+    if (industry && industry.categories.length > 0) {
+      setSelectedCategory(industry.categories[0]);
+    }
+    setCurrentStep('template');
+  };
+
   // Handle template selection
   const handleSelectTemplate = (template: PromptTemplate) => {
     setSelectedTemplate(template);
@@ -95,9 +201,34 @@ export default function Playground() {
     return substituteVariables(selectedTemplate.prompt, variableValues);
   }, [selectedTemplate, variableValues, prompt]);
 
+  // Format prompt for export
+  const formatPromptForExport = (format: string) => {
+    const finalPrompt = mode === 'simple' ? generatePrompt() : prompt;
+
+    switch (format) {
+      case 'excel':
+        // Add markdown table formatting hints
+        return `=== EXCEL-READY FORMAT ===\n\n${finalPrompt}\n\n=== OUTPUT INSTRUCTIONS ===\nPlease format all numerical data in tables with:\n- Column headers in Row 1\n- Currency values with $ symbol and 2 decimal places\n- Percentages with % symbol and 1 decimal place\n- Dates in YYYY-MM-DD format`;
+
+      case 'powerpoint':
+        // Add slide-friendly formatting
+        return `=== PRESENTATION FORMAT ===\n\n${finalPrompt}\n\n=== OUTPUT INSTRUCTIONS ===\nPlease format output as:\n- Bullet points (max 5-7 per section)\n- Clear section headers\n- Key metrics highlighted\n- Executive summary at the top`;
+
+      case 'memo':
+        // Professional memo format
+        const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        return `=== MEMO FORMAT ===\nDate: ${today}\nRe: ${selectedTemplate?.name || 'Analysis'}\n\n${finalPrompt}\n\n=== OUTPUT INSTRUCTIONS ===\nPlease structure the response as a professional memo with:\n- Executive Summary\n- Key Findings\n- Detailed Analysis\n- Recommendations\n- Appendix (if applicable)`;
+
+      case 'pdf':
+      case 'copy':
+      default:
+        return finalPrompt;
+    }
+  };
+
   // Copy to clipboard
   const handleCopy = async () => {
-    const finalPrompt = mode === 'simple' ? generatePrompt() : prompt;
+    const finalPrompt = formatPromptForExport(selectedExportFormat);
     await navigator.clipboard.writeText(finalPrompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -106,6 +237,18 @@ export default function Playground() {
     const newHistory = [finalPrompt, ...history.slice(0, 9)];
     setHistory(newHistory);
     localStorage.setItem('promptforge-history', JSON.stringify(newHistory));
+
+    // Log audit trail if enabled
+    if (auditMode) {
+      const auditEntry = {
+        timestamp: new Date().toISOString(),
+        template: selectedTemplate?.name || 'Custom',
+        format: selectedExportFormat,
+        tokens: analysisResults?.tokens || 0,
+        cost: analysisResults?.cost || 0,
+      };
+      console.log('Audit Log:', auditEntry);
+    }
   };
 
   // Optimize prompt
@@ -113,7 +256,6 @@ export default function Playground() {
     const currentPrompt = mode === 'simple' ? generatePrompt() : prompt;
     const result = compressPrompt(currentPrompt, { aggressiveness: 'medium' });
     setPrompt(result.compressed);
-    setCurrentStep('export');
   };
 
   // Security scan
@@ -123,40 +265,138 @@ export default function Playground() {
     setPrompt(redacted);
   };
 
-  // Get templates for current category
-  const filteredTemplates = selectedCategory === 'all'
-    ? PROMPT_TEMPLATES
-    : PROMPT_TEMPLATES.filter(t => t.category === selectedCategory);
+  // Get templates for current category/industry
+  const filteredTemplates = PROMPT_TEMPLATES.filter(t => {
+    const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory;
+    const matchesSearch = searchQuery === '' ||
+      t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      t.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   // Steps for simple mode
-  const steps: { id: Step; name: string; icon: keyof typeof Icon }[] = [
-    { id: 'template', name: 'Choose Template', icon: 'template' },
-    { id: 'customize', name: 'Customize', icon: 'wand' },
-    { id: 'optimize', name: 'Optimize', icon: 'bolt' },
+  const steps: { id: Step; name: string; icon: keyof typeof Icons }[] = [
+    { id: 'industry', name: 'Industry', icon: 'building' },
+    { id: 'template', name: 'Template', icon: 'documentChart' },
+    { id: 'customize', name: 'Details', icon: 'wand' },
+    { id: 'review', name: 'Review', icon: 'eye' },
     { id: 'export', name: 'Export', icon: 'download' },
   ];
 
   const currentStepIndex = steps.findIndex(s => s.id === currentStep);
 
+  // Render variable input based on type
+  const renderVariableInput = (variable: { name: string; description: string; default: string; type?: string }) => {
+    const type = variable.type || 'text';
+    const commonClasses = "input";
+
+    switch (type) {
+      case 'currency':
+        return (
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]">$</span>
+            <input
+              type="text"
+              value={variableValues[variable.name] || ''}
+              onChange={(e) => handleVariableChange(variable.name, e.target.value)}
+              className={`${commonClasses} pl-8 tabular-nums`}
+              placeholder={variable.default || '0.00'}
+            />
+          </div>
+        );
+
+      case 'percentage':
+        return (
+          <div className="relative">
+            <input
+              type="text"
+              value={variableValues[variable.name] || ''}
+              onChange={(e) => handleVariableChange(variable.name, e.target.value)}
+              className={`${commonClasses} pr-8 tabular-nums`}
+              placeholder={variable.default || '0'}
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748b]">%</span>
+          </div>
+        );
+
+      case 'number':
+        return (
+          <input
+            type="number"
+            value={variableValues[variable.name] || ''}
+            onChange={(e) => handleVariableChange(variable.name, e.target.value)}
+            className={`${commonClasses} tabular-nums`}
+            placeholder={variable.default || '0'}
+          />
+        );
+
+      case 'date':
+        return (
+          <input
+            type="date"
+            value={variableValues[variable.name] || ''}
+            onChange={(e) => handleVariableChange(variable.name, e.target.value)}
+            className={commonClasses}
+          />
+        );
+
+      case 'select':
+        const options = variable.default.split(',').map(o => o.trim());
+        return (
+          <select
+            value={variableValues[variable.name] || options[0]}
+            onChange={(e) => handleVariableChange(variable.name, e.target.value)}
+            className={commonClasses}
+          >
+            {options.map(opt => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
+        );
+
+      case 'textarea':
+        return (
+          <textarea
+            value={variableValues[variable.name] || ''}
+            onChange={(e) => handleVariableChange(variable.name, e.target.value)}
+            className={`${commonClasses} h-32 resize-none font-mono text-sm`}
+            placeholder={variable.description}
+          />
+        );
+
+      default:
+        return (
+          <input
+            type="text"
+            value={variableValues[variable.name] || ''}
+            onChange={(e) => handleVariableChange(variable.name, e.target.value)}
+            className={commonClasses}
+            placeholder={variable.default || variable.description}
+          />
+        );
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[#0a1929]">
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-mesh pointer-events-none opacity-30" />
 
       {/* Header */}
-      <header className="relative z-10 border-b border-gray-800/50">
+      <header className="relative z-10 border-b border-[#1e3a5f]">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center">
-                <Icon name="sparkles" className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center">
+                <Icons.chart className="w-6 h-6 text-[#0a1929]" />
               </div>
               <div>
                 <span className="text-xl font-bold">
-                  <span className="text-teal-400">Prompt</span>Forge
+                  <span className="text-[#d4a853]">Prompt</span>
+                  <span className="text-white">Forge</span>
                 </span>
-                <span className="ml-2 text-xs px-2 py-0.5 bg-teal-500/20 text-teal-400 rounded-full">
+                <span className="ml-2 text-xs px-2 py-0.5 bg-[rgba(212,168,83,0.2)] text-[#d4a853] rounded-full">
                   {mode === 'simple' ? 'Simple' : 'Expert'}
                 </span>
               </div>
@@ -164,36 +404,36 @@ export default function Playground() {
 
             {/* Mode Toggle */}
             <div className="flex items-center gap-4">
-              <div className="flex bg-gray-800/50 rounded-xl p-1">
+              <div className="flex bg-[#0f2137] rounded-xl p-1 border border-[#1e3a5f]">
                 <button
                   onClick={() => setMode('simple')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     mode === 'simple'
-                      ? 'bg-teal-500 text-gray-900'
-                      : 'text-gray-400 hover:text-white'
+                      ? 'bg-[#d4a853] text-[#0a1929]'
+                      : 'text-[#94a3b8] hover:text-white'
                   }`}
                 >
-                  <Icon name="wand" className="w-4 h-4 inline mr-2" />
+                  <Icons.wand className="w-4 h-4 inline mr-2" />
                   Simple
                 </button>
                 <button
                   onClick={() => setMode('expert')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     mode === 'expert'
-                      ? 'bg-teal-500 text-gray-900'
-                      : 'text-gray-400 hover:text-white'
+                      ? 'bg-[#d4a853] text-[#0a1929]'
+                      : 'text-[#94a3b8] hover:text-white'
                   }`}
                 >
-                  <Icon name="beaker" className="w-4 h-4 inline mr-2" />
+                  <Icons.beaker className="w-4 h-4 inline mr-2" />
                   Expert
                 </button>
               </div>
 
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="p-2 text-gray-500 hover:text-teal-400 transition-colors"
+                className="p-2 text-[#64748b] hover:text-[#d4a853] transition-colors"
               >
-                <Icon name="history" className="w-5 h-5" />
+                <Icons.history className="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -205,58 +445,136 @@ export default function Playground() {
         {mode === 'simple' && (
           <div className="space-y-8">
             {/* Progress Steps */}
-            <div className="flex items-center justify-center gap-2">
-              {steps.map((step, index) => (
-                <div key={step.id} className="flex items-center">
-                  <button
-                    onClick={() => index <= currentStepIndex && setCurrentStep(step.id)}
-                    disabled={index > currentStepIndex}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-                      step.id === currentStep
-                        ? 'bg-teal-500 text-gray-900'
-                        : index < currentStepIndex
-                        ? 'bg-teal-500/20 text-teal-400 hover:bg-teal-500/30'
-                        : 'bg-gray-800/50 text-gray-500'
-                    }`}
-                  >
-                    <span className="w-6 h-6 rounded-full bg-current/20 flex items-center justify-center text-sm">
-                      {index + 1}
-                    </span>
-                    <span className="hidden sm:inline">{step.name}</span>
-                  </button>
-                  {index < steps.length - 1 && (
-                    <Icon name="chevronRight" className="w-4 h-4 text-gray-600 mx-2" />
-                  )}
-                </div>
-              ))}
+            <div className="flex items-center justify-center gap-2 overflow-x-auto pb-2">
+              {steps.map((step, index) => {
+                const StepIcon = Icons[step.icon];
+                return (
+                  <div key={step.id} className="flex items-center">
+                    <button
+                      onClick={() => index <= currentStepIndex && setCurrentStep(step.id)}
+                      disabled={index > currentStepIndex}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+                        step.id === currentStep
+                          ? 'bg-[#d4a853] text-[#0a1929]'
+                          : index < currentStepIndex
+                          ? 'bg-[rgba(212,168,83,0.2)] text-[#d4a853] hover:bg-[rgba(212,168,83,0.3)]'
+                          : 'bg-[#0f2137] text-[#64748b] border border-[#1e3a5f]'
+                      }`}
+                    >
+                      <span className="w-6 h-6 rounded-full bg-current/20 flex items-center justify-center text-sm">
+                        {index + 1}
+                      </span>
+                      <span className="hidden sm:inline">{step.name}</span>
+                    </button>
+                    {index < steps.length - 1 && (
+                      <Icons.chevronRight className="w-4 h-4 text-[#334155] mx-2" />
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Step Content */}
             <div className="animate-fade-in">
-              {/* Step 1: Template Selection */}
+              {/* Step 1: Industry Selection */}
+              {currentStep === 'industry' && (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <h2 className="text-2xl font-bold text-white mb-2">Select Your Domain</h2>
+                    <p className="text-[#94a3b8]">Choose your primary use case to see relevant templates</p>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                    {INDUSTRY_OPTIONS.map((industry) => {
+                      const IndustryIcon = Icons[industry.icon as keyof typeof Icons];
+                      return (
+                        <button
+                          key={industry.id}
+                          onClick={() => handleSelectIndustry(industry.id)}
+                          className="card p-6 text-left hover:border-[#d4a853] transition-all group"
+                        >
+                          <div className="flex items-start gap-4">
+                            <div
+                              className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0"
+                              style={{ background: `${industry.color}20` }}
+                            >
+                              {IndustryIcon && <IndustryIcon className="w-7 h-7" style={{ color: industry.color }} />}
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors">
+                                {industry.name}
+                              </h3>
+                              <p className="text-sm text-[#64748b] mt-1">{industry.description}</p>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+
+                    {/* Browse All */}
+                    <button
+                      onClick={() => {
+                        setSelectedIndustry(null);
+                        setSelectedCategory('all');
+                        setCurrentStep('template');
+                      }}
+                      className="card p-6 text-left hover:border-[#d4a853] transition-all group border-dashed"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-14 h-14 rounded-xl border-2 border-dashed border-[#334155] flex items-center justify-center">
+                          <Icons.search className="w-7 h-7 text-[#64748b]" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors">
+                            Browse All Templates
+                          </h3>
+                          <p className="text-sm text-[#64748b] mt-1">View all 18 finance templates</p>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 2: Template Selection */}
               {currentStep === 'template' && (
                 <div className="space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold mb-2">Choose a Template</h2>
-                    <p className="text-gray-500">Start with a pre-built prompt or create from scratch</p>
+                    <h2 className="text-2xl font-bold text-white mb-2">Choose a Template</h2>
+                    <p className="text-[#94a3b8]">Select a financial analysis template or start from scratch</p>
                   </div>
 
-                  {/* Categories */}
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {TEMPLATE_CATEGORIES.map(cat => (
-                      <button
-                        key={cat.id}
-                        onClick={() => setSelectedCategory(cat.id)}
-                        className={`px-4 py-2 rounded-xl text-sm transition-all ${
-                          selectedCategory === cat.id
-                            ? 'bg-teal-500 text-gray-900'
-                            : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800'
-                        }`}
-                      >
-                        <span className="mr-2">{cat.icon}</span>
-                        {cat.name}
-                      </button>
-                    ))}
+                  {/* Search & Categories */}
+                  <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+                    {/* Categories */}
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {TEMPLATE_CATEGORIES.map(cat => (
+                        <button
+                          key={cat.id}
+                          onClick={() => setSelectedCategory(cat.id)}
+                          className={`px-4 py-2 rounded-xl text-sm transition-all ${
+                            selectedCategory === cat.id
+                              ? 'bg-[rgba(212,168,83,0.15)] text-[#d4a853] border border-[rgba(212,168,83,0.3)]'
+                              : 'bg-[#0f2137] text-[#94a3b8] hover:text-white border border-[#1e3a5f]'
+                          }`}
+                        >
+                          <span className="mr-2">{cat.icon}</span>
+                          {cat.name}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Search */}
+                    <div className="relative">
+                      <Icons.search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748b]" />
+                      <input
+                        type="text"
+                        placeholder="Search templates..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10 pr-4 py-2 bg-[#0f2137] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none w-64"
+                      />
+                    </div>
                   </div>
 
                   {/* Template Grid */}
@@ -265,23 +583,25 @@ export default function Playground() {
                       <button
                         key={template.id}
                         onClick={() => handleSelectTemplate(template)}
-                        className="card p-5 text-left hover:border-teal-500/50 transition-all group"
+                        className="card p-5 text-left hover:border-[#d4a853] transition-all group"
                       >
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-cyan-500/20 flex items-center justify-center text-2xl">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center text-2xl shrink-0">
                             {template.icon}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold group-hover:text-teal-400 transition-colors">
+                            <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors truncate">
                               {template.name}
                             </h3>
-                            <p className="text-sm text-gray-500 mt-1">{template.description}</p>
+                            <p className="text-sm text-[#64748b] mt-1 line-clamp-2">{template.description}</p>
                             <div className="flex flex-wrap gap-1 mt-2">
-                              {template.tags.slice(0, 2).map(tag => (
-                                <span key={tag} className="text-xs px-2 py-0.5 bg-gray-800 text-gray-400 rounded">
-                                  {tag}
-                                </span>
-                              ))}
+                              <span className={`badge badge-${template.difficulty}`}>
+                                {template.difficulty}
+                              </span>
+                              <span className="text-xs text-[#64748b]">{template.estimatedTime}</span>
+                              {template.outputFormats.includes('excel') && (
+                                <span className="badge badge-excel text-xs">Excel</span>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -295,60 +615,78 @@ export default function Playground() {
                         setPrompt('');
                         setCurrentStep('customize');
                       }}
-                      className="card p-5 text-left hover:border-teal-500/50 transition-all group border-dashed"
+                      className="card p-5 text-left hover:border-[#d4a853] transition-all group border-dashed"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl border-2 border-dashed border-gray-700 flex items-center justify-center">
-                          <Icon name="plus" className="w-6 h-6 text-gray-500" />
+                        <div className="w-12 h-12 rounded-xl border-2 border-dashed border-[#334155] flex items-center justify-center">
+                          <Icons.plus className="w-6 h-6 text-[#64748b]" />
                         </div>
                         <div>
-                          <h3 className="font-semibold group-hover:text-teal-400 transition-colors">
+                          <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors">
                             Start from Scratch
                           </h3>
-                          <p className="text-sm text-gray-500 mt-1">Write your own prompt</p>
+                          <p className="text-sm text-[#64748b] mt-1">Write your own prompt</p>
                         </div>
                       </div>
+                    </button>
+                  </div>
+
+                  {/* Back button */}
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => setCurrentStep('industry')}
+                      className="btn-secondary"
+                    >
+                      <Icons.arrowLeft className="w-4 h-4 inline mr-2" />
+                      Back to Industry Selection
                     </button>
                   </div>
                 </div>
               )}
 
-              {/* Step 2: Customize */}
+              {/* Step 3: Customize */}
               {currentStep === 'customize' && (
                 <div className="grid lg:grid-cols-2 gap-6">
                   {/* Left: Variables or Editor */}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-xl font-bold">
-                        {selectedTemplate ? 'Fill in the Details' : 'Write Your Prompt'}
+                      <h2 className="text-xl font-bold text-white">
+                        {selectedTemplate ? 'Financial Details' : 'Write Your Prompt'}
                       </h2>
-                      <HelpTooltip content="Fill in each field to customize your prompt. Use descriptive values for best results." />
+                      <HelpTooltip content="Fill in each field to customize your financial analysis prompt." />
                     </div>
 
                     {selectedTemplate ? (
                       <div className="space-y-4">
+                        {/* Template info card */}
+                        <div className="card p-4 bg-[rgba(212,168,83,0.1)] border-[rgba(212,168,83,0.2)]">
+                          <div className="flex items-center gap-3">
+                            <span className="text-2xl">{selectedTemplate.icon}</span>
+                            <div>
+                              <h3 className="font-semibold text-white">{selectedTemplate.name}</h3>
+                              <div className="flex gap-2 mt-1">
+                                <span className={`badge badge-${selectedTemplate.difficulty}`}>
+                                  {selectedTemplate.difficulty}
+                                </span>
+                                <span className="text-xs text-[#94a3b8]">{selectedTemplate.estimatedTime}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Variable inputs */}
                         {selectedTemplate.variables.map(variable => (
                           <div key={variable.name} className="space-y-2">
-                            <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
-                              <span className="text-teal-400">{`{{${variable.name}}}`}</span>
+                            <label className="flex items-center gap-2 text-sm font-medium text-[#94a3b8]">
+                              <span className="text-[#d4a853]">{`{{${variable.name}}}`}</span>
+                              {variable.type && (
+                                <span className="text-xs px-1.5 py-0.5 bg-[#1e3a5f] rounded text-[#64748b]">
+                                  {variable.type}
+                                </span>
+                              )}
                               <HelpTooltip content={variable.description} />
                             </label>
-                            {variable.name === 'content' || variable.name === 'code' || variable.name === 'raw_notes' ? (
-                              <textarea
-                                value={variableValues[variable.name] || ''}
-                                onChange={(e) => handleVariableChange(variable.name, e.target.value)}
-                                className="input h-32 resize-none font-mono text-sm"
-                                placeholder={variable.description}
-                              />
-                            ) : (
-                              <input
-                                type="text"
-                                value={variableValues[variable.name] || ''}
-                                onChange={(e) => handleVariableChange(variable.name, e.target.value)}
-                                className="input"
-                                placeholder={variable.default || variable.description}
-                              />
-                            )}
+                            {renderVariableInput(variable)}
                           </div>
                         ))}
                       </div>
@@ -357,38 +695,48 @@ export default function Playground() {
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         className="input h-64 resize-none font-mono text-sm"
-                        placeholder="Write your prompt here...
+                        placeholder="Write your financial analysis prompt here...
 
-Tips:
-• Be specific about what you want
-• Include context and constraints
+Tips for finance prompts:
+• Specify the company/asset being analyzed
+• Include relevant financial metrics
+• Define the analysis timeframe
 • Use {{variables}} for dynamic content
-• Add examples if helpful"
+• Request specific output formats (tables, charts)"
                       />
                     )}
 
-                    <button
-                      onClick={() => setCurrentStep('optimize')}
-                      disabled={selectedTemplate ? Object.values(variableValues).some(v => !v) : !prompt}
-                      className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Continue to Optimize
-                      <Icon name="arrowRight" className="w-4 h-4 inline ml-2" />
-                    </button>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setCurrentStep('template')}
+                        className="btn-secondary flex-1"
+                      >
+                        <Icons.arrowLeft className="w-4 h-4 inline mr-2" />
+                        Back
+                      </button>
+                      <button
+                        onClick={() => setCurrentStep('review')}
+                        disabled={selectedTemplate ? Object.values(variableValues).some(v => !v) : !prompt}
+                        className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Continue to Review
+                        <Icons.arrowRight className="w-4 h-4 inline ml-2" />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Right: Preview */}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-xl font-bold">Live Preview</h2>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <Icon name="eye" className="w-4 h-4" />
+                      <h2 className="text-xl font-bold text-white">Live Preview</h2>
+                      <div className="flex items-center gap-2 text-sm text-[#64748b]">
+                        <Icons.eye className="w-4 h-4" />
                         Updates as you type
                       </div>
                     </div>
 
                     <div className="card p-6 min-h-[300px]">
-                      <pre className="whitespace-pre-wrap text-sm text-gray-300 font-mono">
+                      <pre className="whitespace-pre-wrap text-sm text-[#94a3b8] font-mono">
                         {selectedTemplate ? generatePrompt() : prompt || 'Your prompt will appear here...'}
                       </pre>
                     </div>
@@ -397,52 +745,65 @@ Tips:
                     {analysisResults && (
                       <div className="grid grid-cols-2 gap-4">
                         <div className="card p-4 text-center">
-                          <div className="text-2xl font-bold text-teal-400">{analysisResults.tokens}</div>
-                          <div className="text-xs text-gray-500">Tokens</div>
+                          <div className="text-2xl font-bold text-[#d4a853] tabular-nums">{analysisResults.tokens}</div>
+                          <div className="text-xs text-[#64748b]">Tokens</div>
                         </div>
                         <div className="card p-4 text-center">
-                          <div className="text-2xl font-bold text-white">${analysisResults.cost.toFixed(4)}</div>
-                          <div className="text-xs text-gray-500">Est. Cost</div>
+                          <div className="text-2xl font-bold text-white tabular-nums">${analysisResults.cost.toFixed(4)}</div>
+                          <div className="text-xs text-[#64748b]">Est. Cost</div>
                         </div>
+                      </div>
+                    )}
+
+                    {/* Model recommendation */}
+                    {selectedTemplate && (
+                      <div className="card p-4 bg-[rgba(20,184,166,0.1)] border-[rgba(20,184,166,0.2)]">
+                        <div className="flex items-center gap-2 text-[#14b8a6] mb-2">
+                          <Icons.lightbulb className="w-4 h-4" />
+                          <span className="text-sm font-medium">Recommended Model</span>
+                        </div>
+                        <p className="text-xs text-[#94a3b8]">
+                          {MODEL_RECOMMENDATIONS[selectedTemplate.difficulty].reason}
+                        </p>
                       </div>
                     )}
                   </div>
                 </div>
               )}
 
-              {/* Step 3: Optimize */}
-              {currentStep === 'optimize' && (
-                <div className="max-w-3xl mx-auto space-y-6">
+              {/* Step 4: Review */}
+              {currentStep === 'review' && (
+                <div className="max-w-4xl mx-auto space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold mb-2">Optimize Your Prompt</h2>
-                    <p className="text-gray-500">Review and enhance before using</p>
+                    <h2 className="text-2xl font-bold text-white mb-2">Review & Optimize</h2>
+                    <p className="text-[#94a3b8]">Review your prompt and apply optimizations</p>
                   </div>
 
                   {/* Analysis Cards */}
                   <div className="grid md:grid-cols-4 gap-4">
                     <div className="card p-4 text-center">
-                      <div className="text-3xl font-bold text-teal-400">{analysisResults?.tokens || 0}</div>
-                      <div className="text-sm text-gray-500">Tokens</div>
+                      <div className="text-3xl font-bold text-[#d4a853] tabular-nums">{analysisResults?.tokens || 0}</div>
+                      <div className="text-sm text-[#64748b]">Tokens</div>
                     </div>
                     <div className="card p-4 text-center">
-                      <div className="text-3xl font-bold text-green-400">{analysisResults?.compressionSavings || 0}%</div>
-                      <div className="text-sm text-gray-500">Can Save</div>
+                      <div className="text-3xl font-bold text-[#14b8a6] tabular-nums">{analysisResults?.compressionSavings || 0}%</div>
+                      <div className="text-sm text-[#64748b]">Can Save</div>
                     </div>
                     <div className="card p-4 text-center">
-                      <div className={`text-3xl font-bold ${analysisResults?.piiCount ? 'text-red-400' : 'text-green-400'}`}>
+                      <div className={`text-3xl font-bold tabular-nums ${analysisResults?.piiCount ? 'text-[#dc2626]' : 'text-[#059669]'}`}>
                         {analysisResults?.piiCount || 0}
                       </div>
-                      <div className="text-sm text-gray-500">PII Found</div>
+                      <div className="text-sm text-[#64748b]">PII Found</div>
                     </div>
                     <div className="card p-4 text-center">
                       <div className={`text-3xl font-bold capitalize ${
-                        analysisResults?.injectionRisk === 'none' ? 'text-green-400' :
-                        analysisResults?.injectionRisk === 'low' ? 'text-yellow-400' :
-                        'text-red-400'
+                        analysisResults?.injectionRisk === 'none' ? 'text-[#059669]' :
+                        analysisResults?.injectionRisk === 'low' ? 'text-[#d4a853]' :
+                        'text-[#dc2626]'
                       }`}>
                         {analysisResults?.injectionRisk || 'None'}
                       </div>
-                      <div className="text-sm text-gray-500">Risk Level</div>
+                      <div className="text-sm text-[#64748b]">Risk Level</div>
                     </div>
                   </div>
 
@@ -450,30 +811,30 @@ Tips:
                   <div className="grid md:grid-cols-2 gap-4">
                     <button
                       onClick={handleOptimize}
-                      className="card p-5 text-left hover:border-teal-500/50 transition-all group"
+                      className="card p-5 text-left hover:border-[#d4a853] transition-all group"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-400">
-                          <Icon name="compress" className="w-6 h-6" />
+                        <div className="w-12 h-12 rounded-xl bg-[rgba(212,168,83,0.2)] flex items-center justify-center text-[#d4a853]">
+                          <Icons.compress className="w-6 h-6" />
                         </div>
                         <div>
-                          <h3 className="font-semibold group-hover:text-teal-400">Compress Prompt</h3>
-                          <p className="text-sm text-gray-500">Remove filler words, save ~{analysisResults?.compressionSavings || 0}% tokens</p>
+                          <h3 className="font-semibold text-white group-hover:text-[#d4a853]">Compress Prompt</h3>
+                          <p className="text-sm text-[#64748b]">Remove filler words, save ~{analysisResults?.compressionSavings || 0}% tokens</p>
                         </div>
                       </div>
                     </button>
 
                     <button
                       onClick={handleSecurityScan}
-                      className="card p-5 text-left hover:border-teal-500/50 transition-all group"
+                      className="card p-5 text-left hover:border-[#d4a853] transition-all group"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
-                          <Icon name="shield" className="w-6 h-6" />
+                        <div className="w-12 h-12 rounded-xl bg-[rgba(220,38,38,0.2)] flex items-center justify-center text-[#dc2626]">
+                          <Icons.shield className="w-6 h-6" />
                         </div>
                         <div>
-                          <h3 className="font-semibold group-hover:text-teal-400">Redact PII</h3>
-                          <p className="text-sm text-gray-500">Remove {analysisResults?.piiCount || 0} sensitive items found</p>
+                          <h3 className="font-semibold text-white group-hover:text-[#d4a853]">Redact PII</h3>
+                          <p className="text-sm text-[#64748b]">Remove {analysisResults?.piiCount || 0} sensitive items found</p>
                         </div>
                       </div>
                     </button>
@@ -481,7 +842,19 @@ Tips:
 
                   {/* Preview */}
                   <div className="card p-6">
-                    <pre className="whitespace-pre-wrap text-sm text-gray-300 font-mono">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-sm text-[#64748b]">Prompt Preview</span>
+                      {selectedTemplate && (
+                        <div className="flex gap-2">
+                          {selectedTemplate.outputFormats.map(format => (
+                            <span key={format} className={`badge badge-${format} text-xs`}>
+                              {format.toUpperCase()}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <pre className="whitespace-pre-wrap text-sm text-[#94a3b8] font-mono max-h-64 overflow-auto">
                       {selectedTemplate ? generatePrompt() : prompt}
                     </pre>
                   </div>
@@ -491,7 +864,7 @@ Tips:
                       onClick={() => setCurrentStep('customize')}
                       className="btn-secondary flex-1"
                     >
-                      <Icon name="arrowLeft" className="w-4 h-4 inline mr-2" />
+                      <Icons.arrowLeft className="w-4 h-4 inline mr-2" />
                       Back
                     </button>
                     <button
@@ -499,66 +872,120 @@ Tips:
                       className="btn-primary flex-1"
                     >
                       Continue to Export
-                      <Icon name="arrowRight" className="w-4 h-4 inline ml-2" />
+                      <Icons.arrowRight className="w-4 h-4 inline ml-2" />
                     </button>
                   </div>
                 </div>
               )}
 
-              {/* Step 4: Export */}
+              {/* Step 5: Export */}
               {currentStep === 'export' && (
-                <div className="max-w-3xl mx-auto space-y-6">
+                <div className="max-w-4xl mx-auto space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold mb-2">Your Prompt is Ready!</h2>
-                    <p className="text-gray-500">Copy it or export in your preferred format</p>
+                    <h2 className="text-2xl font-bold text-white mb-2">Your Prompt is Ready!</h2>
+                    <p className="text-[#94a3b8]">Choose your export format and copy</p>
+                  </div>
+
+                  {/* Export Format Selection */}
+                  <div className="grid md:grid-cols-5 gap-3">
+                    {EXPORT_FORMATS.map(format => {
+                      const FormatIcon = Icons[format.icon as keyof typeof Icons];
+                      return (
+                        <button
+                          key={format.id}
+                          onClick={() => setSelectedExportFormat(format.id)}
+                          className={`card p-4 text-center transition-all ${
+                            selectedExportFormat === format.id
+                              ? 'border-[#d4a853] bg-[rgba(212,168,83,0.1)]'
+                              : 'hover:border-[#2d4a6f]'
+                          }`}
+                        >
+                          {FormatIcon && <FormatIcon className={`w-6 h-6 mx-auto mb-2 ${selectedExportFormat === format.id ? 'text-[#d4a853]' : 'text-[#64748b]'}`} />}
+                          <div className={`text-sm font-medium ${selectedExportFormat === format.id ? 'text-[#d4a853]' : 'text-white'}`}>
+                            {format.name}
+                          </div>
+                          <div className="text-xs text-[#64748b] mt-1">{format.description}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Audit Mode Toggle */}
+                  <div className="card p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Icons.documentChart className="w-5 h-5 text-[#64748b]" />
+                        <div>
+                          <div className="text-sm font-medium text-white">Audit Mode</div>
+                          <div className="text-xs text-[#64748b]">Log exports for compliance tracking</div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setAuditMode(!auditMode)}
+                        className={`w-12 h-6 rounded-full transition-colors ${auditMode ? 'bg-[#d4a853]' : 'bg-[#334155]'}`}
+                      >
+                        <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${auditMode ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Final Prompt */}
                   <div className="card p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm text-gray-500">Final Prompt</span>
+                      <span className="text-sm text-[#64748b]">
+                        {selectedExportFormat === 'copy' ? 'Final Prompt' : `${EXPORT_FORMATS.find(f => f.id === selectedExportFormat)?.name} Format`}
+                      </span>
                       <button
                         onClick={handleCopy}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                          copied ? 'bg-green-500 text-white' : 'bg-teal-500/20 text-teal-400 hover:bg-teal-500/30'
+                          copied ? 'bg-[#059669] text-white' : 'bg-[rgba(212,168,83,0.2)] text-[#d4a853] hover:bg-[rgba(212,168,83,0.3)]'
                         }`}
                       >
-                        <Icon name={copied ? 'check' : 'copy'} className="w-4 h-4" />
+                        <Icons.copy className="w-4 h-4" />
                         {copied ? 'Copied!' : 'Copy'}
                       </button>
                     </div>
-                    <pre className="whitespace-pre-wrap text-sm text-gray-300 font-mono max-h-64 overflow-auto">
-                      {selectedTemplate ? generatePrompt() : prompt}
+                    <pre className="whitespace-pre-wrap text-sm text-[#94a3b8] font-mono max-h-64 overflow-auto">
+                      {formatPromptForExport(selectedExportFormat)}
                     </pre>
                   </div>
 
                   {/* Stats Summary */}
                   <div className="grid grid-cols-3 gap-4">
                     <div className="card p-4 text-center">
-                      <div className="text-2xl font-bold text-teal-400">{analysisResults?.tokens || 0}</div>
-                      <div className="text-xs text-gray-500">Total Tokens</div>
+                      <div className="text-2xl font-bold text-[#d4a853] tabular-nums">{analysisResults?.tokens || 0}</div>
+                      <div className="text-xs text-[#64748b]">Total Tokens</div>
                     </div>
                     <div className="card p-4 text-center">
-                      <div className="text-2xl font-bold text-white">${analysisResults?.cost.toFixed(4) || '0.0000'}</div>
-                      <div className="text-xs text-gray-500">Estimated Cost</div>
+                      <div className="text-2xl font-bold text-white tabular-nums">${analysisResults?.cost.toFixed(4) || '0.0000'}</div>
+                      <div className="text-xs text-[#64748b]">Estimated Cost</div>
                     </div>
                     <div className="card p-4 text-center">
-                      <div className="text-2xl font-bold text-green-400">✓</div>
-                      <div className="text-xs text-gray-500">Security Checked</div>
+                      <div className="text-2xl font-bold text-[#059669]">✓</div>
+                      <div className="text-xs text-[#64748b]">Security Checked</div>
                     </div>
                   </div>
 
                   {/* Actions */}
                   <div className="flex gap-4">
                     <button
-                      onClick={() => {
-                        setCurrentStep('template');
-                        setSelectedTemplate(null);
-                        setPrompt('');
-                      }}
+                      onClick={() => setCurrentStep('review')}
                       className="btn-secondary flex-1"
                     >
-                      <Icon name="plus" className="w-4 h-4 inline mr-2" />
+                      <Icons.arrowLeft className="w-4 h-4 inline mr-2" />
+                      Back
+                    </button>
+                    <button
+                      onClick={() => {
+                        setCurrentStep('industry');
+                        setSelectedIndustry(null);
+                        setSelectedTemplate(null);
+                        setPrompt('');
+                        setVariableValues({});
+                      }}
+                      className="btn-primary flex-1"
+                    >
+                      <Icons.plus className="w-4 h-4 inline mr-2" />
                       Create Another
                     </button>
                   </div>
@@ -578,22 +1005,24 @@ Tips:
             analysisResults={analysisResults}
             onCopy={handleCopy}
             copied={copied}
+            auditMode={auditMode}
+            setAuditMode={setAuditMode}
           />
         )}
       </main>
 
       {/* History Panel */}
       {showHistory && (
-        <div className="fixed inset-y-0 right-0 w-80 bg-[#12121a] border-l border-gray-800 z-50 animate-slide-in">
-          <div className="p-4 border-b border-gray-800 flex items-center justify-between">
-            <h3 className="font-semibold">Recent Prompts</h3>
-            <button onClick={() => setShowHistory(false)} className="p-1 hover:text-teal-400">
-              <Icon name="x" className="w-5 h-5" />
+        <div className="fixed inset-y-0 right-0 w-80 bg-[#0f2137] border-l border-[#1e3a5f] z-50 animate-slide-in">
+          <div className="p-4 border-b border-[#1e3a5f] flex items-center justify-between">
+            <h3 className="font-semibold text-white">Recent Prompts</h3>
+            <button onClick={() => setShowHistory(false)} className="p-1 hover:text-[#d4a853]">
+              <Icons.x className="w-5 h-5" />
             </button>
           </div>
           <div className="p-4 space-y-3 overflow-auto max-h-[calc(100vh-64px)]">
             {history.length === 0 ? (
-              <p className="text-gray-500 text-sm">No prompts yet. Create one to get started!</p>
+              <p className="text-[#64748b] text-sm">No prompts yet. Create one to get started!</p>
             ) : (
               history.map((item, i) => (
                 <button
@@ -603,9 +1032,9 @@ Tips:
                     setShowHistory(false);
                     setMode('expert');
                   }}
-                  className="w-full p-3 card text-left hover:border-teal-500/50 transition-all"
+                  className="w-full p-3 card text-left hover:border-[#d4a853] transition-all"
                 >
-                  <p className="text-sm text-gray-300 line-clamp-3">{item}</p>
+                  <p className="text-sm text-[#94a3b8] line-clamp-3">{item}</p>
                 </button>
               ))
             )}
@@ -625,6 +1054,8 @@ function ExpertMode({
   analysisResults,
   onCopy,
   copied,
+  auditMode,
+  setAuditMode,
 }: {
   prompt: string;
   setPrompt: (p: string) => void;
@@ -633,9 +1064,12 @@ function ExpertMode({
   analysisResults: any;
   onCopy: () => void;
   copied: boolean;
+  auditMode: boolean;
+  setAuditMode: (v: boolean) => void;
 }) {
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
   const [compressionLevel, setCompressionLevel] = useState<'low' | 'medium' | 'high'>('medium');
+  const [outputFormat, setOutputFormat] = useState<'standard' | 'excel' | 'slides' | 'memo'>('standard');
   const [result, setResult] = useState<React.ReactNode>(null);
 
   const features = [
@@ -643,6 +1077,7 @@ function ExpertMode({
     { id: 'compress', name: 'Compress', icon: 'compress' as const, desc: 'Reduce tokens' },
     { id: 'security', name: 'Security', icon: 'shield' as const, desc: 'PII & injection' },
     { id: 'cost', name: 'Cost', icon: 'calculator' as const, desc: 'Token pricing' },
+    { id: 'format', name: 'Format', icon: 'spreadsheet' as const, desc: 'Output presets' },
   ];
 
   const handleFeatureAction = (featureId: string) => {
@@ -651,12 +1086,12 @@ function ExpertMode({
         const vars = extractVariables(prompt);
         setResult(
           <div className="space-y-3">
-            <p className="text-sm text-gray-400">Found {vars.length} variables:</p>
+            <p className="text-sm text-[#94a3b8]">Found {vars.length} variables:</p>
             {vars.map(v => (
               <div key={v.name} className="flex items-center gap-2 text-sm">
-                <code className="px-2 py-1 bg-teal-500/20 text-teal-300 rounded">{`{{${v.name}}}`}</code>
-                {v.defaultValue && <span className="text-gray-500">default: {v.defaultValue}</span>}
-                {v.type && <span className="text-gray-500">type: {v.type}</span>}
+                <code className="px-2 py-1 bg-[rgba(212,168,83,0.2)] text-[#d4a853] rounded">{`{{${v.name}}}`}</code>
+                {v.defaultValue && <span className="text-[#64748b]">default: {v.defaultValue}</span>}
+                {v.type && <span className="text-[#64748b]">type: {v.type}</span>}
               </div>
             ))}
           </div>
@@ -670,16 +1105,16 @@ function ExpertMode({
           <div className="space-y-3">
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
-                <div className="text-xl font-bold text-white">{compressed.originalTokens}</div>
-                <div className="text-xs text-gray-500">Original</div>
+                <div className="text-xl font-bold text-white tabular-nums">{compressed.originalTokens}</div>
+                <div className="text-xs text-[#64748b]">Original</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-teal-400">{compressed.compressedTokens}</div>
-                <div className="text-xs text-gray-500">Compressed</div>
+                <div className="text-xl font-bold text-[#d4a853] tabular-nums">{compressed.compressedTokens}</div>
+                <div className="text-xs text-[#64748b]">Compressed</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-green-400">{compressed.savings}%</div>
-                <div className="text-xs text-gray-500">Saved</div>
+                <div className="text-xl font-bold text-[#059669] tabular-nums">{compressed.savings}%</div>
+                <div className="text-xs text-[#64748b]">Saved</div>
               </div>
             </div>
           </div>
@@ -695,22 +1130,22 @@ function ExpertMode({
           <div className="space-y-3">
             <div className="flex items-center gap-4">
               <div>
-                <span className="text-sm text-gray-400">PII: </span>
-                <span className={`font-bold ${pii.length ? 'text-red-400' : 'text-green-400'}`}>
+                <span className="text-sm text-[#94a3b8]">PII: </span>
+                <span className={`font-bold ${pii.length ? 'text-[#dc2626]' : 'text-[#059669]'}`}>
                   {pii.length} found
                 </span>
               </div>
               <div>
-                <span className="text-sm text-gray-400">Risk: </span>
+                <span className="text-sm text-[#94a3b8]">Risk: </span>
                 <span className={`font-bold capitalize ${
-                  riskLevel === 'none' ? 'text-green-400' :
-                  riskLevel === 'low' ? 'text-yellow-400' : 'text-red-400'
+                  riskLevel === 'none' ? 'text-[#059669]' :
+                  riskLevel === 'low' ? 'text-[#d4a853]' : 'text-[#dc2626]'
                 }`}>
                   {riskLevel}
                 </span>
               </div>
             </div>
-            <p className="text-sm text-green-400">Prompt has been redacted.</p>
+            <p className="text-sm text-[#059669]">Prompt has been redacted.</p>
           </div>
         );
         break;
@@ -721,14 +1156,37 @@ function ExpertMode({
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div className="text-center">
-                <div className="text-xl font-bold text-teal-400">{cost.inputTokens}</div>
-                <div className="text-xs text-gray-500">Input Tokens</div>
+                <div className="text-xl font-bold text-[#d4a853] tabular-nums">{cost.inputTokens}</div>
+                <div className="text-xs text-[#64748b]">Input Tokens</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-white">${cost.totalCost.toFixed(4)}</div>
-                <div className="text-xs text-gray-500">Per Request</div>
+                <div className="text-xl font-bold text-white tabular-nums">${cost.totalCost.toFixed(4)}</div>
+                <div className="text-xs text-[#64748b]">Per Request</div>
               </div>
             </div>
+          </div>
+        );
+        break;
+      }
+      case 'format': {
+        let formatInstructions = '';
+        switch (outputFormat) {
+          case 'excel':
+            formatInstructions = '\n\n=== OUTPUT FORMAT: EXCEL ===\nPlease format all output as:\n- Tabular data with clear headers\n- Currency values: $X,XXX.XX\n- Percentages: X.X%\n- Dates: YYYY-MM-DD';
+            break;
+          case 'slides':
+            formatInstructions = '\n\n=== OUTPUT FORMAT: SLIDES ===\nPlease format all output as:\n- Bullet points (max 5 per section)\n- Clear section headers\n- Key metrics highlighted\n- Executive summary first';
+            break;
+          case 'memo':
+            formatInstructions = '\n\n=== OUTPUT FORMAT: MEMO ===\nPlease structure as:\n- Executive Summary\n- Key Findings\n- Detailed Analysis\n- Recommendations\n- Appendix';
+            break;
+        }
+        if (formatInstructions && !prompt.includes('OUTPUT FORMAT')) {
+          setPrompt(prompt + formatInstructions);
+        }
+        setResult(
+          <div className="text-sm text-[#059669]">
+            Output format instructions added to prompt.
           </div>
         );
         break;
@@ -741,12 +1199,12 @@ function ExpertMode({
       {/* Editor */}
       <div className="lg:col-span-2 space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">Prompt Editor</h2>
+          <h2 className="text-xl font-bold text-white">Prompt Editor</h2>
           <div className="flex items-center gap-2">
             <select
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm"
+              className="bg-[#0f2137] border border-[#1e3a5f] rounded-lg px-3 py-2 text-sm text-white"
             >
               {MODEL_PRICING.map((m) => (
                 <option key={m.id} value={m.id}>{m.name}</option>
@@ -755,10 +1213,10 @@ function ExpertMode({
             <button
               onClick={onCopy}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                copied ? 'bg-green-500 text-white' : 'bg-teal-500/20 text-teal-400 hover:bg-teal-500/30'
+                copied ? 'bg-[#059669] text-white' : 'bg-[rgba(212,168,83,0.2)] text-[#d4a853] hover:bg-[rgba(212,168,83,0.3)]'
               }`}
             >
-              <Icon name={copied ? 'check' : 'copy'} className="w-4 h-4" />
+              <Icons.copy className="w-4 h-4" />
               {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
@@ -768,137 +1226,184 @@ function ExpertMode({
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           className="input h-96 resize-none font-mono text-sm"
-          placeholder="Enter your prompt here...
+          placeholder="Enter your financial analysis prompt here...
 
 Expert tips:
 • Use {{variable:default|type}} for typed variables
-• Chain prompts with conditional logic
-• Test with different models for cost optimization
-• Enable compression for production use"
+• Supported types: text, currency, percentage, number, date, select
+• Add output format instructions for Excel/slides/memo
+• Enable audit mode for compliance tracking"
         />
 
         {/* Quick Stats Bar */}
         {analysisResults && (
           <div className="flex items-center gap-6 text-sm">
             <div className="flex items-center gap-2">
-              <span className="text-gray-500">Tokens:</span>
-              <span className="text-teal-400 font-medium">{analysisResults.tokens}</span>
+              <span className="text-[#64748b]">Tokens:</span>
+              <span className="text-[#d4a853] font-medium tabular-nums">{analysisResults.tokens}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-gray-500">Cost:</span>
-              <span className="text-white font-medium">${analysisResults.cost.toFixed(4)}</span>
+              <span className="text-[#64748b]">Cost:</span>
+              <span className="text-white font-medium tabular-nums">${analysisResults.cost.toFixed(4)}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-gray-500">PII:</span>
-              <span className={`font-medium ${analysisResults.piiCount ? 'text-red-400' : 'text-green-400'}`}>
+              <span className="text-[#64748b]">PII:</span>
+              <span className={`font-medium tabular-nums ${analysisResults.piiCount ? 'text-[#dc2626]' : 'text-[#059669]'}`}>
                 {analysisResults.piiCount}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-gray-500">Risk:</span>
+              <span className="text-[#64748b]">Risk:</span>
               <span className={`font-medium capitalize ${
-                analysisResults.injectionRisk === 'none' ? 'text-green-400' :
-                analysisResults.injectionRisk === 'low' ? 'text-yellow-400' : 'text-red-400'
+                analysisResults.injectionRisk === 'none' ? 'text-[#059669]' :
+                analysisResults.injectionRisk === 'low' ? 'text-[#d4a853]' : 'text-[#dc2626]'
               }`}>
                 {analysisResults.injectionRisk}
               </span>
             </div>
           </div>
         )}
+
+        {/* Audit Mode Toggle */}
+        <div className="card p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Icons.documentChart className="w-5 h-5 text-[#64748b]" />
+              <div>
+                <div className="text-sm font-medium text-white">Audit Mode</div>
+                <div className="text-xs text-[#64748b]">Log exports for compliance tracking</div>
+              </div>
+            </div>
+            <button
+              onClick={() => setAuditMode(!auditMode)}
+              className={`w-12 h-6 rounded-full transition-colors ${auditMode ? 'bg-[#d4a853]' : 'bg-[#334155]'}`}
+            >
+              <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${auditMode ? 'translate-x-6' : 'translate-x-0.5'}`} />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Features Panel */}
       <div className="space-y-4">
-        <h2 className="text-xl font-bold">Tools</h2>
+        <h2 className="text-xl font-bold text-white">Tools</h2>
 
         <div className="space-y-3">
-          {features.map((f) => (
-            <div key={f.id} className="card overflow-hidden">
-              <button
-                onClick={() => setActiveFeature(activeFeature === f.id ? null : f.id)}
-                className="w-full p-4 flex items-center justify-between hover:bg-gray-800/50 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-400">
-                    <Icon name={f.icon} className="w-5 h-5" />
+          {features.map((f) => {
+            const FeatureIcon = Icons[f.icon as keyof typeof Icons];
+            return (
+              <div key={f.id} className="card overflow-hidden">
+                <button
+                  onClick={() => setActiveFeature(activeFeature === f.id ? null : f.id)}
+                  className="w-full p-4 flex items-center justify-between hover:bg-[#162a45] transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-[rgba(212,168,83,0.2)] flex items-center justify-center text-[#d4a853]">
+                      {FeatureIcon && <FeatureIcon className="w-5 h-5" />}
+                    </div>
+                    <div className="text-left">
+                      <div className="font-medium text-white">{f.name}</div>
+                      <div className="text-xs text-[#64748b]">{f.desc}</div>
+                    </div>
                   </div>
-                  <div className="text-left">
-                    <div className="font-medium">{f.name}</div>
-                    <div className="text-xs text-gray-500">{f.desc}</div>
-                  </div>
-                </div>
-                <Icon
-                  name="chevronDown"
-                  className={`w-5 h-5 text-gray-500 transition-transform ${activeFeature === f.id ? 'rotate-180' : ''}`}
-                />
-              </button>
+                  <Icons.chevronDown
+                    className={`w-5 h-5 text-[#64748b] transition-transform ${activeFeature === f.id ? 'rotate-180' : ''}`}
+                  />
+                </button>
 
-              {activeFeature === f.id && (
-                <div className="p-4 border-t border-gray-800 bg-gray-900/50 animate-fade-in">
-                  {f.id === 'compress' && (
-                    <div className="mb-4">
-                      <label className="text-xs text-gray-500 mb-2 block">Aggressiveness</label>
-                      <div className="flex gap-2">
-                        {(['low', 'medium', 'high'] as const).map((level) => (
-                          <button
-                            key={level}
-                            onClick={() => setCompressionLevel(level)}
-                            className={`flex-1 py-2 rounded-lg text-sm capitalize ${
-                              compressionLevel === level
-                                ? 'bg-teal-500 text-gray-900'
-                                : 'bg-gray-800 text-gray-400'
-                            }`}
-                          >
-                            {level}
-                          </button>
-                        ))}
+                {activeFeature === f.id && (
+                  <div className="p-4 border-t border-[#1e3a5f] bg-[#0a1929] animate-fade-in">
+                    {f.id === 'compress' && (
+                      <div className="mb-4">
+                        <label className="text-xs text-[#64748b] mb-2 block">Aggressiveness</label>
+                        <div className="flex gap-2">
+                          {(['low', 'medium', 'high'] as const).map((level) => (
+                            <button
+                              key={level}
+                              onClick={() => setCompressionLevel(level)}
+                              className={`flex-1 py-2 rounded-lg text-sm capitalize ${
+                                compressionLevel === level
+                                  ? 'bg-[#d4a853] text-[#0a1929]'
+                                  : 'bg-[#0f2137] text-[#94a3b8] border border-[#1e3a5f]'
+                              }`}
+                            >
+                              {level}
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {f.id === 'cost' && (
-                    <div className="mb-4">
-                      <label className="text-xs text-gray-500 mb-2 block">Model</label>
-                      <select
-                        value={selectedModel}
-                        onChange={(e) => setSelectedModel(e.target.value)}
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm"
-                      >
-                        {MODEL_PRICING.map((m) => (
-                          <option key={m.id} value={m.id}>{m.name} - ${m.inputPricePerMillion}/1M</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
+                    {f.id === 'cost' && (
+                      <div className="mb-4">
+                        <label className="text-xs text-[#64748b] mb-2 block">Model</label>
+                        <select
+                          value={selectedModel}
+                          onChange={(e) => setSelectedModel(e.target.value)}
+                          className="w-full bg-[#0f2137] border border-[#1e3a5f] rounded-lg px-3 py-2 text-sm text-white"
+                        >
+                          {MODEL_PRICING.map((m) => (
+                            <option key={m.id} value={m.id}>{m.name} - ${m.inputPricePerMillion}/1M</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
 
-                  <button
-                    onClick={() => handleFeatureAction(f.id)}
-                    className="btn-primary w-full py-2 text-sm"
-                    disabled={!prompt}
-                  >
-                    Run {f.name}
-                  </button>
+                    {f.id === 'format' && (
+                      <div className="mb-4">
+                        <label className="text-xs text-[#64748b] mb-2 block">Output Format</label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {[
+                            { id: 'standard', label: 'Standard' },
+                            { id: 'excel', label: 'Excel Table' },
+                            { id: 'slides', label: 'Slide Bullets' },
+                            { id: 'memo', label: 'Memo Format' },
+                          ].map((fmt) => (
+                            <button
+                              key={fmt.id}
+                              onClick={() => setOutputFormat(fmt.id as any)}
+                              className={`py-2 rounded-lg text-sm ${
+                                outputFormat === fmt.id
+                                  ? 'bg-[#d4a853] text-[#0a1929]'
+                                  : 'bg-[#0f2137] text-[#94a3b8] border border-[#1e3a5f]'
+                              }`}
+                            >
+                              {fmt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
-                  {result && activeFeature === f.id && (
-                    <div className="mt-4 p-3 bg-gray-800/50 rounded-lg">
-                      {result}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+                    <button
+                      onClick={() => handleFeatureAction(f.id)}
+                      className="btn-primary w-full py-2 text-sm"
+                      disabled={!prompt}
+                    >
+                      Run {f.name}
+                    </button>
+
+                    {result && activeFeature === f.id && (
+                      <div className="mt-4 p-3 bg-[#0f2137] rounded-lg border border-[#1e3a5f]">
+                        {result}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-        {/* Tips */}
-        <div className="card p-4">
-          <div className="flex items-center gap-2 text-teal-400 mb-2">
-            <Icon name="lightbulb" className="w-4 h-4" />
-            <span className="text-sm font-medium">Pro Tip</span>
+        {/* Finance Pro Tips */}
+        <div className="card p-4 bg-[rgba(212,168,83,0.1)] border-[rgba(212,168,83,0.2)]">
+          <div className="flex items-center gap-2 text-[#d4a853] mb-2">
+            <Icons.lightbulb className="w-4 h-4" />
+            <span className="text-sm font-medium">Finance Pro Tip</span>
           </div>
-          <p className="text-xs text-gray-400">
-            Use compression on long prompts to save up to 30% on token costs.
-            Always run security scan before using prompts with user-provided data.
+          <p className="text-xs text-[#94a3b8]">
+            Use the Format tool to add Excel-ready or slide-friendly output instructions.
+            Enable Audit Mode for compliance tracking in regulated environments.
           </p>
         </div>
       </div>
