@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Icons } from '../Icons';
-import { detectTask, QUICK_STARTS, LLM_INFO, TaskPattern, TargetLLM } from '../../data/task-patterns';
+import Tooltip from '../ui/Tooltip';
+import { QUICK_STARTS, LLM_INFO, TaskPattern, TargetLLM } from '../../data/task-patterns';
+import { TOOLTIPS } from '../../data/walkthrough-steps';
 
 interface IntentInputProps {
   value: string;
@@ -39,18 +41,20 @@ export default function IntentInput({
       </div>
 
       {/* Main Input */}
-      <div className="relative">
-        <textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          placeholder="e.g., Write a Python script that organizes my photos by date and removes duplicates..."
-          rows={4}
-          className={`w-full px-5 py-4 bg-[#0a1929] border-2 rounded-xl text-white text-lg placeholder-[#64748b] focus:outline-none resize-none transition-colors ${
-            isFocused ? 'border-[#d4a853]' : 'border-[#1e3a5f]'
-          }`}
-        />
+      <div className="relative" data-tour="intent-input">
+        <Tooltip content={TOOLTIPS.intentInput} position="top">
+          <textarea
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            placeholder="e.g., Write a Python script that organizes my photos by date and removes duplicates..."
+            rows={4}
+            className={`w-full px-5 py-4 bg-[#0a1929] border-2 rounded-xl text-white text-lg placeholder-[#64748b] focus:outline-none resize-none transition-colors ${
+              isFocused ? 'border-[#d4a853]' : 'border-[#1e3a5f]'
+            }`}
+          />
+        </Tooltip>
         <div className="absolute bottom-3 right-3 text-xs text-[#64748b]">
           {value.length} characters
         </div>
@@ -58,7 +62,7 @@ export default function IntentInput({
 
       {/* Detection Feedback */}
       {value.length > 10 && detectedTask && recommendedLLM && (
-        <div className="p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f] animate-fadeIn">
+        <div className="p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f] animate-fadeIn" data-tour="task-detection">
           <div className="flex items-start gap-4">
             <div className="p-2 rounded-lg bg-[#d4a853]/20">
               <Icons.bolt className="w-5 h-5 text-[#d4a853]" />
@@ -82,18 +86,19 @@ export default function IntentInput({
 
       {/* Quick Starts */}
       {value.length === 0 && (
-        <div>
+        <div data-tour="quick-starts">
           <div className="text-sm text-[#64748b] mb-3">Quick starts:</div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {QUICK_STARTS.map((quick, i) => (
-              <button
-                key={i}
-                onClick={() => handleQuickStart(quick.task)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-[#1e3a5f] text-[#94a3b8] hover:text-white hover:bg-[#2d4a6f] transition-all text-sm"
-              >
-                <Icons.code className="w-4 h-4" />
-                {quick.label}
-              </button>
+              <Tooltip key={i} content={TOOLTIPS.quickStarts} position="bottom">
+                <button
+                  onClick={() => handleQuickStart(quick.task)}
+                  className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-[#1e3a5f] text-[#94a3b8] hover:text-white hover:bg-[#2d4a6f] transition-all text-sm"
+                >
+                  <Icons.code className="w-4 h-4" />
+                  {quick.label}
+                </button>
+              </Tooltip>
             ))}
           </div>
         </div>

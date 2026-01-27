@@ -4,8 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import SplashScreen from './components/SplashScreen';
 import Onboarding from './components/Onboarding';
+import Walkthrough from './components/ui/Walkthrough';
+import Tooltip from './components/ui/Tooltip';
 import { Icons } from './components/Icons';
 import { PROMPT_TEMPLATES, TEMPLATE_CATEGORIES } from './components/PromptTemplates';
+import { DASHBOARD_WALKTHROUGH, TOOLTIPS } from './data/walkthrough-steps';
 
 // Quick start workflows for different roles
 const quickStartWorkflows = [
@@ -25,6 +28,7 @@ const recentWork = [
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showWalkthrough, setShowWalkthrough] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,6 +40,17 @@ export default function Home() {
     }
   }, []);
 
+  // Check for dashboard tour after onboarding
+  useEffect(() => {
+    if (isLoaded && !showOnboarding) {
+      const hasSeenTour = localStorage.getItem('promptforge-dashboard-tour');
+      if (!hasSeenTour) {
+        const timer = setTimeout(() => setShowWalkthrough(true), 1000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [isLoaded, showOnboarding]);
+
   const handleSplashComplete = () => {
     setShowSplash(false);
     setIsLoaded(true);
@@ -46,8 +61,8 @@ export default function Home() {
   };
 
   const handleShowHelp = () => {
-    localStorage.removeItem('promptforge-onboarded');
-    setShowOnboarding(true);
+    localStorage.removeItem('promptforge-dashboard-tour');
+    setShowWalkthrough(true);
   };
 
   const filteredTemplates = PROMPT_TEMPLATES.filter(t => {
@@ -85,15 +100,21 @@ export default function Home() {
               <Link href="/" className="px-4 py-2 text-white font-medium rounded-lg bg-[rgba(212,168,83,0.1)]">
                 Dashboard
               </Link>
-              <Link href="/builder" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
-                Prompt Builder
-              </Link>
-              <Link href="/prompts" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
-                My Prompts
-              </Link>
-              <Link href="/playground" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
-                Playground
-              </Link>
+              <Tooltip content="Create prompts with our guided wizard" position="bottom">
+                <Link href="/builder" data-tour="nav-builder" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                  Prompt Builder
+                </Link>
+              </Tooltip>
+              <Tooltip content="Browse your saved prompts and templates" position="bottom">
+                <Link href="/prompts" data-tour="nav-prompts" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                  My Prompts
+                </Link>
+              </Tooltip>
+              <Tooltip content="Test prompts with AI models" position="bottom">
+                <Link href="/playground" data-tour="nav-playground" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                  Playground
+                </Link>
+              </Tooltip>
             </div>
           </div>
 
@@ -124,7 +145,7 @@ export default function Home() {
           {/* Stats & Quick Start Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             {/* Quick Stats */}
-            <div className="card p-6">
+            <div className="card p-6" data-tour="quick-stats">
               <h3 className="text-sm font-medium text-[#94a3b8] mb-4 flex items-center gap-2">
                 <Icons.chartLine className="w-4 h-4" />
                 Quick Stats
@@ -172,7 +193,7 @@ export default function Home() {
             </div>
 
             {/* Industry Quick Start */}
-            <div className="card p-6">
+            <div className="card p-6" data-tour="quick-start">
               <h3 className="text-sm font-medium text-[#94a3b8] mb-4 flex items-center gap-2">
                 <Icons.bolt className="w-4 h-4" />
                 Quick Start
@@ -205,7 +226,7 @@ export default function Home() {
           </div>
 
           {/* Template Library */}
-          <div className="card p-6">
+          <div className="card p-6" data-tour="templates">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
               <h2 className="text-xl font-bold text-white">Financial Templates</h2>
 
@@ -334,6 +355,15 @@ export default function Home() {
             </div>
           </div>
         </footer>
+
+        {/* Dashboard Walkthrough */}
+        <Walkthrough
+          steps={DASHBOARD_WALKTHROUGH}
+          isOpen={showWalkthrough}
+          onClose={() => setShowWalkthrough(false)}
+          onComplete={() => setShowWalkthrough(false)}
+          storageKey="promptforge-dashboard-tour"
+        />
       </main>
     </>
   );

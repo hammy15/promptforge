@@ -1,7 +1,9 @@
 'use client';
 
 import TeachingTip from './TeachingTip';
+import Tooltip from '../ui/Tooltip';
 import { TEACHING_TIPS, PromptOptions as Options } from '../../data/prompt-templates';
+import { TOOLTIPS } from '../../data/walkthrough-steps';
 
 interface PromptOptionsProps {
   options: Options;
@@ -42,17 +44,22 @@ export default function PromptOptions({
           </label>
           <div className="grid grid-cols-3 gap-2">
             {(['brief', 'detailed', 'comprehensive'] as const).map((level) => (
-              <button
+              <Tooltip
                 key={level}
-                onClick={() => updateOption('detail', level)}
-                className={`py-3 px-4 rounded-lg text-sm font-medium capitalize transition-all ${
-                  options.detail === level
-                    ? 'bg-[#d4a853] text-[#0a1929]'
-                    : 'bg-[#1e3a5f] text-[#94a3b8] hover:text-white'
-                }`}
+                content={TOOLTIPS[`detail${level.charAt(0).toUpperCase() + level.slice(1)}` as keyof typeof TOOLTIPS] || ''}
+                position="bottom"
               >
-                {level}
-              </button>
+                <button
+                  onClick={() => updateOption('detail', level)}
+                  className={`w-full py-3 px-4 rounded-lg text-sm font-medium capitalize transition-all ${
+                    options.detail === level
+                      ? 'bg-[#d4a853] text-[#0a1929]'
+                      : 'bg-[#1e3a5f] text-[#94a3b8] hover:text-white'
+                  }`}
+                >
+                  {level}
+                </button>
+              </Tooltip>
             ))}
           </div>
           <TeachingTip
@@ -68,17 +75,22 @@ export default function PromptOptions({
           </label>
           <div className="grid grid-cols-3 gap-2">
             {(['casual', 'professional', 'technical'] as const).map((tone) => (
-              <button
+              <Tooltip
                 key={tone}
-                onClick={() => updateOption('tone', tone)}
-                className={`py-3 px-4 rounded-lg text-sm font-medium capitalize transition-all ${
-                  options.tone === tone
-                    ? 'bg-[#d4a853] text-[#0a1929]'
-                    : 'bg-[#1e3a5f] text-[#94a3b8] hover:text-white'
-                }`}
+                content={TOOLTIPS[`tone${tone.charAt(0).toUpperCase() + tone.slice(1)}` as keyof typeof TOOLTIPS] || ''}
+                position="bottom"
               >
-                {tone}
-              </button>
+                <button
+                  onClick={() => updateOption('tone', tone)}
+                  className={`w-full py-3 px-4 rounded-lg text-sm font-medium capitalize transition-all ${
+                    options.tone === tone
+                      ? 'bg-[#d4a853] text-[#0a1929]'
+                      : 'bg-[#1e3a5f] text-[#94a3b8] hover:text-white'
+                  }`}
+                >
+                  {tone}
+                </button>
+              </Tooltip>
             ))}
           </div>
           <TeachingTip
