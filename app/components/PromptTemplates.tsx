@@ -35,7 +35,7 @@ export const PROMPT_TEMPLATES: PromptTemplate[] = [
 
 **Company Overview:**
 - Industry: {{industry}}
-- Current Revenue: ${{current_revenue}}M
+- Current Revenue: \${{current_revenue}}M
 - Current EBITDA Margin: {{ebitda_margin}}%
 - Historical Growth Rate: {{historical_growth}}%
 
@@ -85,8 +85,8 @@ Format the output as Excel-ready tables where applicable.`,
     prompt: `Develop a comprehensive comparable companies analysis for {{company_name}} in the {{industry}} sector.
 
 **Target Company Metrics:**
-- LTM Revenue: ${{ltm_revenue}}M
-- LTM EBITDA: ${{ltm_ebitda}}M
+- LTM Revenue: \${{ltm_revenue}}M
+- LTM EBITDA: \${{ltm_ebitda}}M
 - Revenue Growth (YoY): {{revenue_growth}}%
 - EBITDA Margin: {{ebitda_margin}}%
 
@@ -143,8 +143,8 @@ Format all data as sortable tables ready for Excel export.`,
     prompt: `Analyze the quarterly earnings results for {{company_name}} ({{ticker}}) for {{quarter}}.
 
 **Reported Results:**
-- Revenue: ${{reported_revenue}}M (Consensus: ${{consensus_revenue}}M)
-- EPS: ${{reported_eps}} (Consensus: ${{consensus_eps}})
+- Revenue: \${{reported_revenue}}M (Consensus: \${{consensus_revenue}}M)
+- EPS: \${{reported_eps}} (Consensus: \${{consensus_eps}})
 - Gross Margin: {{gross_margin}}%
 - Operating Margin: {{operating_margin}}%
 
@@ -208,7 +208,7 @@ Format key metrics as bullet points suitable for client communication.`,
     prompt: `Build a comprehensive sensitivity analysis for {{analysis_type}} valuation of {{company_name}}.
 
 **Base Case Assumptions:**
-- Base Value: ${{base_value}}M
+- Base Value: \${{base_value}}M
 - Primary Variable: {{primary_variable}} (Base: {{primary_base}}%)
 - Secondary Variable: {{secondary_variable}} (Base: {{secondary_base}}%)
 
@@ -278,7 +278,7 @@ Format all tables for direct Excel paste with conditional formatting guidance.`,
 **Deal Context:**
 - Transaction Type: {{transaction_type}}
 - Target Sector: {{sector}}
-- Deal Size: ${{deal_size}}M
+- Deal Size: \${{deal_size}}M
 - Investment Thesis: {{investment_thesis}}
 
 **Develop DD framework covering:**
@@ -348,7 +348,7 @@ Provide prioritized action items with responsible parties and timelines.`,
     prompt: `Develop a comprehensive market sizing analysis for {{company_name}} operating in the {{market_segment}} market.
 
 **Company Context:**
-- Current Revenue: ${{current_revenue}}M
+- Current Revenue: \${{current_revenue}}M
 - Primary Geography: {{geography}}
 - Business Model: {{business_model}}
 - Key Products/Services: {{products}}
@@ -647,7 +647,7 @@ Format for board/leadership presentation with executive summary.`,
 - Business Focus: {{business_focus}}
 - Target Market: {{target_market}}
 - Business Model: {{business_model}}
-- Funding Goal: ${{funding_goal}}M
+- Funding Goal: \${{funding_goal}}M
 
 **Business Plan Structure:**
 
@@ -894,8 +894,8 @@ Present as strategic workshop output with visual framework.`,
 **Deal Overview:**
 - Target: {{company_name}}
 - Transaction Type: {{transaction_type}}
-- Enterprise Value: ${{enterprise_value}}M
-- Equity Investment: ${{equity_investment}}M
+- Enterprise Value: \${{enterprise_value}}M
+- Equity Investment: \${{equity_investment}}M
 - Ownership: {{ownership}}%
 
 **Investment Memo Structure:**
@@ -984,7 +984,7 @@ Format as formal IC memo with appendix for detailed analysis.`,
 **Transaction Overview:**
 - Target Company: {{company_name}}
 - Transaction Type: {{transaction_type}}
-- Deal Size: ${{deal_size}}M
+- Deal Size: \${{deal_size}}M
 - Investor/Acquirer: {{investor}}
 
 **Term Sheet Framework:**
@@ -1070,7 +1070,7 @@ Present as bullet points suitable for term sheet document draft.`,
 - Company: {{company_name}}
 - Stage: {{company_stage}}
 - Pitch Context: {{pitch_context}}
-- Raise Amount: ${{raise_amount}}M
+- Raise Amount: \${{raise_amount}}M
 - Use of Funds: {{use_of_funds}}
 
 **Pitch Deck Structure (15-20 slides):**
@@ -1204,9 +1204,9 @@ Provide bullet point content suggestions and design notes for each slide.`,
    - Key ask (if any)
 
 2. **Key Metrics Dashboard**
-   - **Revenue**: ${{revenue}}K ({{revenue_growth}}% MoM/QoQ)
-   - **MRR/ARR**: ${{mrr}}K
-   - **Cash Position**: ${{cash}}K
+   - **Revenue**: \${{revenue}}K ({{revenue_growth}}% MoM/QoQ)
+   - **MRR/ARR**: \${{mrr}}K
+   - **Cash Position**: \${{cash}}K
    - **Runway**: {{runway}} months
    - **Customers**: {{customers}} ({{customer_growth}}% growth)
    - **NRR**: {{nrr}}%

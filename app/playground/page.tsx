@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Icons, Icon } from '../components/Icons';
@@ -10,6 +10,29 @@ import { compressPrompt } from '@/features/smart-compression';
 import { detectPII, redactPII, detectInjection, getInjectionRiskLevel } from '@/features/security';
 import { extractVariables, substituteVariables } from '@/features/variable-system';
 import { calculateCost, MODEL_PRICING } from '@/features/cost-calculator';
+
+// Loading fallback component
+function PlaygroundLoading() {
+  return (
+    <div className="min-h-screen bg-[#0a1929] flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <Icons.chart className="w-7 h-7 text-[#0a1929]" />
+        </div>
+        <p className="text-[#94a3b8]">Loading builder...</p>
+      </div>
+    </div>
+  );
+}
+
+// Main export wrapped in Suspense
+export default function PlaygroundPage() {
+  return (
+    <Suspense fallback={<PlaygroundLoading />}>
+      <Playground />
+    </Suspense>
+  );
+}
 
 type Mode = 'simple' | 'expert';
 type Step = 'industry' | 'template' | 'customize' | 'review' | 'export';
@@ -74,7 +97,7 @@ const MODEL_RECOMMENDATIONS = {
   advanced: { model: 'claude-opus-4-20250514', reason: 'Maximum capability for complex financial modeling' },
 };
 
-export default function Playground() {
+function Playground() {
   const searchParams = useSearchParams();
 
   // Core state
