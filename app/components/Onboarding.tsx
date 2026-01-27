@@ -60,7 +60,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         return (
           <div className="text-center max-w-lg animate-fade-in">
             {/* Welcome icon */}
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center">
               <Icons.sparkles className="w-10 h-10 text-[#0a1929]" />
             </div>
             <h2 className="text-3xl font-bold text-white mb-4">
@@ -99,18 +99,18 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                     onClick={() => setSelectedRole(role.id)}
                     className={`p-5 rounded-xl border text-left transition-all ${
                       selectedRole === role.id
-                        ? 'border-[#d4a853] bg-[rgba(212,168,83,0.1)]'
+                        ? 'border-[#4ECDC4] bg-[rgba(78,205,196,0.1)]'
                         : 'border-[#1e3a5f] bg-[#0f2137] hover:border-[#2d4a6f]'
                     }`}
                   >
                     <div className="flex items-start gap-4">
                       <div className={`p-2 rounded-lg ${
                         selectedRole === role.id
-                          ? 'bg-[rgba(212,168,83,0.2)]'
+                          ? 'bg-[rgba(78,205,196,0.2)]'
                           : 'bg-[#162a45]'
                       }`}>
                         {IconComponent && <IconComponent className={`w-6 h-6 ${
-                          selectedRole === role.id ? 'text-[#d4a853]' : 'text-[#627d98]'
+                          selectedRole === role.id ? 'text-[#4ECDC4]' : 'text-[#627d98]'
                         }`} />}
                       </div>
                       <div>
@@ -125,7 +125,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                       </div>
                       {selectedRole === role.id && (
                         <div className="ml-auto">
-                          <Icons.check className="w-5 h-5 text-[#d4a853]" />
+                          <Icons.check className="w-5 h-5 text-[#4ECDC4]" />
                         </div>
                       )}
                     </div>
@@ -154,18 +154,18 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                     onClick={() => setSelectedUseCase(useCase.id)}
                     className={`p-5 rounded-xl border text-left transition-all ${
                       selectedUseCase === useCase.id
-                        ? 'border-[#d4a853] bg-[rgba(212,168,83,0.1)]'
+                        ? 'border-[#4ECDC4] bg-[rgba(78,205,196,0.1)]'
                         : 'border-[#1e3a5f] bg-[#0f2137] hover:border-[#2d4a6f]'
                     }`}
                   >
                     <div className="flex items-start gap-4">
                       <div className={`p-2 rounded-lg ${
                         selectedUseCase === useCase.id
-                          ? 'bg-[rgba(212,168,83,0.2)]'
+                          ? 'bg-[rgba(78,205,196,0.2)]'
                           : 'bg-[#162a45]'
                       }`}>
                         {IconComponent && <IconComponent className={`w-6 h-6 ${
-                          selectedUseCase === useCase.id ? 'text-[#d4a853]' : 'text-[#627d98]'
+                          selectedUseCase === useCase.id ? 'text-[#4ECDC4]' : 'text-[#627d98]'
                         }`} />}
                       </div>
                       <div className="flex-1">
@@ -180,7 +180,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                         {selectedUseCase === useCase.id && (
                           <div className="flex flex-wrap gap-1 mt-2">
                             {useCase.templates.map((t) => (
-                              <span key={t} className="text-xs px-2 py-0.5 rounded bg-[rgba(212,168,83,0.15)] text-[#d4a853]">
+                              <span key={t} className="text-xs px-2 py-0.5 rounded bg-[rgba(78,205,196,0.15)] text-[#4ECDC4]">
                                 {t}
                               </span>
                             ))}
@@ -188,7 +188,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                         )}
                       </div>
                       {selectedUseCase === useCase.id && (
-                        <Icons.check className="w-5 h-5 text-[#d4a853] shrink-0" />
+                        <Icons.check className="w-5 h-5 text-[#4ECDC4] shrink-0" />
                       )}
                     </div>
                   </button>
@@ -212,7 +212,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             <div className="bg-[#0f2137] rounded-2xl border border-[#1e3a5f] p-6 mb-6">
               {/* Simulated template selection */}
               <div className="flex items-center gap-3 mb-4 pb-4 border-b border-[#1e3a5f]">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center text-xl">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center text-xl">
                   📊
                 </div>
                 <div>
@@ -265,7 +265,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             {/* Feature highlights */}
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f]">
-                <div className="text-2xl font-bold text-[#d4a853] tabular-nums">18</div>
+                <div className="text-2xl font-bold text-[#4ECDC4] tabular-nums">18</div>
                 <div className="text-sm text-[#64748b]">Finance Templates</div>
               </div>
               <div className="text-center p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f]">
@@ -300,8 +300,8 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               <div className="space-y-2">
                 {selectedUseCase && useCases.find(u => u.id === selectedUseCase)?.templates.map((t) => (
                   <div key={t} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#162a45] transition-colors cursor-pointer">
-                    <div className="w-8 h-8 rounded-lg bg-[rgba(212,168,83,0.15)] flex items-center justify-center">
-                      <Icons.template className="w-4 h-4 text-[#d4a853]" />
+                    <div className="w-8 h-8 rounded-lg bg-[rgba(78,205,196,0.15)] flex items-center justify-center">
+                      <Icons.template className="w-4 h-4 text-[#4ECDC4]" />
                     </div>
                     <span className="text-sm text-white">{t}</span>
                     <Icons.arrowRight className="w-4 h-4 text-[#64748b] ml-auto" />
@@ -339,7 +339,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             key={i}
             className={`h-1.5 rounded-full transition-all ${
               i + 1 <= step
-                ? 'w-8 bg-[#d4a853]'
+                ? 'w-8 bg-[#4ECDC4]'
                 : 'w-4 bg-[#1e3a5f]'
             }`}
           />

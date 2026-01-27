@@ -170,7 +170,7 @@ export const LLM_INFO: Record<TargetLLM, {
     name: 'Claude Code',
     tagline: 'Expert coding assistant',
     icon: 'terminal',
-    color: '#d4a853',
+    color: '#4ECDC4',
     strengths: ['Code generation', 'File operations', 'CLI automation', 'Debugging'],
     bestFor: 'Developers building software',
   },

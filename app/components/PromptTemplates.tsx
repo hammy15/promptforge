@@ -1452,8 +1452,8 @@ Write in active voice with clear, concise language appropriate for {{audience}}.
 ];
 
 export const TEMPLATE_CATEGORIES = [
-  { id: 'all', name: 'All Templates', icon: '✨', slug: 'all', color: '#d4a853' },
-  { id: 'Financial Analysis', name: 'Financial Analysis', icon: '📊', slug: 'financial-analysis', color: '#d4a853' },
+  { id: 'all', name: 'All Templates', icon: '✨', slug: 'all', color: '#4ECDC4' },
+  { id: 'Financial Analysis', name: 'Financial Analysis', icon: '📊', slug: 'financial-analysis', color: '#4ECDC4' },
   { id: 'Investment Research', name: 'Investment Research', icon: '🔍', slug: 'investment-research', color: '#14b8a6' },
   { id: 'Strategy & Planning', name: 'Strategy & Planning', icon: '⚡', slug: 'strategy-planning', color: '#8b5cf6' },
   { id: 'M&A & Deal Work', name: 'M&A & Deal Work', icon: '🤝', slug: 'ma-deal-work', color: '#f97316' },

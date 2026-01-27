@@ -16,7 +16,7 @@ export default function TeachingTip({ title, content, defaultOpen = false }: Tea
     <div className="mt-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 text-xs text-[#64748b] hover:text-[#d4a853] transition-colors"
+        className="flex items-center gap-1.5 text-xs text-[#64748b] hover:text-[#4ECDC4] transition-colors"
       >
         <Icons.lightbulb className="w-3.5 h-3.5" />
         <span>{isOpen ? 'Hide tip' : 'Why this matters'}</span>
@@ -32,7 +32,7 @@ export default function TeachingTip({ title, content, defaultOpen = false }: Tea
 
       {isOpen && (
         <div className="mt-2 p-3 rounded-lg bg-[#0a1929] border border-[#1e3a5f]">
-          <div className="text-sm font-medium text-[#d4a853] mb-1">{title}</div>
+          <div className="text-sm font-medium text-[#4ECDC4] mb-1">{title}</div>
           <div className="text-xs text-[#94a3b8] leading-relaxed">{content}</div>
         </div>
       )}

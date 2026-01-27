@@ -55,7 +55,7 @@ export default function StyleGallery({
             placeholder="Search styles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-4 py-2 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none w-64"
+            className="pl-10 pr-4 py-2 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
           />
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function StyleGallery({
           onClick={() => setActiveCategory('all')}
           className={`px-4 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
             activeCategory === 'all'
-              ? 'bg-[rgba(212,168,83,0.15)] text-[#d4a853] border border-[rgba(212,168,83,0.3)]'
+              ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
               : 'text-[#94a3b8] hover:text-white hover:bg-[#162a45]'
           }`}
         >
@@ -104,7 +104,7 @@ export default function StyleGallery({
             onClick={() => setActiveCategory(cat.id)}
             className={`px-4 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
               activeCategory === cat.id
-                ? 'bg-[rgba(212,168,83,0.15)] text-[#d4a853] border border-[rgba(212,168,83,0.3)]'
+                ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
                 : 'text-[#94a3b8] hover:text-white hover:bg-[#162a45]'
             }`}
           >
@@ -125,7 +125,7 @@ export default function StyleGallery({
               key={style.id}
               className={`relative p-4 rounded-xl border transition-all ${
                 isSelected
-                  ? 'bg-[rgba(212,168,83,0.1)] border-[#d4a853]'
+                  ? 'bg-[rgba(78,205,196,0.1)] border-[#4ECDC4]'
                   : isDisabled
                   ? 'bg-[#0f2137] border-[#1e3a5f] opacity-50 cursor-not-allowed'
                   : 'bg-[#0f2137] border-[#1e3a5f] hover:border-[#2d4a6f] cursor-pointer'
@@ -140,7 +140,7 @@ export default function StyleGallery({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <h4 className={`font-semibold ${isSelected ? 'text-[#d4a853]' : 'text-white'}`}>
+                    <h4 className={`font-semibold ${isSelected ? 'text-[#4ECDC4]' : 'text-white'}`}>
                       {style.name}
                     </h4>
                     <span
@@ -169,7 +169,7 @@ export default function StyleGallery({
                   disabled={isDisabled}
                   className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                     isSelected
-                      ? 'bg-[#d4a853] text-[#0a1929]'
+                      ? 'bg-[#4ECDC4] text-[#0a1929]'
                       : isDisabled
                       ? 'bg-[#1e3a5f] text-[#64748b] cursor-not-allowed'
                       : 'bg-[#1e3a5f] text-white hover:bg-[#2d4a6f]'
@@ -220,7 +220,7 @@ export default function StyleGallery({
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-[#d4a853] mb-2">After:</div>
+                  <div className="text-xs text-[#4ECDC4] mb-2">After:</div>
                   <div className="p-3 rounded-lg bg-[#0a1929] text-sm text-white">
                     "{previewStyle.previewAfter}"
                   </div>
@@ -264,7 +264,7 @@ export default function StyleGallery({
                 disabled={!selectedStyles.includes(previewStyle.id) && selectedStyles.length >= maxSelections}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedStyles.includes(previewStyle.id)
-                    ? 'bg-[#d4a853] text-[#0a1929]'
+                    ? 'bg-[#4ECDC4] text-[#0a1929]'
                     : 'bg-[#1e3a5f] text-white hover:bg-[#2d4a6f]'
                 }`}
               >

@@ -129,7 +129,7 @@ export default function GuidedPromptBuilder() {
       {/* Progress Bar */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-[#1e3a5f] z-50">
         <div
-          className="h-full bg-gradient-to-r from-[#d4a853] to-[#b8953f] transition-all duration-500"
+          className="h-full bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] transition-all duration-500"
           style={{ width: `${(state.step / 4) * 100}%` }}
         />
       </div>
@@ -142,9 +142,9 @@ export default function GuidedPromptBuilder() {
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
                   num < state.step
-                    ? 'bg-[#d4a853] text-[#0a1929]'
+                    ? 'bg-[#4ECDC4] text-[#0a1929]'
                     : num === state.step
-                    ? 'bg-[#d4a853] text-[#0a1929] ring-4 ring-[#d4a853]/30'
+                    ? 'bg-[#4ECDC4] text-[#0a1929] ring-4 ring-[#4ECDC4]/30'
                     : 'bg-[#1e3a5f] text-[#64748b]'
                 }`}
               >
@@ -159,7 +159,7 @@ export default function GuidedPromptBuilder() {
               {num < 4 && (
                 <div
                   className={`w-12 h-0.5 mx-1 transition-colors ${
-                    num < state.step ? 'bg-[#d4a853]' : 'bg-[#1e3a5f]'
+                    num < state.step ? 'bg-[#4ECDC4]' : 'bg-[#1e3a5f]'
                   }`}
                 />
               )}
@@ -167,10 +167,10 @@ export default function GuidedPromptBuilder() {
           ))}
         </div>
         <div className="max-w-xl mx-auto flex items-center justify-between mt-2 px-2">
-          <span className={`text-xs ${state.step >= 1 ? 'text-[#d4a853]' : 'text-[#64748b]'}`}>Intent</span>
-          <span className={`text-xs ${state.step >= 2 ? 'text-[#d4a853]' : 'text-[#64748b]'}`}>AI</span>
-          <span className={`text-xs ${state.step >= 3 ? 'text-[#d4a853]' : 'text-[#64748b]'}`}>Options</span>
-          <span className={`text-xs ${state.step >= 4 ? 'text-[#d4a853]' : 'text-[#64748b]'}`}>Done</span>
+          <span className={`text-xs ${state.step >= 1 ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`}>Intent</span>
+          <span className={`text-xs ${state.step >= 2 ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`}>AI</span>
+          <span className={`text-xs ${state.step >= 3 ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`}>Options</span>
+          <span className={`text-xs ${state.step >= 4 ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`}>Done</span>
         </div>
       </div>
 

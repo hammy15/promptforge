@@ -20,7 +20,7 @@ function PlaygroundLoading() {
   return (
     <div className="min-h-screen bg-[#0a1929] flex items-center justify-center">
       <div className="text-center">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center mx-auto mb-4 animate-pulse">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center mx-auto mb-4 animate-pulse">
           <Icons.chart className="w-7 h-7 text-[#0a1929]" />
         </div>
         <p className="text-[#94a3b8]">Loading builder...</p>
@@ -48,7 +48,7 @@ const INDUSTRY_OPTIONS = [
     name: 'M&A & Deal Work',
     description: 'Investment memos, term sheets, due diligence',
     icon: 'handshake',
-    color: '#d4a853',
+    color: '#4ECDC4',
     categories: ['ma'],
   },
   {
@@ -426,15 +426,15 @@ function Playground() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center">
                 <Icons.chart className="w-6 h-6 text-[#0a1929]" />
               </div>
               <div>
                 <span className="text-xl font-bold">
-                  <span className="text-[#d4a853]">Prompt</span>
+                  <span className="text-[#4ECDC4]">Prompt</span>
                   <span className="text-white">Forge</span>
                 </span>
-                <span className="ml-2 text-xs px-2 py-0.5 bg-[rgba(212,168,83,0.2)] text-[#d4a853] rounded-full">
+                <span className="ml-2 text-xs px-2 py-0.5 bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] rounded-full">
                   {mode === 'simple' ? 'Simple' : 'Expert'}
                 </span>
               </div>
@@ -447,7 +447,7 @@ function Playground() {
                   onClick={() => setMode('simple')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     mode === 'simple'
-                      ? 'bg-[#d4a853] text-[#0a1929]'
+                      ? 'bg-[#4ECDC4] text-[#0a1929]'
                       : 'text-[#94a3b8] hover:text-white'
                   }`}
                 >
@@ -458,7 +458,7 @@ function Playground() {
                   onClick={() => setMode('expert')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     mode === 'expert'
-                      ? 'bg-[#d4a853] text-[#0a1929]'
+                      ? 'bg-[#4ECDC4] text-[#0a1929]'
                       : 'text-[#94a3b8] hover:text-white'
                   }`}
                 >
@@ -469,14 +469,14 @@ function Playground() {
 
               <button
                 onClick={() => setShowAgentHelper(!showAgentHelper)}
-                className={`p-2 transition-colors ${showAgentHelper ? 'text-[#d4a853]' : 'text-[#64748b] hover:text-[#d4a853]'}`}
+                className={`p-2 transition-colors ${showAgentHelper ? 'text-[#4ECDC4]' : 'text-[#64748b] hover:text-[#4ECDC4]'}`}
                 title="AI Assistant"
               >
                 <Icons.bot className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="p-2 text-[#64748b] hover:text-[#d4a853] transition-colors"
+                className="p-2 text-[#64748b] hover:text-[#4ECDC4] transition-colors"
               >
                 <Icons.history className="w-5 h-5" />
               </button>
@@ -500,9 +500,9 @@ function Playground() {
                       disabled={index > currentStepIndex}
                       className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
                         step.id === currentStep
-                          ? 'bg-[#d4a853] text-[#0a1929]'
+                          ? 'bg-[#4ECDC4] text-[#0a1929]'
                           : index < currentStepIndex
-                          ? 'bg-[rgba(212,168,83,0.2)] text-[#d4a853] hover:bg-[rgba(212,168,83,0.3)]'
+                          ? 'bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] hover:bg-[rgba(78,205,196,0.3)]'
                           : 'bg-[#0f2137] text-[#64748b] border border-[#1e3a5f]'
                       }`}
                     >
@@ -536,7 +536,7 @@ function Playground() {
                         <button
                           key={industry.id}
                           onClick={() => handleSelectIndustry(industry.id)}
-                          className="card p-6 text-left hover:border-[#d4a853] transition-all group"
+                          className="card p-6 text-left hover:border-[#4ECDC4] transition-all group"
                         >
                           <div className="flex items-start gap-4">
                             <div
@@ -546,7 +546,7 @@ function Playground() {
                               {IndustryIcon && <IndustryIcon className="w-7 h-7" style={{ color: industry.color }} />}
                             </div>
                             <div>
-                              <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors">
+                              <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors">
                                 {industry.name}
                               </h3>
                               <p className="text-sm text-[#64748b] mt-1">{industry.description}</p>
@@ -563,14 +563,14 @@ function Playground() {
                         setSelectedCategory('all');
                         setCurrentStep('template');
                       }}
-                      className="card p-6 text-left hover:border-[#d4a853] transition-all group border-dashed"
+                      className="card p-6 text-left hover:border-[#4ECDC4] transition-all group border-dashed"
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-14 h-14 rounded-xl border-2 border-dashed border-[#334155] flex items-center justify-center">
                           <Icons.search className="w-7 h-7 text-[#64748b]" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors">
+                          <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors">
                             Browse All Templates
                           </h3>
                           <p className="text-sm text-[#64748b] mt-1">View all 18 finance templates</p>
@@ -599,7 +599,7 @@ function Playground() {
                           onClick={() => setSelectedCategory(cat.id)}
                           className={`px-4 py-2 rounded-xl text-sm transition-all ${
                             selectedCategory === cat.id
-                              ? 'bg-[rgba(212,168,83,0.15)] text-[#d4a853] border border-[rgba(212,168,83,0.3)]'
+                              ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
                               : 'bg-[#0f2137] text-[#94a3b8] hover:text-white border border-[#1e3a5f]'
                           }`}
                         >
@@ -617,7 +617,7 @@ function Playground() {
                         placeholder="Search templates..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 pr-4 py-2 bg-[#0f2137] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none w-64"
+                        className="pl-10 pr-4 py-2 bg-[#0f2137] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
                       />
                     </div>
                   </div>
@@ -628,14 +628,14 @@ function Playground() {
                       <button
                         key={template.id}
                         onClick={() => handleSelectTemplate(template)}
-                        className="card p-5 text-left hover:border-[#d4a853] transition-all group"
+                        className="card p-5 text-left hover:border-[#4ECDC4] transition-all group"
                       >
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center text-2xl shrink-0">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center text-2xl shrink-0">
                             {template.icon}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors truncate">
+                            <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors truncate">
                               {template.name}
                             </h3>
                             <p className="text-sm text-[#64748b] mt-1 line-clamp-2">{template.description}</p>
@@ -660,14 +660,14 @@ function Playground() {
                         setPrompt('');
                         setCurrentStep('customize');
                       }}
-                      className="card p-5 text-left hover:border-[#d4a853] transition-all group border-dashed"
+                      className="card p-5 text-left hover:border-[#4ECDC4] transition-all group border-dashed"
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl border-2 border-dashed border-[#334155] flex items-center justify-center">
                           <Icons.plus className="w-6 h-6 text-[#64748b]" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors">
+                          <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors">
                             Start from Scratch
                           </h3>
                           <p className="text-sm text-[#64748b] mt-1">Write your own prompt</p>
@@ -704,7 +704,7 @@ function Playground() {
                     {selectedTemplate ? (
                       <div className="space-y-4">
                         {/* Template info card */}
-                        <div className="card p-4 bg-[rgba(212,168,83,0.1)] border-[rgba(212,168,83,0.2)]">
+                        <div className="card p-4 bg-[rgba(78,205,196,0.1)] border-[rgba(78,205,196,0.2)]">
                           <div className="flex items-center gap-3">
                             <span className="text-2xl">{selectedTemplate.icon}</span>
                             <div>
@@ -723,7 +723,7 @@ function Playground() {
                         {selectedTemplate.variables.map(variable => (
                           <div key={variable.name} className="space-y-2">
                             <label className="flex items-center gap-2 text-sm font-medium text-[#94a3b8]">
-                              <span className="text-[#d4a853]">{`{{${variable.name}}}`}</span>
+                              <span className="text-[#4ECDC4]">{`{{${variable.name}}}`}</span>
                               {variable.type && (
                                 <span className="text-xs px-1.5 py-0.5 bg-[#1e3a5f] rounded text-[#64748b]">
                                   {variable.type}
@@ -791,7 +791,7 @@ Tips for finance prompts:
                     {analysisResults && (
                       <div className="grid grid-cols-2 gap-4">
                         <div className="card p-4 text-center">
-                          <div className="text-2xl font-bold text-[#d4a853] tabular-nums">{analysisResults.tokens}</div>
+                          <div className="text-2xl font-bold text-[#4ECDC4] tabular-nums">{analysisResults.tokens}</div>
                           <div className="text-xs text-[#64748b]">Tokens</div>
                         </div>
                         <div className="card p-4 text-center">
@@ -828,7 +828,7 @@ Tips for finance prompts:
                   {/* Analysis Cards */}
                   <div className="grid md:grid-cols-4 gap-4">
                     <div className="card p-4 text-center">
-                      <div className="text-3xl font-bold text-[#d4a853] tabular-nums">{analysisResults?.tokens || 0}</div>
+                      <div className="text-3xl font-bold text-[#4ECDC4] tabular-nums">{analysisResults?.tokens || 0}</div>
                       <div className="text-sm text-[#64748b]">Tokens</div>
                     </div>
                     <div className="card p-4 text-center">
@@ -844,7 +844,7 @@ Tips for finance prompts:
                     <div className="card p-4 text-center">
                       <div className={`text-3xl font-bold capitalize ${
                         analysisResults?.injectionRisk === 'none' ? 'text-[#059669]' :
-                        analysisResults?.injectionRisk === 'low' ? 'text-[#d4a853]' :
+                        analysisResults?.injectionRisk === 'low' ? 'text-[#4ECDC4]' :
                         'text-[#dc2626]'
                       }`}>
                         {analysisResults?.injectionRisk || 'None'}
@@ -857,14 +857,14 @@ Tips for finance prompts:
                   <div className="grid md:grid-cols-2 gap-4">
                     <button
                       onClick={handleOptimize}
-                      className="card p-5 text-left hover:border-[#d4a853] transition-all group"
+                      className="card p-5 text-left hover:border-[#4ECDC4] transition-all group"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-[rgba(212,168,83,0.2)] flex items-center justify-center text-[#d4a853]">
+                        <div className="w-12 h-12 rounded-xl bg-[rgba(78,205,196,0.2)] flex items-center justify-center text-[#4ECDC4]">
                           <Icons.compress className="w-6 h-6" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white group-hover:text-[#d4a853]">Compress Prompt</h3>
+                          <h3 className="font-semibold text-white group-hover:text-[#4ECDC4]">Compress Prompt</h3>
                           <p className="text-sm text-[#64748b]">Remove filler words, save ~{analysisResults?.compressionSavings || 0}% tokens</p>
                         </div>
                       </div>
@@ -872,14 +872,14 @@ Tips for finance prompts:
 
                     <button
                       onClick={handleSecurityScan}
-                      className="card p-5 text-left hover:border-[#d4a853] transition-all group"
+                      className="card p-5 text-left hover:border-[#4ECDC4] transition-all group"
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-[rgba(220,38,38,0.2)] flex items-center justify-center text-[#dc2626]">
                           <Icons.shield className="w-6 h-6" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white group-hover:text-[#d4a853]">Redact PII</h3>
+                          <h3 className="font-semibold text-white group-hover:text-[#4ECDC4]">Redact PII</h3>
                           <p className="text-sm text-[#64748b]">Remove {analysisResults?.piiCount || 0} sensitive items found</p>
                         </div>
                       </div>
@@ -942,12 +942,12 @@ Tips for finance prompts:
                           onClick={() => setSelectedExportFormat(format.id)}
                           className={`card p-4 text-center transition-all ${
                             selectedExportFormat === format.id
-                              ? 'border-[#d4a853] bg-[rgba(212,168,83,0.1)]'
+                              ? 'border-[#4ECDC4] bg-[rgba(78,205,196,0.1)]'
                               : 'hover:border-[#2d4a6f]'
                           }`}
                         >
-                          {FormatIcon && <FormatIcon className={`w-6 h-6 mx-auto mb-2 ${selectedExportFormat === format.id ? 'text-[#d4a853]' : 'text-[#64748b]'}`} />}
-                          <div className={`text-sm font-medium ${selectedExportFormat === format.id ? 'text-[#d4a853]' : 'text-white'}`}>
+                          {FormatIcon && <FormatIcon className={`w-6 h-6 mx-auto mb-2 ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`} />}
+                          <div className={`text-sm font-medium ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-white'}`}>
                             {format.name}
                           </div>
                           <div className="text-xs text-[#64748b] mt-1">{format.description}</div>
@@ -968,7 +968,7 @@ Tips for finance prompts:
                       </div>
                       <button
                         onClick={() => setAuditMode(!auditMode)}
-                        className={`w-12 h-6 rounded-full transition-colors ${auditMode ? 'bg-[#d4a853]' : 'bg-[#334155]'}`}
+                        className={`w-12 h-6 rounded-full transition-colors ${auditMode ? 'bg-[#4ECDC4]' : 'bg-[#334155]'}`}
                       >
                         <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${auditMode ? 'translate-x-6' : 'translate-x-0.5'}`} />
                       </button>
@@ -985,7 +985,7 @@ Tips for finance prompts:
                         onClick={handleCopy}
                         data-tour="run-button"
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                          copied ? 'bg-[#059669] text-white' : 'bg-[rgba(212,168,83,0.2)] text-[#d4a853] hover:bg-[rgba(212,168,83,0.3)]'
+                          copied ? 'bg-[#059669] text-white' : 'bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] hover:bg-[rgba(78,205,196,0.3)]'
                         }`}
                       >
                         <Icons.copy className="w-4 h-4" />
@@ -1000,7 +1000,7 @@ Tips for finance prompts:
                   {/* Stats Summary */}
                   <div className="grid grid-cols-3 gap-4">
                     <div className="card p-4 text-center">
-                      <div className="text-2xl font-bold text-[#d4a853] tabular-nums">{analysisResults?.tokens || 0}</div>
+                      <div className="text-2xl font-bold text-[#4ECDC4] tabular-nums">{analysisResults?.tokens || 0}</div>
                       <div className="text-xs text-[#64748b]">Total Tokens</div>
                     </div>
                     <div className="card p-4 text-center">
@@ -1063,7 +1063,7 @@ Tips for finance prompts:
         <div className="fixed inset-y-0 right-0 w-80 bg-[#0f2137] border-l border-[#1e3a5f] z-50 animate-slide-in">
           <div className="p-4 border-b border-[#1e3a5f] flex items-center justify-between">
             <h3 className="font-semibold text-white">Recent Prompts</h3>
-            <button onClick={() => setShowHistory(false)} className="p-1 hover:text-[#d4a853]">
+            <button onClick={() => setShowHistory(false)} className="p-1 hover:text-[#4ECDC4]">
               <Icons.x className="w-5 h-5" />
             </button>
           </div>
@@ -1079,7 +1079,7 @@ Tips for finance prompts:
                     setShowHistory(false);
                     setMode('expert');
                   }}
-                  className="w-full p-3 card text-left hover:border-[#d4a853] transition-all"
+                  className="w-full p-3 card text-left hover:border-[#4ECDC4] transition-all"
                 >
                   <p className="text-sm text-[#94a3b8] line-clamp-3">{item}</p>
                 </button>
@@ -1150,7 +1150,7 @@ function ExpertMode({
             <p className="text-sm text-[#94a3b8]">Found {vars.length} variables:</p>
             {vars.map(v => (
               <div key={v.name} className="flex items-center gap-2 text-sm">
-                <code className="px-2 py-1 bg-[rgba(212,168,83,0.2)] text-[#d4a853] rounded">{`{{${v.name}}}`}</code>
+                <code className="px-2 py-1 bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] rounded">{`{{${v.name}}}`}</code>
                 {v.defaultValue && <span className="text-[#64748b]">default: {v.defaultValue}</span>}
                 {v.type && <span className="text-[#64748b]">type: {v.type}</span>}
               </div>
@@ -1170,7 +1170,7 @@ function ExpertMode({
                 <div className="text-xs text-[#64748b]">Original</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-[#d4a853] tabular-nums">{compressed.compressedTokens}</div>
+                <div className="text-xl font-bold text-[#4ECDC4] tabular-nums">{compressed.compressedTokens}</div>
                 <div className="text-xs text-[#64748b]">Compressed</div>
               </div>
               <div className="text-center">
@@ -1200,7 +1200,7 @@ function ExpertMode({
                 <span className="text-sm text-[#94a3b8]">Risk: </span>
                 <span className={`font-bold capitalize ${
                   riskLevel === 'none' ? 'text-[#059669]' :
-                  riskLevel === 'low' ? 'text-[#d4a853]' : 'text-[#dc2626]'
+                  riskLevel === 'low' ? 'text-[#4ECDC4]' : 'text-[#dc2626]'
                 }`}>
                   {riskLevel}
                 </span>
@@ -1217,7 +1217,7 @@ function ExpertMode({
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div className="text-center">
-                <div className="text-xl font-bold text-[#d4a853] tabular-nums">{cost.inputTokens}</div>
+                <div className="text-xl font-bold text-[#4ECDC4] tabular-nums">{cost.inputTokens}</div>
                 <div className="text-xs text-[#64748b]">Input Tokens</div>
               </div>
               <div className="text-center">
@@ -1275,7 +1275,7 @@ function ExpertMode({
             <button
               onClick={onCopy}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                copied ? 'bg-[#059669] text-white' : 'bg-[rgba(212,168,83,0.2)] text-[#d4a853] hover:bg-[rgba(212,168,83,0.3)]'
+                copied ? 'bg-[#059669] text-white' : 'bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] hover:bg-[rgba(78,205,196,0.3)]'
               }`}
             >
               <Icons.copy className="w-4 h-4" />
@@ -1303,7 +1303,7 @@ Expert tips:
           <div className="flex items-center gap-6 text-sm">
             <div className="flex items-center gap-2">
               <span className="text-[#64748b]">Tokens:</span>
-              <span className="text-[#d4a853] font-medium tabular-nums">{analysisResults.tokens}</span>
+              <span className="text-[#4ECDC4] font-medium tabular-nums">{analysisResults.tokens}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[#64748b]">Cost:</span>
@@ -1319,7 +1319,7 @@ Expert tips:
               <span className="text-[#64748b]">Risk:</span>
               <span className={`font-medium capitalize ${
                 analysisResults.injectionRisk === 'none' ? 'text-[#059669]' :
-                analysisResults.injectionRisk === 'low' ? 'text-[#d4a853]' : 'text-[#dc2626]'
+                analysisResults.injectionRisk === 'low' ? 'text-[#4ECDC4]' : 'text-[#dc2626]'
               }`}>
                 {analysisResults.injectionRisk}
               </span>
@@ -1339,7 +1339,7 @@ Expert tips:
             </div>
             <button
               onClick={() => setAuditMode(!auditMode)}
-              className={`w-12 h-6 rounded-full transition-colors ${auditMode ? 'bg-[#d4a853]' : 'bg-[#334155]'}`}
+              className={`w-12 h-6 rounded-full transition-colors ${auditMode ? 'bg-[#4ECDC4]' : 'bg-[#334155]'}`}
             >
               <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${auditMode ? 'translate-x-6' : 'translate-x-0.5'}`} />
             </button>
@@ -1361,7 +1361,7 @@ Expert tips:
                   className="w-full p-4 flex items-center justify-between hover:bg-[#162a45] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[rgba(212,168,83,0.2)] flex items-center justify-center text-[#d4a853]">
+                    <div className="w-10 h-10 rounded-lg bg-[rgba(78,205,196,0.2)] flex items-center justify-center text-[#4ECDC4]">
                       {FeatureIcon && <FeatureIcon className="w-5 h-5" />}
                     </div>
                     <div className="text-left">
@@ -1386,7 +1386,7 @@ Expert tips:
                               onClick={() => setCompressionLevel(level)}
                               className={`flex-1 py-2 rounded-lg text-sm capitalize ${
                                 compressionLevel === level
-                                  ? 'bg-[#d4a853] text-[#0a1929]'
+                                  ? 'bg-[#4ECDC4] text-[#0a1929]'
                                   : 'bg-[#0f2137] text-[#94a3b8] border border-[#1e3a5f]'
                               }`}
                             >
@@ -1427,7 +1427,7 @@ Expert tips:
                               onClick={() => setOutputFormat(fmt.id as any)}
                               className={`py-2 rounded-lg text-sm ${
                                 outputFormat === fmt.id
-                                  ? 'bg-[#d4a853] text-[#0a1929]'
+                                  ? 'bg-[#4ECDC4] text-[#0a1929]'
                                   : 'bg-[#0f2137] text-[#94a3b8] border border-[#1e3a5f]'
                               }`}
                             >
@@ -1459,8 +1459,8 @@ Expert tips:
         </div>
 
         {/* Finance Pro Tips */}
-        <div className="card p-4 bg-[rgba(212,168,83,0.1)] border-[rgba(212,168,83,0.2)]">
-          <div className="flex items-center gap-2 text-[#d4a853] mb-2">
+        <div className="card p-4 bg-[rgba(78,205,196,0.1)] border-[rgba(78,205,196,0.2)]">
+          <div className="flex items-center gap-2 text-[#4ECDC4] mb-2">
             <Icons.lightbulb className="w-4 h-4" />
             <span className="text-sm font-medium">Finance Pro Tip</span>
           </div>

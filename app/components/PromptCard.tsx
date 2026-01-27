@@ -26,14 +26,14 @@ interface PromptCardProps {
 
 export default function PromptCard({ prompt, onClick, href }: PromptCardProps) {
   const content = (
-    <div className="group p-5 rounded-xl border border-[#1e3a5f] bg-[#0f2137] hover:border-[#d4a853] hover:bg-[#162a45] transition-all cursor-pointer">
+    <div className="group p-5 rounded-xl border border-[#1e3a5f] bg-[#0f2137] hover:border-[#4ECDC4] hover:bg-[#162a45] transition-all cursor-pointer">
       <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center text-2xl shrink-0">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center text-2xl shrink-0">
           {prompt.icon}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors truncate">
+            <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors truncate">
               {prompt.name}
             </h3>
             {prompt.isCustom && (
@@ -78,7 +78,7 @@ export default function PromptCard({ prompt, onClick, href }: PromptCardProps) {
             </div>
           )}
         </div>
-        <Icons.arrowRight className="w-5 h-5 text-[#64748b] group-hover:text-[#d4a853] transition-colors shrink-0" />
+        <Icons.arrowRight className="w-5 h-5 text-[#64748b] group-hover:text-[#4ECDC4] transition-colors shrink-0" />
       </div>
     </div>
   );

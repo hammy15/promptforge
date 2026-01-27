@@ -42,7 +42,7 @@ export default function SplashScreen({ onComplete, duration = 3000 }: SplashScre
           <path
             d="M0,80 Q50,70 100,60 T200,50 T300,40 T400,30"
             fill="none"
-            stroke="#d4a853"
+            stroke="#4ECDC4"
             strokeWidth="1"
             className="animate-chart-draw"
             style={{ strokeDasharray: '100', animationDelay: '0.5s' }}
@@ -62,7 +62,7 @@ export default function SplashScreen({ onComplete, duration = 3000 }: SplashScre
       <div className="relative z-10 flex flex-col items-center">
         {/* Animated icon */}
         <div className="relative mb-8">
-          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center neu-shadow animate-float">
+          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center neu-shadow animate-float">
             {/* Finance chart icon */}
             <svg
               className="w-14 h-14 text-[#0a1929]"
@@ -90,7 +90,7 @@ export default function SplashScreen({ onComplete, duration = 3000 }: SplashScre
 
         {/* Title */}
         <h1 className="text-5xl font-bold mb-3 animate-slide-up">
-          <span style={{ color: '#d4a853' }}>Prompt</span>
+          <span style={{ color: '#4ECDC4' }}>Prompt</span>
           <span className="text-white">Forge</span>
         </h1>
 
@@ -105,7 +105,7 @@ export default function SplashScreen({ onComplete, duration = 3000 }: SplashScre
           background: 'rgba(212, 168, 83, 0.1)',
           animationDelay: '0.2s'
         }}>
-          <span className="text-sm" style={{ color: '#d4a853' }}>
+          <span className="text-sm" style={{ color: '#4ECDC4' }}>
             For Finance Professionals
           </span>
         </div>
@@ -114,15 +114,15 @@ export default function SplashScreen({ onComplete, duration = 3000 }: SplashScre
         <div className="mt-12 flex items-center gap-2">
           <div
             className="w-2 h-2 rounded-full animate-pulse"
-            style={{ background: '#d4a853', animationDelay: '0s' }}
+            style={{ background: '#4ECDC4', animationDelay: '0s' }}
           />
           <div
             className="w-2 h-2 rounded-full animate-pulse"
-            style={{ background: '#d4a853', animationDelay: '0.2s' }}
+            style={{ background: '#4ECDC4', animationDelay: '0.2s' }}
           />
           <div
             className="w-2 h-2 rounded-full animate-pulse"
-            style={{ background: '#d4a853', animationDelay: '0.4s' }}
+            style={{ background: '#4ECDC4', animationDelay: '0.4s' }}
           />
         </div>
       </div>

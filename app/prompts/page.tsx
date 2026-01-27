@@ -14,11 +14,11 @@ export default function PromptsPage() {
         <div className="flex items-center gap-8">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center">
               <Icons.chart className="w-6 h-6 text-[#0a1929]" />
             </div>
             <span className="text-xl font-bold">
-              <span className="text-[#d4a853]">Prompt</span>
+              <span className="text-[#4ECDC4]">Prompt</span>
               <span className="text-white">Forge</span>
             </span>
           </Link>
@@ -28,7 +28,7 @@ export default function PromptsPage() {
             <Link href="/" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
               Dashboard
             </Link>
-            <Link href="/prompts" className="px-4 py-2 text-white font-medium rounded-lg bg-[rgba(212,168,83,0.1)]">
+            <Link href="/prompts" className="px-4 py-2 text-white font-medium rounded-lg bg-[rgba(78,205,196,0.1)]">
               Prompts
             </Link>
             <Link href="/prompts/create" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
@@ -44,7 +44,7 @@ export default function PromptsPage() {
           <button className="p-2 text-[#64748b] hover:text-white transition-colors">
             <Icons.settings className="w-5 h-5" />
           </button>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center text-[#0a1929] text-sm font-semibold">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center text-[#0a1929] text-sm font-semibold">
             H
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function PromptsPage() {
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="card p-4">
-            <div className="text-2xl font-bold text-[#d4a853] tabular-nums">18</div>
+            <div className="text-2xl font-bold text-[#4ECDC4] tabular-nums">18</div>
             <div className="text-sm text-[#64748b]">Finance Templates</div>
           </div>
           <div className="card p-4">

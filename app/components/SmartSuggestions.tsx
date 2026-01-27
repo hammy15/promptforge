@@ -68,7 +68,7 @@ export default function SmartSuggestions({
 
   const complexityColors = {
     simple: '#14b8a6',
-    moderate: '#d4a853',
+    moderate: '#4ECDC4',
     complex: '#f97316',
   };
 
@@ -86,7 +86,7 @@ export default function SmartSuggestions({
             onChange={(e) => setUserIntent(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
             placeholder="e.g., Analyze financial reports and extract key metrics"
-            className="flex-1 px-4 py-2.5 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none"
+            className="flex-1 px-4 py-2.5 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none"
           />
           <button
             onClick={handleAnalyze}
@@ -94,7 +94,7 @@ export default function SmartSuggestions({
             className={`px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors ${
               isLoading || !userIntent.trim()
                 ? 'bg-[#1e3a5f] text-[#64748b] cursor-not-allowed'
-                : 'bg-[#d4a853] text-[#0a1929] hover:bg-[#c49843]'
+                : 'bg-[#4ECDC4] text-[#0a1929] hover:bg-[#c49843]'
             }`}
           >
             {isLoading ? (
@@ -120,7 +120,7 @@ export default function SmartSuggestions({
           {/* Task Analysis */}
           <div className="p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f]">
             <h4 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
-              <Icons.target className="w-4 h-4 text-[#d4a853]" />
+              <Icons.target className="w-4 h-4 text-[#4ECDC4]" />
               Task Analysis
             </h4>
             <div className="grid grid-cols-2 gap-4">
@@ -166,11 +166,11 @@ export default function SmartSuggestions({
                   <button
                     key={i}
                     onClick={() => onSelectModel?.(rec.model)}
-                    className="w-full p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f] hover:border-[#d4a853] transition-all text-left group"
+                    className="w-full p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f] hover:border-[#4ECDC4] transition-all text-left group"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-white group-hover:text-[#d4a853]">
+                        <span className="font-semibold text-white group-hover:text-[#4ECDC4]">
                           {rec.modelInfo?.name || rec.model}
                         </span>
                         {rec.modelInfo?.cost && (
@@ -184,7 +184,7 @@ export default function SmartSuggestions({
                           className="w-8 h-2 rounded-full bg-[#1e3a5f] overflow-hidden"
                         >
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-[#14b8a6] to-[#d4a853]"
+                            className="h-full rounded-full bg-gradient-to-r from-[#14b8a6] to-[#4ECDC4]"
                             style={{ width: `${rec.score}%` }}
                           />
                         </div>
@@ -195,7 +195,7 @@ export default function SmartSuggestions({
                       <ul className="text-xs text-[#94a3b8] space-y-1">
                         {rec.reasons.slice(0, 2).map((reason, j) => (
                           <li key={j} className="flex items-start gap-1">
-                            <span className="text-[#d4a853]">•</span>
+                            <span className="text-[#4ECDC4]">•</span>
                             {reason}
                           </li>
                         ))}
@@ -211,13 +211,13 @@ export default function SmartSuggestions({
           {suggestions.promptTips && suggestions.promptTips.length > 0 && (
             <div className="p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f]">
               <h4 className="text-sm font-medium text-white mb-2 flex items-center gap-2">
-                <Icons.lightbulb className="w-4 h-4 text-[#d4a853]" />
+                <Icons.lightbulb className="w-4 h-4 text-[#4ECDC4]" />
                 Prompt Tips
               </h4>
               <ul className="space-y-1">
                 {suggestions.promptTips.map((tip, i) => (
                   <li key={i} className="text-sm text-[#94a3b8] flex items-start gap-2">
-                    <span className="text-[#d4a853]">•</span>
+                    <span className="text-[#4ECDC4]">•</span>
                     {tip}
                   </li>
                 ))}

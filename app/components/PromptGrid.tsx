@@ -63,7 +63,7 @@ export default function PromptGrid({
               placeholder="Search prompts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none"
+              className="w-full pl-10 pr-4 py-2 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none"
             />
           </div>
         )}
@@ -98,7 +98,7 @@ export default function PromptGrid({
             onClick={() => setActiveCategory('all')}
             className={`px-4 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
               activeCategory === 'all'
-                ? 'bg-[rgba(212,168,83,0.15)] text-[#d4a853] border border-[rgba(212,168,83,0.3)]'
+                ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
                 : 'text-[#94a3b8] hover:text-white hover:bg-[#162a45]'
             }`}
           >
@@ -110,7 +110,7 @@ export default function PromptGrid({
               onClick={() => setActiveCategory(cat.id)}
               className={`px-4 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
                 activeCategory === cat.id
-                  ? 'bg-[rgba(212,168,83,0.15)] text-[#d4a853] border border-[rgba(212,168,83,0.3)]'
+                  ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
                   : 'text-[#94a3b8] hover:text-white hover:bg-[#162a45]'
               }`}
             >

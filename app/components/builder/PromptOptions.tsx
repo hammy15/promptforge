@@ -53,7 +53,7 @@ export default function PromptOptions({
                   onClick={() => updateOption('detail', level)}
                   className={`w-full py-3 px-4 rounded-lg text-sm font-medium capitalize transition-all ${
                     options.detail === level
-                      ? 'bg-[#d4a853] text-[#0a1929]'
+                      ? 'bg-[#4ECDC4] text-[#0a1929]'
                       : 'bg-[#1e3a5f] text-[#94a3b8] hover:text-white'
                   }`}
                 >
@@ -84,7 +84,7 @@ export default function PromptOptions({
                   onClick={() => updateOption('tone', tone)}
                   className={`w-full py-3 px-4 rounded-lg text-sm font-medium capitalize transition-all ${
                     options.tone === tone
-                      ? 'bg-[#d4a853] text-[#0a1929]'
+                      ? 'bg-[#4ECDC4] text-[#0a1929]'
                       : 'bg-[#1e3a5f] text-[#94a3b8] hover:text-white'
                   }`}
                 >
@@ -116,7 +116,7 @@ export default function PromptOptions({
               />
               <div
                 className={`w-12 h-7 rounded-full transition-colors ${
-                  options.includeSteps ? 'bg-[#d4a853]' : 'bg-[#1e3a5f]'
+                  options.includeSteps ? 'bg-[#4ECDC4]' : 'bg-[#1e3a5f]'
                 }`}
               >
                 <div
@@ -143,7 +143,7 @@ export default function PromptOptions({
               />
               <div
                 className={`w-12 h-7 rounded-full transition-colors ${
-                  options.includeErrors ? 'bg-[#d4a853]' : 'bg-[#1e3a5f]'
+                  options.includeErrors ? 'bg-[#4ECDC4]' : 'bg-[#1e3a5f]'
                 }`}
               >
                 <div
@@ -170,7 +170,7 @@ export default function PromptOptions({
         </button>
         <button
           onClick={onNext}
-          className="flex-1 py-4 rounded-xl font-semibold text-lg bg-gradient-to-r from-[#d4a853] to-[#b8953f] text-[#0a1929] hover:opacity-90 transition-all flex items-center justify-center gap-2"
+          className="flex-1 py-4 rounded-xl font-semibold text-lg bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] text-[#0a1929] hover:opacity-90 transition-all flex items-center justify-center gap-2"
         >
           Generate Prompt
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

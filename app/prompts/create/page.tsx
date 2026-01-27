@@ -109,11 +109,11 @@ export default function CreatePromptPage() {
       <nav className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-[#1e3a5f]">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center">
               <Icons.chart className="w-6 h-6 text-[#0a1929]" />
             </div>
             <span className="text-xl font-bold">
-              <span className="text-[#d4a853]">Prompt</span>
+              <span className="text-[#4ECDC4]">Prompt</span>
               <span className="text-white">Forge</span>
             </span>
           </Link>
@@ -125,7 +125,7 @@ export default function CreatePromptPage() {
             <Link href="/prompts" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
               Prompts
             </Link>
-            <Link href="/prompts/create" className="px-4 py-2 text-white font-medium rounded-lg bg-[rgba(212,168,83,0.1)]">
+            <Link href="/prompts/create" className="px-4 py-2 text-white font-medium rounded-lg bg-[rgba(78,205,196,0.1)]">
               Create
             </Link>
             <Link href="/playground" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
@@ -138,7 +138,7 @@ export default function CreatePromptPage() {
           <button className="p-2 text-[#64748b] hover:text-white transition-colors">
             <Icons.settings className="w-5 h-5" />
           </button>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center text-[#0a1929] text-sm font-semibold">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center text-[#0a1929] text-sm font-semibold">
             H
           </div>
         </div>
@@ -160,7 +160,7 @@ export default function CreatePromptPage() {
                 disabled={index > currentStepIndex}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
                   step.id === currentStep
-                    ? 'bg-[#d4a853] text-[#0a1929]'
+                    ? 'bg-[#4ECDC4] text-[#0a1929]'
                     : index < currentStepIndex
                     ? 'bg-[#1e3a5f] text-white cursor-pointer'
                     : 'bg-[#0f2137] text-[#64748b] cursor-not-allowed'
@@ -173,7 +173,7 @@ export default function CreatePromptPage() {
               </button>
               {index < steps.length - 1 && (
                 <div className={`w-8 md:w-16 h-0.5 mx-2 ${
-                  index < currentStepIndex ? 'bg-[#d4a853]' : 'bg-[#1e3a5f]'
+                  index < currentStepIndex ? 'bg-[#4ECDC4]' : 'bg-[#1e3a5f]'
                 }`} />
               )}
             </div>
@@ -197,7 +197,7 @@ export default function CreatePromptPage() {
                   value={promptName}
                   onChange={(e) => setPromptName(e.target.value)}
                   placeholder="e.g., Code Review Assistant"
-                  className="w-full px-4 py-3 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none"
+                  className="w-full px-4 py-3 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none"
                 />
               </div>
 
@@ -208,7 +208,7 @@ export default function CreatePromptPage() {
                   onChange={(e) => setUserIntent(e.target.value)}
                   placeholder="e.g., I want a prompt that helps me review code for security vulnerabilities, best practices, and performance issues. It should provide actionable suggestions with examples..."
                   rows={6}
-                  className="w-full px-4 py-3 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none resize-none"
+                  className="w-full px-4 py-3 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none resize-none"
                 />
                 <div className="flex justify-between mt-2">
                   <span className="text-xs text-[#64748b]">Be specific about the task, context, and desired output</span>
@@ -276,15 +276,15 @@ export default function CreatePromptPage() {
           {/* Step 4: Generating */}
           {currentStep === 'generate' && (
             <div className="text-center py-12">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center mx-auto mb-4 animate-pulse">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center mx-auto mb-4 animate-pulse">
                 <Icons.bolt className="w-8 h-8 text-[#0a1929]" />
               </div>
               <h2 className="text-xl font-bold text-white mb-2">Generating your prompt...</h2>
               <p className="text-[#94a3b8]">AI is crafting an optimized prompt based on your selections</p>
               <div className="flex justify-center gap-1 mt-4">
-                <div className="w-2 h-2 rounded-full bg-[#d4a853] animate-bounce" style={{ animationDelay: '0s' }} />
-                <div className="w-2 h-2 rounded-full bg-[#d4a853] animate-bounce" style={{ animationDelay: '0.2s' }} />
-                <div className="w-2 h-2 rounded-full bg-[#d4a853] animate-bounce" style={{ animationDelay: '0.4s' }} />
+                <div className="w-2 h-2 rounded-full bg-[#4ECDC4] animate-bounce" style={{ animationDelay: '0s' }} />
+                <div className="w-2 h-2 rounded-full bg-[#4ECDC4] animate-bounce" style={{ animationDelay: '0.2s' }} />
+                <div className="w-2 h-2 rounded-full bg-[#4ECDC4] animate-bounce" style={{ animationDelay: '0.4s' }} />
               </div>
             </div>
           )}
@@ -305,7 +305,7 @@ export default function CreatePromptPage() {
                     value={generatedPrompt}
                     onChange={(e) => setGeneratedPrompt(e.target.value)}
                     rows={20}
-                    className="w-full px-4 py-3 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white font-mono text-sm focus:border-[#d4a853] focus:outline-none resize-none"
+                    className="w-full px-4 py-3 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white font-mono text-sm focus:border-[#4ECDC4] focus:outline-none resize-none"
                   />
                 </div>
 
@@ -392,7 +392,7 @@ export default function CreatePromptPage() {
               disabled={!canProceed()}
               className={`flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${
                 canProceed()
-                  ? 'bg-[#d4a853] text-[#0a1929] hover:bg-[#c49843]'
+                  ? 'bg-[#4ECDC4] text-[#0a1929] hover:bg-[#c49843]'
                   : 'bg-[#1e3a5f] text-[#64748b] cursor-not-allowed'
               }`}
             >

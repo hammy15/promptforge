@@ -32,7 +32,7 @@ export default function LLMTargetSelector({
             onClick={() => onSelect(target.id)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
               selected === target.id
-                ? 'bg-[rgba(212,168,83,0.15)] text-[#d4a853] border border-[rgba(212,168,83,0.3)]'
+                ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
                 : 'bg-[#0f2137] border border-[#1e3a5f] text-[#94a3b8] hover:border-[#2d4a6f] hover:text-white'
             }`}
           >
@@ -56,14 +56,14 @@ export default function LLMTargetSelector({
             onMouseLeave={() => setHoveredTarget(null)}
             className={`relative p-4 rounded-xl border transition-all group ${
               selected === target.id
-                ? 'bg-[rgba(212,168,83,0.1)] border-[#d4a853]'
+                ? 'bg-[rgba(78,205,196,0.1)] border-[#4ECDC4]'
                 : 'bg-[#0f2137] border-[#1e3a5f] hover:border-[#2d4a6f]'
             }`}
           >
             {/* Selected indicator */}
             {selected === target.id && (
               <div className="absolute top-2 right-2">
-                <div className="w-5 h-5 rounded-full bg-[#d4a853] flex items-center justify-center">
+                <div className="w-5 h-5 rounded-full bg-[#4ECDC4] flex items-center justify-center">
                   <Icons.check className="w-3 h-3 text-[#0a1929]" />
                 </div>
               </div>
@@ -76,7 +76,7 @@ export default function LLMTargetSelector({
                 {target.logo}
               </div>
               <div className={`font-semibold mb-1 ${
-                selected === target.id ? 'text-[#d4a853]' : 'text-white'
+                selected === target.id ? 'text-[#4ECDC4]' : 'text-white'
               }`}>
                 {target.name}
               </div>
@@ -152,7 +152,7 @@ export default function LLMTargetSelector({
                 <ul className="space-y-1">
                   {displayTarget.optimizationTips.slice(0, 3).map((tip, i) => (
                     <li key={i} className="text-sm text-[#94a3b8] flex items-start gap-2">
-                      <span className="text-[#d4a853] mt-0.5">•</span>
+                      <span className="text-[#4ECDC4] mt-0.5">•</span>
                       <span>{tip}</span>
                     </li>
                   ))}

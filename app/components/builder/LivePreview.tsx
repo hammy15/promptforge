@@ -32,7 +32,7 @@ export default function LivePreview({
     return (
       <button
         onClick={onToggle}
-        className="fixed right-4 bottom-4 md:right-8 md:bottom-8 p-4 rounded-xl bg-[#d4a853] text-[#0a1929] shadow-lg hover:bg-[#c49843] transition-colors z-40"
+        className="fixed right-4 bottom-4 md:right-8 md:bottom-8 p-4 rounded-xl bg-[#4ECDC4] text-[#0a1929] shadow-lg hover:bg-[#c49843] transition-colors z-40"
       >
         <Icons.eye className="w-6 h-6" />
       </button>
@@ -44,7 +44,7 @@ export default function LivePreview({
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-[#1e3a5f]">
         <div className="flex items-center gap-2">
-          <Icons.eye className="w-5 h-5 text-[#d4a853]" />
+          <Icons.eye className="w-5 h-5 text-[#4ECDC4]" />
           <span className="font-semibold text-white">Live Preview</span>
         </div>
         <button
@@ -94,8 +94,8 @@ export default function LivePreview({
                 )}
                 {sections.task && (
                   <div className="space-y-1">
-                    <div className="text-xs font-medium text-[#d4a853]">TASK</div>
-                    <div className="p-3 rounded-lg bg-[#d4a853]/10 text-sm text-[#94a3b8] whitespace-pre-wrap">
+                    <div className="text-xs font-medium text-[#4ECDC4]">TASK</div>
+                    <div className="p-3 rounded-lg bg-[#4ECDC4]/10 text-sm text-[#94a3b8] whitespace-pre-wrap">
                       {sections.task}
                     </div>
                   </div>

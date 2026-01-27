@@ -13,7 +13,7 @@ import { DASHBOARD_WALKTHROUGH, TOOLTIPS } from './data/walkthrough-steps';
 
 // Quick start workflows for different roles
 const quickStartWorkflows = [
-  { id: 'ib', name: 'Investment Banking', icon: 'building', templates: ['dcf-valuation', 'comparable-companies', 'pitch-deck'], color: '#d4a853' },
+  { id: 'ib', name: 'Investment Banking', icon: 'building', templates: ['dcf-valuation', 'comparable-companies', 'pitch-deck'], color: '#4ECDC4' },
   { id: 'pe', name: 'Private Equity', icon: 'briefcase', templates: ['investment-memo', 'due-diligence', 'term-sheet'], color: '#14b8a6' },
   { id: 'corp', name: 'Corporate Finance', icon: 'chart', templates: ['business-plan', 'board-deck', 'investor-update'], color: '#8b5cf6' },
   { id: 'strategy', name: 'Strategy Consulting', icon: 'target', templates: ['swot-analysis', 'competitive-intelligence', 'tam-sam-som'], color: '#f97316' },
@@ -87,18 +87,18 @@ export default function Home() {
           <div className="flex items-center gap-8">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center">
                 <Icons.chart className="w-6 h-6 text-[#0a1929]" />
               </div>
               <span className="text-xl font-bold">
-                <span className="text-[#d4a853]">Prompt</span>
+                <span className="text-[#4ECDC4]">Prompt</span>
                 <span className="text-white">Forge</span>
               </span>
             </Link>
 
             {/* Nav Links */}
             <div className="hidden md:flex items-center gap-1">
-              <Link href="/" className="px-4 py-2 text-white font-medium rounded-lg bg-[rgba(212,168,83,0.1)]">
+              <Link href="/" className="px-4 py-2 text-white font-medium rounded-lg bg-[rgba(78,205,196,0.1)]">
                 Dashboard
               </Link>
               <Tooltip content="Create prompts with our guided wizard" position="bottom">
@@ -122,7 +122,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleShowHelp}
-              className="p-2 text-[#64748b] hover:text-[#d4a853] transition-colors"
+              className="p-2 text-[#64748b] hover:text-[#4ECDC4] transition-colors"
               title="Show onboarding"
             >
               <Icons.help className="w-5 h-5" />
@@ -130,7 +130,7 @@ export default function Home() {
             <button className="p-2 text-[#64748b] hover:text-white transition-colors">
               <Icons.settings className="w-5 h-5" />
             </button>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center text-[#0a1929] text-sm font-semibold">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center text-[#0a1929] text-sm font-semibold">
               H
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function Home() {
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <div className="text-2xl font-bold text-[#d4a853] tabular-nums">$0.00</div>
+                  <div className="text-2xl font-bold text-[#4ECDC4] tabular-nums">$0.00</div>
                   <div className="text-xs text-[#64748b]">Cost MTD</div>
                 </div>
                 <div>
@@ -180,7 +180,7 @@ export default function Home() {
               <div className="space-y-3">
                 {recentWork.map((work, i) => (
                   <div key={i} className="flex items-center gap-3 text-sm">
-                    <div className={`w-2 h-2 rounded-full ${work.status === 'completed' ? 'bg-[#059669]' : 'bg-[#d4a853]'}`} />
+                    <div className={`w-2 h-2 rounded-full ${work.status === 'completed' ? 'bg-[#059669]' : 'bg-[#4ECDC4]'}`} />
                     <div className="flex-1 truncate">
                       <span className="text-white">{work.name}</span>
                     </div>
@@ -239,7 +239,7 @@ export default function Home() {
                   placeholder="Search templates..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none w-64"
+                  className="pl-10 pr-4 py-2 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
                 />
               </div>
             </div>
@@ -252,7 +252,7 @@ export default function Home() {
                   onClick={() => setActiveCategory(cat.id)}
                   className={`px-4 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
                     activeCategory === cat.id
-                      ? 'bg-[rgba(212,168,83,0.15)] text-[#d4a853] border border-[rgba(212,168,83,0.3)]'
+                      ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
                       : 'text-[#94a3b8] hover:text-white hover:bg-[#162a45]'
                   }`}
                 >
@@ -268,14 +268,14 @@ export default function Home() {
                 <Link
                   key={template.id}
                   href={`/playground?template=${template.id}`}
-                  className="group p-5 rounded-xl border border-[#1e3a5f] bg-[#0f2137] hover:border-[#d4a853] hover:bg-[#162a45] transition-all"
+                  className="group p-5 rounded-xl border border-[#1e3a5f] bg-[#0f2137] hover:border-[#4ECDC4] hover:bg-[#162a45] transition-all"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center text-2xl shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center text-2xl shrink-0">
                       {template.icon}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-white group-hover:text-[#d4a853] transition-colors truncate">
+                      <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors truncate">
                         {template.name}
                       </h3>
                       <p className="text-sm text-[#64748b] line-clamp-2 mt-1">
@@ -339,7 +339,7 @@ export default function Home() {
         <footer className="relative z-10 px-6 py-8 border-t border-[#1e3a5f] mt-12">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-[#64748b]">
-              <span className="text-[#d4a853] font-semibold">PromptForge</span>
+              <span className="text-[#4ECDC4] font-semibold">PromptForge</span>
               <span>•</span>
               <span>AI-Powered Financial Analysis</span>
             </div>

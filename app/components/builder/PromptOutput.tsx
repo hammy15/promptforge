@@ -92,7 +92,7 @@ export default function PromptOutput({
           className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-all ${
             copied
               ? 'bg-[#22c55e] text-white'
-              : 'bg-[#d4a853] text-[#0a1929] hover:bg-[#c49843]'
+              : 'bg-[#4ECDC4] text-[#0a1929] hover:bg-[#c49843]'
           }`}
         >
           {copied ? (
@@ -128,7 +128,7 @@ export default function PromptOutput({
       <div className="grid grid-cols-2 gap-3">
         <button
           onClick={onTestInPlayground}
-          className="py-4 rounded-xl font-semibold text-lg bg-gradient-to-r from-[#d4a853] to-[#b8953f] text-[#0a1929] hover:opacity-90 transition-all flex items-center justify-center gap-2"
+          className="py-4 rounded-xl font-semibold text-lg bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] text-[#0a1929] hover:opacity-90 transition-all flex items-center justify-center gap-2"
         >
           <Icons.play className="w-5 h-5" />
           Test in Playground
@@ -158,7 +158,7 @@ export default function PromptOutput({
       {/* Tips */}
       <div className="p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f]">
         <div className="flex items-start gap-3">
-          <Icons.lightbulb className="w-5 h-5 text-[#d4a853] flex-shrink-0 mt-0.5" />
+          <Icons.lightbulb className="w-5 h-5 text-[#4ECDC4] flex-shrink-0 mt-0.5" />
           <div className="text-sm text-[#94a3b8]">
             <span className="font-medium text-white">Pro tip:</span> You can paste this prompt directly into {llmInfo.name}.
             For best results, include any relevant context or files when you start the conversation.

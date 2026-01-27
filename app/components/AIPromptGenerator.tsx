@@ -64,7 +64,7 @@ export default function AIPromptGenerator({
             onChange={(e) => setDescription(e.target.value)}
             placeholder="e.g., I need a prompt that helps analyze quarterly earnings reports and identify key trends, risks, and opportunities..."
             rows={4}
-            className="w-full px-4 py-3 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none resize-none"
+            className="w-full px-4 py-3 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none resize-none"
           />
           <div className="absolute bottom-3 right-3 flex items-center gap-2">
             <span className="text-xs text-[#64748b]">{description.length} chars</span>
@@ -79,7 +79,7 @@ export default function AIPromptGenerator({
         className={`w-full py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors ${
           isGenerating || !description.trim()
             ? 'bg-[#1e3a5f] text-[#64748b] cursor-not-allowed'
-            : 'bg-gradient-to-r from-[#d4a853] to-[#b8953f] text-[#0a1929] hover:opacity-90'
+            : 'bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] text-[#0a1929] hover:opacity-90'
         }`}
       >
         {isGenerating ? (

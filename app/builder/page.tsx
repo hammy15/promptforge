@@ -11,7 +11,7 @@ export default function BuilderPage() {
       <nav className="fixed top-0 left-0 right-0 z-40 bg-[#0a1929]/90 backdrop-blur-sm border-b border-[#1e3a5f]">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center">
               <Icons.bolt className="w-6 h-6 text-[#0a1929]" />
             </div>
             <span className="text-xl font-bold text-white">PromptForge</span>
@@ -26,7 +26,7 @@ export default function BuilderPage() {
             </Link>
             <Link
               href="/builder"
-              className="text-[#d4a853] font-medium text-sm"
+              className="text-[#4ECDC4] font-medium text-sm"
             >
               Prompt Builder
             </Link>

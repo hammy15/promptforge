@@ -12,11 +12,16 @@
   --navy-900: #102a43;
   --navy-950: #0a1929;
 
-  /* Accent: Refined Gold (premium, success) */
-  --gold-400: #f0c674;
-  --gold-500: #d4a853;
-  --gold-600: #b8953f;
-  --gold-700: #9c7f2e;
+  /* Primary: Mint Green (fresh, modern) */
+  --mint-300: #6EE7B7;
+  --mint-400: #4ECDC4;
+  --mint-500: #3EB489;
+  --mint-600: #059669;
+
+  /* Accent: Coral (complementary, warm) */
+  --coral-400: #FF8A80;
+  --coral-500: #FF6B6B;
+  --coral-600: #F85149;
 
   /* Secondary: Teal (growth, positive) */
   --teal-400: #2dd4bf;
@@ -94,12 +99,16 @@ body {
   box-shadow: 0 0 20px rgba(72, 101, 129, 0.3);
 }
 
-.glow-gold {
-  box-shadow: 0 0 20px rgba(212, 168, 83, 0.3);
+.glow-mint {
+  box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
 }
 
-.glow-gold-lg {
-  box-shadow: 0 0 40px rgba(212, 168, 83, 0.4);
+.glow-mint-lg {
+  box-shadow: 0 0 40px rgba(78, 205, 196, 0.4);
+}
+
+.glow-coral {
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
 }
 
 .glow-teal {
@@ -184,7 +193,7 @@ body {
 .bg-gradient-mesh {
   background:
     radial-gradient(at 40% 20%, rgba(72, 101, 129, 0.15) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(212, 168, 83, 0.08) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(78, 205, 196, 0.08) 0px, transparent 50%),
     radial-gradient(at 0% 50%, rgba(72, 101, 129, 0.1) 0px, transparent 50%),
     radial-gradient(at 80% 50%, rgba(20, 184, 166, 0.08) 0px, transparent 50%),
     radial-gradient(at 0% 100%, rgba(72, 101, 129, 0.1) 0px, transparent 50%);
@@ -195,11 +204,11 @@ body {
 }
 
 .bg-gradient-gold {
-  background: linear-gradient(135deg, var(--gold-600) 0%, var(--gold-500) 50%, var(--gold-400) 100%);
+  background: linear-gradient(135deg, var(--mint-500) 0%, var(--mint-400) 50%, var(--mint-300) 100%);
 }
 
 .bg-gradient-navy-gold {
-  background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 60%, rgba(212, 168, 83, 0.2) 100%);
+  background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 60%, rgba(78, 205, 196, 0.2) 100%);
 }
 
 /* Custom scrollbar */
@@ -224,13 +233,13 @@ body {
 /* Button styles - Primary Gold */
 .btn-primary {
   @apply px-6 py-3 font-semibold rounded-xl transition-all duration-200;
-  background: linear-gradient(135deg, var(--gold-500) 0%, var(--gold-600) 100%);
+  background: linear-gradient(135deg, var(--mint-400) 0%, var(--mint-500) 100%);
   color: var(--navy-950);
-  box-shadow: 0 4px 14px rgba(212, 168, 83, 0.3);
+  box-shadow: 0 4px 14px rgba(78, 205, 196, 0.3);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 6px 20px rgba(212, 168, 83, 0.5);
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.5);
   transform: translateY(-1px);
 }
 
@@ -248,8 +257,8 @@ body {
 }
 
 .btn-secondary:hover {
-  border-color: var(--gold-500);
-  color: var(--gold-400);
+  border-color: var(--mint-400);
+  color: var(--mint-300);
 }
 
 /* Button styles - Teal (for positive actions) */
@@ -280,7 +289,7 @@ body {
 
 .card-gold {
   background: var(--bg-card);
-  border: 1px solid rgba(212, 168, 83, 0.3);
+  border: 1px solid rgba(78, 205, 196, 0.3);
   border-radius: 1rem;
 }
 
@@ -301,9 +310,9 @@ body {
 }
 
 .input:focus {
-  border-color: var(--gold-500);
+  border-color: var(--mint-400);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.1);
+  box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
 }
 
 /* Financial data display */
@@ -320,7 +329,7 @@ body {
 }
 
 .metric-highlight {
-  color: var(--gold-400);
+  color: var(--mint-300);
 }
 
 /* Badge styles */
@@ -329,9 +338,9 @@ body {
 }
 
 .badge-gold {
-  background: rgba(212, 168, 83, 0.15);
-  color: var(--gold-400);
-  border: 1px solid rgba(212, 168, 83, 0.3);
+  background: rgba(78, 205, 196, 0.15);
+  color: var(--mint-300);
+  border: 1px solid rgba(78, 205, 196, 0.3);
 }
 
 .badge-navy {
@@ -365,8 +374,8 @@ body {
 }
 
 .badge-intermediate {
-  background: rgba(212, 168, 83, 0.15);
-  color: var(--gold-400);
+  background: rgba(78, 205, 196, 0.15);
+  color: var(--mint-300);
 }
 
 .badge-advanced {
@@ -440,8 +449,8 @@ body {
 }
 
 .kpi-card-highlight {
-  border-color: rgba(212, 168, 83, 0.3);
-  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 168, 83, 0.05) 100%);
+  border-color: rgba(78, 205, 196, 0.3);
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(78, 205, 196, 0.05) 100%);
 }
 
 /* Progress indicator */
@@ -452,7 +461,7 @@ body {
 
 .progress-bar-fill {
   @apply h-full rounded-full transition-all duration-500;
-  background: linear-gradient(90deg, var(--gold-600) 0%, var(--gold-400) 100%);
+  background: linear-gradient(90deg, var(--mint-500) 0%, var(--mint-300) 100%);
 }
 
 .progress-bar-teal .progress-bar-fill {
@@ -461,19 +470,19 @@ body {
 
 /* Sparkline styles */
 .sparkline {
-  stroke: var(--gold-500);
+  stroke: var(--mint-400);
   stroke-width: 2;
   fill: none;
 }
 
 .sparkline-area {
-  fill: rgba(212, 168, 83, 0.1);
+  fill: rgba(78, 205, 196, 0.1);
 }
 
 /* Category colors for finance templates */
 .category-financial-analysis {
-  --category-color: var(--gold-500);
-  --category-bg: rgba(212, 168, 83, 0.1);
+  --category-color: var(--mint-400);
+  --category-bg: rgba(78, 205, 196, 0.1);
 }
 
 .category-investment-research {

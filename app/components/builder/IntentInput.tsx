@@ -33,7 +33,7 @@ export default function IntentInput({
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] mb-4">
           <Icons.edit className="w-8 h-8 text-[#0a1929]" />
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">What do you want to do?</h2>
@@ -51,7 +51,7 @@ export default function IntentInput({
             placeholder="e.g., Write a Python script that organizes my photos by date and removes duplicates..."
             rows={4}
             className={`w-full px-5 py-4 bg-[#0a1929] border-2 rounded-xl text-white text-lg placeholder-[#64748b] focus:outline-none resize-none transition-colors ${
-              isFocused ? 'border-[#d4a853]' : 'border-[#1e3a5f]'
+              isFocused ? 'border-[#4ECDC4]' : 'border-[#1e3a5f]'
             }`}
           />
         </Tooltip>
@@ -64,8 +64,8 @@ export default function IntentInput({
       {value.length > 10 && detectedTask && recommendedLLM && (
         <div className="p-4 rounded-xl bg-[#0f2137] border border-[#1e3a5f] animate-fadeIn" data-tour="task-detection">
           <div className="flex items-start gap-4">
-            <div className="p-2 rounded-lg bg-[#d4a853]/20">
-              <Icons.bolt className="w-5 h-5 text-[#d4a853]" />
+            <div className="p-2 rounded-lg bg-[#4ECDC4]/20">
+              <Icons.bolt className="w-5 h-5 text-[#4ECDC4]" />
             </div>
             <div className="flex-1">
               <div className="text-sm text-[#64748b] mb-1">Detected task type</div>
@@ -110,7 +110,7 @@ export default function IntentInput({
         disabled={!canProceed}
         className={`w-full py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition-all ${
           canProceed
-            ? 'bg-gradient-to-r from-[#d4a853] to-[#b8953f] text-[#0a1929] hover:opacity-90'
+            ? 'bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] text-[#0a1929] hover:opacity-90'
             : 'bg-[#1e3a5f] text-[#64748b] cursor-not-allowed'
         }`}
       >

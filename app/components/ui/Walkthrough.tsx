@@ -139,7 +139,7 @@ export default function Walkthrough({
       {/* Spotlight on target element */}
       {targetRect && (
         <div
-          className="absolute border-2 border-[#d4a853] rounded-lg shadow-[0_0_0_9999px_rgba(0,0,0,0.7)] transition-all duration-300"
+          className="absolute border-2 border-[#4ECDC4] rounded-lg shadow-[0_0_0_9999px_rgba(0,0,0,0.7)] transition-all duration-300"
           style={{
             top: targetRect.top - 4,
             left: targetRect.left - 4,
@@ -155,7 +155,7 @@ export default function Walkthrough({
         style={getTooltipPosition()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[#d4a853] to-[#b8953f]">
+        <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[#4ECDC4] to-[#3EB489]">
           <div className="flex items-center gap-2">
             <Icons.lightbulb className="w-5 h-5 text-[#0a1929]" />
             <span className="font-semibold text-[#0a1929]">
@@ -183,7 +183,7 @@ export default function Walkthrough({
               <div
                 key={i}
                 className={`flex-1 h-1 rounded-full transition-colors ${
-                  i <= currentStep ? 'bg-[#d4a853]' : 'bg-[#1e3a5f]'
+                  i <= currentStep ? 'bg-[#4ECDC4]' : 'bg-[#1e3a5f]'
                 }`}
               />
             ))}
@@ -209,7 +209,7 @@ export default function Walkthrough({
             )}
             <button
               onClick={handleNext}
-              className="px-4 py-2 text-sm font-medium text-[#0a1929] bg-[#d4a853] hover:bg-[#c49843] rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-[#0a1929] bg-[#4ECDC4] hover:bg-[#3EB489] rounded-lg transition-colors"
             >
               {isLastStep ? 'Get Started' : 'Next'}
             </button>

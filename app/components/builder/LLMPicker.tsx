@@ -69,13 +69,13 @@ export default function LLMPicker({
               onClick={() => onChange(llm)}
               className={`relative p-5 rounded-xl border-2 transition-all text-left ${
                 isSelected
-                  ? 'border-[#d4a853] bg-[#d4a853]/10'
+                  ? 'border-[#4ECDC4] bg-[#4ECDC4]/10'
                   : 'border-[#1e3a5f] bg-[#0f2137] hover:border-[#2d4a6f]'
               }`}
             >
               {/* Recommended Badge */}
               {isRecommended && (
-                <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-[#d4a853] text-[#0a1929] text-xs font-semibold">
+                <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-[#4ECDC4] text-[#0a1929] text-xs font-semibold">
                   Best match
                 </div>
               )}
@@ -98,7 +98,7 @@ export default function LLMPicker({
               {/* Selected Check */}
               {isSelected && (
                 <div className="absolute bottom-3 right-3">
-                  <div className="w-6 h-6 rounded-full bg-[#d4a853] flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-[#4ECDC4] flex items-center justify-center">
                     <svg className="w-4 h-4 text-[#0a1929]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
@@ -131,7 +131,7 @@ export default function LLMPicker({
         </button>
         <button
           onClick={onNext}
-          className="flex-1 py-4 rounded-xl font-semibold text-lg bg-gradient-to-r from-[#d4a853] to-[#b8953f] text-[#0a1929] hover:opacity-90 transition-all flex items-center justify-center gap-2"
+          className="flex-1 py-4 rounded-xl font-semibold text-lg bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] text-[#0a1929] hover:opacity-90 transition-all flex items-center justify-center gap-2"
         >
           Continue
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

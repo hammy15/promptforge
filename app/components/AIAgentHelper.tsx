@@ -136,7 +136,7 @@ export default function AIAgentHelper({
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-[#1e3a5f]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8953f] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center">
             <Icons.bot className="w-6 h-6 text-[#0a1929]" />
           </div>
           <div>
@@ -171,7 +171,7 @@ export default function AIAgentHelper({
             <div
               className={`max-w-[85%] rounded-2xl px-4 py-2.5 ${
                 message.role === 'user'
-                  ? 'bg-[#d4a853] text-[#0a1929]'
+                  ? 'bg-[#4ECDC4] text-[#0a1929]'
                   : 'bg-[#1e3a5f] text-white'
               }`}
             >
@@ -191,9 +191,9 @@ export default function AIAgentHelper({
           <div className="flex justify-start">
             <div className="bg-[#1e3a5f] rounded-2xl px-4 py-3">
               <div className="flex gap-1">
-                <div className="w-2 h-2 rounded-full bg-[#d4a853] animate-bounce" style={{ animationDelay: '0s' }} />
-                <div className="w-2 h-2 rounded-full bg-[#d4a853] animate-bounce" style={{ animationDelay: '0.2s' }} />
-                <div className="w-2 h-2 rounded-full bg-[#d4a853] animate-bounce" style={{ animationDelay: '0.4s' }} />
+                <div className="w-2 h-2 rounded-full bg-[#4ECDC4] animate-bounce" style={{ animationDelay: '0s' }} />
+                <div className="w-2 h-2 rounded-full bg-[#4ECDC4] animate-bounce" style={{ animationDelay: '0.2s' }} />
+                <div className="w-2 h-2 rounded-full bg-[#4ECDC4] animate-bounce" style={{ animationDelay: '0.4s' }} />
               </div>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function AIAgentHelper({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder="Ask me anything..."
-            className="flex-1 px-4 py-2.5 bg-[#0a1929] border border-[#1e3a5f] rounded-xl text-white placeholder-[#64748b] focus:border-[#d4a853] focus:outline-none"
+            className="flex-1 px-4 py-2.5 bg-[#0a1929] border border-[#1e3a5f] rounded-xl text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none"
           />
           <button
             onClick={handleSend}
@@ -236,7 +236,7 @@ export default function AIAgentHelper({
             className={`p-2.5 rounded-xl transition-colors ${
               isLoading || !input.trim()
                 ? 'bg-[#1e3a5f] text-[#64748b] cursor-not-allowed'
-                : 'bg-[#d4a853] text-[#0a1929] hover:bg-[#c49843]'
+                : 'bg-[#4ECDC4] text-[#0a1929] hover:bg-[#c49843]'
             }`}
           >
             <Icons.send className="w-5 h-5" />

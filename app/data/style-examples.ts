@@ -131,7 +131,7 @@ export const STYLE_EXAMPLES: StyleExample[] = [
     name: 'COSTAR Framework',
     category: 'structure',
     icon: '⭐',
-    color: '#d4a853',
+    color: '#4ECDC4',
     description: 'Context, Objective, Style, Tone, Audience, Response',
     previewBefore: 'Write a product description',
     previewAfter: '**Context:** [Background]\n**Objective:** [Goal]\n**Style:** [Approach]\n**Tone:** [Voice]\n**Audience:** [Target]\n**Response:** [Format]',
