@@ -441,7 +441,7 @@ function Playground() {
               <div>
                 <span className="text-xl font-bold">
                   <span className="text-[#4ECDC4]">Prompt</span>
-                  <span className="text-white">Forge</span>
+                  <span className="text-[var(--foreground)]">Forge</span>
                 </span>
                 <span className="ml-2 text-xs px-2 py-0.5 bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] rounded-full">
                   {mode === 'simple' ? 'Simple' : 'Expert'}
@@ -457,7 +457,7 @@ function Playground() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     mode === 'simple'
                       ? 'bg-[#4ECDC4] text-[#0a1929]'
-                      : 'text-[var(--text-secondary)] hover:text-white'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
                   }`}
                 >
                   <Icons.wand className="w-4 h-4 inline mr-2" />
@@ -468,7 +468,7 @@ function Playground() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     mode === 'expert'
                       ? 'bg-[#4ECDC4] text-[#0a1929]'
-                      : 'text-[var(--text-secondary)] hover:text-white'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
                   }`}
                 >
                   <Icons.beaker className="w-4 h-4 inline mr-2" />
@@ -535,7 +535,7 @@ function Playground() {
               {currentStep === 'industry' && (
                 <div className="space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold text-white mb-2">Select Your Domain</h2>
+                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Select Your Domain</h2>
                     <p className="text-[var(--text-secondary)]">Choose your primary use case to see relevant templates</p>
                   </div>
 
@@ -556,7 +556,7 @@ function Playground() {
                               {IndustryIcon && <IndustryIcon className="w-7 h-7" style={{ color: industry.color }} />}
                             </div>
                             <div>
-                              <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors">
+                              <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4] transition-colors">
                                 {industry.name}
                               </h3>
                               <p className="text-sm text-[var(--text-muted)] mt-1">{industry.description}</p>
@@ -580,7 +580,7 @@ function Playground() {
                           <Icons.search className="w-7 h-7 text-[var(--text-muted)]" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors">
+                          <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4] transition-colors">
                             Browse All Templates
                           </h3>
                           <p className="text-sm text-[var(--text-muted)] mt-1">View all 18 finance templates</p>
@@ -595,7 +595,7 @@ function Playground() {
               {currentStep === 'template' && (
                 <div className="space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold text-white mb-2">Choose a Template</h2>
+                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Choose a Template</h2>
                     <p className="text-[var(--text-secondary)]">Select a financial analysis template or start from scratch</p>
                   </div>
 
@@ -610,7 +610,7 @@ function Playground() {
                           className={`px-4 py-2 rounded-xl text-sm transition-all ${
                             selectedCategory === cat.id
                               ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
-                              : 'bg-[var(--card)] text-[var(--text-secondary)] hover:text-white border border-[var(--border-color)]'
+                              : 'bg-[var(--card)] text-[var(--text-secondary)] hover:text-[var(--foreground)] border border-[var(--border-color)]'
                           }`}
                         >
                           <span className="mr-2">{cat.icon}</span>
@@ -627,7 +627,7 @@ function Playground() {
                         placeholder="Search templates..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 pr-4 py-2 bg-[var(--card)] border border-[var(--border-color)] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
+                        className="pl-10 pr-4 py-2 bg-[var(--card)] border border-[var(--border-color)] rounded-lg text-sm text-[var(--foreground)] placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
                       />
                     </div>
                   </div>
@@ -645,7 +645,7 @@ function Playground() {
                             {template.icon}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors truncate">
+                            <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4] transition-colors truncate">
                               {template.name}
                             </h3>
                             <p className="text-sm text-[var(--text-muted)] mt-1 line-clamp-2">{template.description}</p>
@@ -677,7 +677,7 @@ function Playground() {
                           <Icons.plus className="w-6 h-6 text-[var(--text-muted)]" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors">
+                          <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4] transition-colors">
                             Start from Scratch
                           </h3>
                           <p className="text-sm text-[var(--text-muted)] mt-1">Write your own prompt</p>
@@ -705,7 +705,7 @@ function Playground() {
                   {/* Left: Variables or Editor */}
                   <div className="space-y-4" data-tour="variables-panel">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-xl font-bold text-white">
+                      <h2 className="text-xl font-bold text-[var(--foreground)]">
                         {selectedTemplate ? 'Financial Details' : 'Write Your Prompt'}
                       </h2>
                       <HelpTooltip content="Fill in each field to customize your financial analysis prompt." />
@@ -718,7 +718,7 @@ function Playground() {
                           <div className="flex items-center gap-3">
                             <span className="text-2xl">{selectedTemplate.icon}</span>
                             <div>
-                              <h3 className="font-semibold text-white">{selectedTemplate.name}</h3>
+                              <h3 className="font-semibold text-[var(--foreground)]">{selectedTemplate.name}</h3>
                               <div className="flex gap-2 mt-1">
                                 <span className={`badge badge-${selectedTemplate.difficulty}`}>
                                   {selectedTemplate.difficulty}
@@ -784,7 +784,7 @@ Tips for finance prompts:
                   {/* Right: Preview */}
                   <div className="space-y-4" data-tour="output-panel">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-xl font-bold text-white">Live Preview</h2>
+                      <h2 className="text-xl font-bold text-[var(--foreground)]">Live Preview</h2>
                       <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                         <Icons.eye className="w-4 h-4" />
                         Updates as you type
@@ -805,7 +805,7 @@ Tips for finance prompts:
                           <div className="text-xs text-[var(--text-muted)]">Tokens</div>
                         </div>
                         <div className="card p-4 text-center">
-                          <div className="text-2xl font-bold text-white tabular-nums">${analysisResults.cost.toFixed(4)}</div>
+                          <div className="text-2xl font-bold text-[var(--foreground)] tabular-nums">${analysisResults.cost.toFixed(4)}</div>
                           <div className="text-xs text-[var(--text-muted)]">Est. Cost</div>
                         </div>
                       </div>
@@ -831,7 +831,7 @@ Tips for finance prompts:
               {currentStep === 'review' && (
                 <div className="max-w-4xl mx-auto space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold text-white mb-2">Review & Optimize</h2>
+                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Review & Optimize</h2>
                     <p className="text-[var(--text-secondary)]">Review your prompt and apply optimizations</p>
                   </div>
 
@@ -874,7 +874,7 @@ Tips for finance prompts:
                           <Icons.compress className="w-6 h-6" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white group-hover:text-[#4ECDC4]">Compress Prompt</h3>
+                          <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4]">Compress Prompt</h3>
                           <p className="text-sm text-[var(--text-muted)]">Remove filler words, save ~{analysisResults?.compressionSavings || 0}% tokens</p>
                         </div>
                       </div>
@@ -889,7 +889,7 @@ Tips for finance prompts:
                           <Icons.shield className="w-6 h-6" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white group-hover:text-[#4ECDC4]">Redact PII</h3>
+                          <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4]">Redact PII</h3>
                           <p className="text-sm text-[var(--text-muted)]">Remove {analysisResults?.piiCount || 0} sensitive items found</p>
                         </div>
                       </div>
@@ -938,7 +938,7 @@ Tips for finance prompts:
               {currentStep === 'export' && (
                 <div className="max-w-4xl mx-auto space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold text-white mb-2">Your Prompt is Ready!</h2>
+                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Your Prompt is Ready!</h2>
                     <p className="text-[var(--text-secondary)]">Choose your export format and copy</p>
                   </div>
 
@@ -957,7 +957,7 @@ Tips for finance prompts:
                           }`}
                         >
                           {FormatIcon && <FormatIcon className={`w-6 h-6 mx-auto mb-2 ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-[var(--text-muted)]'}`} />}
-                          <div className={`text-sm font-medium ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-white'}`}>
+                          <div className={`text-sm font-medium ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-[var(--foreground)]'}`}>
                             {format.name}
                           </div>
                           <div className="text-xs text-[var(--text-muted)] mt-1">{format.description}</div>
@@ -972,7 +972,7 @@ Tips for finance prompts:
                       <div className="flex items-center gap-3">
                         <Icons.documentChart className="w-5 h-5 text-[var(--text-muted)]" />
                         <div>
-                          <div className="text-sm font-medium text-white">Audit Mode</div>
+                          <div className="text-sm font-medium text-[var(--foreground)]">Audit Mode</div>
                           <div className="text-xs text-[var(--text-muted)]">Log exports for compliance tracking</div>
                         </div>
                       </div>
@@ -995,7 +995,7 @@ Tips for finance prompts:
                         onClick={handleCopy}
                         data-tour="run-button"
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                          copied ? 'bg-[#059669] text-white' : 'bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] hover:bg-[rgba(78,205,196,0.3)]'
+                          copied ? 'bg-[#059669] text-[var(--foreground)]' : 'bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] hover:bg-[rgba(78,205,196,0.3)]'
                         }`}
                       >
                         <Icons.copy className="w-4 h-4" />
@@ -1014,7 +1014,7 @@ Tips for finance prompts:
                       <div className="text-xs text-[var(--text-muted)]">Total Tokens</div>
                     </div>
                     <div className="card p-4 text-center">
-                      <div className="text-2xl font-bold text-white tabular-nums">${analysisResults?.cost.toFixed(4) || '0.0000'}</div>
+                      <div className="text-2xl font-bold text-[var(--foreground)] tabular-nums">${analysisResults?.cost.toFixed(4) || '0.0000'}</div>
                       <div className="text-xs text-[var(--text-muted)]">Estimated Cost</div>
                     </div>
                     <div className="card p-4 text-center">
@@ -1074,7 +1074,7 @@ Tips for finance prompts:
       {showHistory && (
         <div className="fixed inset-y-0 right-0 w-80 bg-[var(--card)] border-l border-[var(--border-color)] z-50 animate-slide-in">
           <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between">
-            <h3 className="font-semibold text-white">Recent Prompts</h3>
+            <h3 className="font-semibold text-[var(--foreground)]">Recent Prompts</h3>
             <button onClick={() => setShowHistory(false)} className="p-1 hover:text-[#4ECDC4]">
               <Icons.x className="w-5 h-5" />
             </button>
@@ -1182,7 +1182,7 @@ function ExpertMode({
           <div className="space-y-3">
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
-                <div className="text-xl font-bold text-white tabular-nums">{compressed.originalTokens}</div>
+                <div className="text-xl font-bold text-[var(--foreground)] tabular-nums">{compressed.originalTokens}</div>
                 <div className="text-xs text-[var(--text-muted)]">Original</div>
               </div>
               <div className="text-center">
@@ -1237,7 +1237,7 @@ function ExpertMode({
                 <div className="text-xs text-[var(--text-muted)]">Input Tokens</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-white tabular-nums">${cost.totalCost.toFixed(4)}</div>
+                <div className="text-xl font-bold text-[var(--foreground)] tabular-nums">${cost.totalCost.toFixed(4)}</div>
                 <div className="text-xs text-[var(--text-muted)]">Per Request</div>
               </div>
             </div>
@@ -1276,12 +1276,12 @@ function ExpertMode({
       {/* Editor */}
       <div className="lg:col-span-2 space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white">Prompt Editor</h2>
+          <h2 className="text-xl font-bold text-[var(--foreground)]">Prompt Editor</h2>
           <div className="flex items-center gap-2">
             <select
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className="bg-[var(--card)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-sm text-white"
+              className="bg-[var(--card)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-sm text-[var(--foreground)]"
               data-tour="model-selector"
             >
               {MODEL_PRICING.map((m) => (
@@ -1291,7 +1291,7 @@ function ExpertMode({
             <button
               onClick={onCopy}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                copied ? 'bg-[#059669] text-white' : 'bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] hover:bg-[rgba(78,205,196,0.3)]'
+                copied ? 'bg-[#059669] text-[var(--foreground)]' : 'bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] hover:bg-[rgba(78,205,196,0.3)]'
               }`}
             >
               <Icons.copy className="w-4 h-4" />
@@ -1323,7 +1323,7 @@ Expert tips:
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[var(--text-muted)]">Cost:</span>
-              <span className="text-white font-medium tabular-nums">${analysisResults.cost.toFixed(4)}</span>
+              <span className="text-[var(--foreground)] font-medium tabular-nums">${analysisResults.cost.toFixed(4)}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[var(--text-muted)]">PII:</span>
@@ -1349,7 +1349,7 @@ Expert tips:
             <div className="flex items-center gap-3">
               <Icons.documentChart className="w-5 h-5 text-[var(--text-muted)]" />
               <div>
-                <div className="text-sm font-medium text-white">Audit Mode</div>
+                <div className="text-sm font-medium text-[var(--foreground)]">Audit Mode</div>
                 <div className="text-xs text-[var(--text-muted)]">Log exports for compliance tracking</div>
               </div>
             </div>
@@ -1365,7 +1365,7 @@ Expert tips:
 
       {/* Features Panel */}
       <div className="space-y-4" data-tour="variables-panel">
-        <h2 className="text-xl font-bold text-white">Tools</h2>
+        <h2 className="text-xl font-bold text-[var(--foreground)]">Tools</h2>
 
         <div className="space-y-3">
           {features.map((f) => {
@@ -1381,7 +1381,7 @@ Expert tips:
                       {FeatureIcon && <FeatureIcon className="w-5 h-5" />}
                     </div>
                     <div className="text-left">
-                      <div className="font-medium text-white">{f.name}</div>
+                      <div className="font-medium text-[var(--foreground)]">{f.name}</div>
                       <div className="text-xs text-[var(--text-muted)]">{f.desc}</div>
                     </div>
                   </div>
@@ -1419,7 +1419,7 @@ Expert tips:
                         <select
                           value={selectedModel}
                           onChange={(e) => setSelectedModel(e.target.value)}
-                          className="w-full bg-[var(--card)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-sm text-white"
+                          className="w-full bg-[var(--card)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-sm text-[var(--foreground)]"
                         >
                           {MODEL_PRICING.map((m) => (
                             <option key={m.id} value={m.id}>{m.name} - ${m.inputPricePerMillion}/1M</option>
