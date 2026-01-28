@@ -15,6 +15,7 @@ import Walkthrough from '../components/ui/Walkthrough';
 import HelpButton from '../components/ui/HelpButton';
 import { PLAYGROUND_WALKTHROUGH } from '../data/walkthrough-steps';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { PromptScoreCard } from '../components/PromptScoreCard';
 
 // Loading fallback component
 function PlaygroundLoading() {
@@ -180,12 +181,23 @@ function Playground() {
   useEffect(() => {
     const templateId = searchParams.get('template');
     const modeParam = searchParams.get('mode');
+    const demoParam = searchParams.get('demo');
 
     if (modeParam === 'expert') {
       setMode('expert');
     }
 
-    if (templateId) {
+    // If demo=true and template matches DEMO_EXAMPLE, load demo with pre-filled values
+    if (demoParam === 'true' && templateId === DEMO_EXAMPLE.templateId) {
+      const template = ALL_TEMPLATES.find(t => t.id === DEMO_EXAMPLE.templateId);
+      if (template) {
+        setSelectedTemplate(template);
+        setPrompt(template.prompt);
+        setOriginalPrompt(template.prompt);
+        setVariableValues(DEMO_EXAMPLE.variables);
+        setCurrentStep('export');
+      }
+    } else if (templateId) {
       const template = ALL_TEMPLATES.find(t => t.id === templateId);
       if (template) {
         handleSelectTemplate(template);
@@ -1411,11 +1423,17 @@ Expert tips:
           })}
         </div>
 
-        {/* Finance Pro Tips */}
+        {/* Prompt Quality Score */}
+        <PromptScoreCard
+          prompt={prompt}
+          onImprove={(improved) => setPrompt(improved)}
+        />
+
+        {/* Pro Tips */}
         <div className="card p-4 bg-[rgba(78,205,196,0.1)] border-[rgba(78,205,196,0.2)]">
           <div className="flex items-center gap-2 text-[#4ECDC4] mb-2">
             <Icons.lightbulb className="w-4 h-4" />
-            <span className="text-sm font-medium">Finance Pro Tip</span>
+            <span className="text-sm font-medium">Pro Tip</span>
           </div>
           <p className="text-xs text-[var(--text-secondary)]">
             Use the Format tool to add Excel-ready or slide-friendly output instructions.

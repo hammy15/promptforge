@@ -143,7 +143,7 @@ export default function Home() {
                   <Icons.arrowRight className="w-5 h-5" />
                 </Link>
                 <Link
-                  href="/playground?template=dcf-valuation&demo=true"
+                  href="/playground?template=hospice-eligibility-general&demo=true"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 border border-[var(--border-color)] text-[var(--foreground)] font-semibold rounded-xl hover:border-[#4ECDC4] hover:bg-[var(--muted)] transition-all"
                 >
                   <Icons.eye className="w-5 h-5" />
