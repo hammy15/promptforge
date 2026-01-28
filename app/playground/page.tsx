@@ -40,7 +40,7 @@ export default function PlaygroundPage() {
 }
 
 type Mode = 'simple' | 'expert';
-type Step = 'industry' | 'template' | 'customize' | 'review' | 'export';
+type Step = 'template' | 'customize' | 'export';
 
 // Industry/use-case options for finance professionals
 const INDUSTRY_OPTIONS = [
@@ -110,12 +110,25 @@ const MODEL_RECOMMENDATIONS = {
   advanced: { model: 'claude-opus-4-5-20250514', reason: 'Maximum capability for complex financial modeling' },
 };
 
+// Demo data for one-click example
+const DEMO_EXAMPLE = {
+  templateId: 'dcf-model',
+  variables: {
+    company_name: 'Acme Corporation',
+    revenue: '150,000,000',
+    growth_rate: '12',
+    discount_rate: '10',
+    terminal_growth: '2.5',
+    projection_years: '5',
+  },
+};
+
 function Playground() {
   const searchParams = useSearchParams();
 
   // Core state
   const [mode, setMode] = useState<Mode>('simple');
-  const [currentStep, setCurrentStep] = useState<Step>('industry');
+  const [currentStep, setCurrentStep] = useState<Step>('template');
   const [prompt, setPrompt] = useState('');
   const [originalPrompt, setOriginalPrompt] = useState('');
 
@@ -211,14 +224,31 @@ function Playground() {
     }
   }, [selectedTemplate]);
 
-  // Handle industry selection
+  // Handle industry selection (filter templates, stay on same step)
   const handleSelectIndustry = (industryId: string) => {
-    setSelectedIndustry(industryId);
-    const industry = INDUSTRY_OPTIONS.find(i => i.id === industryId);
-    if (industry && industry.categories.length > 0) {
-      setSelectedCategory(industry.categories[0]);
+    if (selectedIndustry === industryId) {
+      // Toggle off if same industry clicked
+      setSelectedIndustry(null);
+      setSelectedCategory('all');
+    } else {
+      setSelectedIndustry(industryId);
+      const industry = INDUSTRY_OPTIONS.find(i => i.id === industryId);
+      if (industry && industry.categories.length > 0) {
+        setSelectedCategory(industry.categories[0]);
+      }
     }
-    setCurrentStep('template');
+  };
+
+  // One-click demo - instantly show a completed example
+  const handleTryDemo = () => {
+    const template = ALL_TEMPLATES.find(t => t.id === DEMO_EXAMPLE.templateId);
+    if (template) {
+      setSelectedTemplate(template);
+      setPrompt(template.prompt);
+      setOriginalPrompt(template.prompt);
+      setVariableValues(DEMO_EXAMPLE.variables);
+      setCurrentStep('export'); // Jump straight to the result
+    }
   };
 
   // Handle template selection
@@ -321,13 +351,11 @@ function Playground() {
     return matchesCategory && matchesSearch;
   });
 
-  // Steps for simple mode
+  // Steps for simple mode - Simplified to 3 steps
   const steps: { id: Step; name: string; icon: keyof typeof Icons }[] = [
-    { id: 'industry', name: 'Industry', icon: 'building' },
-    { id: 'template', name: 'Template', icon: 'documentChart' },
-    { id: 'customize', name: 'Details', icon: 'wand' },
-    { id: 'review', name: 'Review', icon: 'eye' },
-    { id: 'export', name: 'Export', icon: 'download' },
+    { id: 'template', name: 'Choose Template', icon: 'documentChart' },
+    { id: 'customize', name: 'Fill Details', icon: 'wand' },
+    { id: 'export', name: 'Get Prompt', icon: 'copy' },
   ];
 
   const currentStepIndex = steps.findIndex(s => s.id === currentStep);
@@ -531,103 +559,69 @@ function Playground() {
 
             {/* Step Content */}
             <div className="animate-fade-in">
-              {/* Step 1: Industry Selection */}
-              {currentStep === 'industry' && (
+              {/* Step 1: Choose Template (combined industry + template) */}
+              {currentStep === 'template' && (
                 <div className="space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Select Your Domain</h2>
-                    <p className="text-[var(--text-secondary)]">Choose your primary use case to see relevant templates</p>
+                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Choose Your Template</h2>
+                    <p className="text-[var(--text-secondary)]">Filter by domain or browse all templates</p>
+
+                    {/* One-Click Demo */}
+                    <button
+                      onClick={handleTryDemo}
+                      className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] text-[#0a1929] font-medium hover:opacity-90 transition-opacity"
+                    >
+                      <Icons.play className="w-4 h-4" />
+                      Try Demo Instantly
+                    </button>
+                    <p className="text-xs text-[var(--text-muted)] mt-2">See a complete DCF analysis example in one click</p>
                   </div>
 
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                  {/* Industry Quick Filters */}
+                  <div className="flex flex-wrap justify-center gap-2">
+                    <button
+                      onClick={() => {
+                        setSelectedIndustry(null);
+                        setSelectedCategory('all');
+                      }}
+                      className={`px-4 py-2 rounded-xl text-sm transition-all flex items-center gap-2 ${
+                        !selectedIndustry
+                          ? 'bg-[#4ECDC4] text-[#0a1929]'
+                          : 'bg-[var(--card)] text-[var(--text-secondary)] hover:text-[var(--foreground)] border border-[var(--border-color)]'
+                      }`}
+                    >
+                      <Icons.search className="w-4 h-4" />
+                      All Templates
+                    </button>
                     {INDUSTRY_OPTIONS.map((industry) => {
                       const IndustryIcon = Icons[industry.icon as keyof typeof Icons];
                       return (
                         <button
                           key={industry.id}
                           onClick={() => handleSelectIndustry(industry.id)}
-                          className="card p-6 text-left hover:border-[#4ECDC4] transition-all group"
-                        >
-                          <div className="flex items-start gap-4">
-                            <div
-                              className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0"
-                              style={{ background: `${industry.color}20` }}
-                            >
-                              {IndustryIcon && <IndustryIcon className="w-7 h-7" style={{ color: industry.color }} />}
-                            </div>
-                            <div>
-                              <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4] transition-colors">
-                                {industry.name}
-                              </h3>
-                              <p className="text-sm text-[var(--text-muted)] mt-1">{industry.description}</p>
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })}
-
-                    {/* Browse All */}
-                    <button
-                      onClick={() => {
-                        setSelectedIndustry(null);
-                        setSelectedCategory('all');
-                        setCurrentStep('template');
-                      }}
-                      className="card p-6 text-left hover:border-[#4ECDC4] transition-all group border-dashed"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-xl border-2 border-dashed border-[#334155] flex items-center justify-center">
-                          <Icons.search className="w-7 h-7 text-[var(--text-muted)]" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4] transition-colors">
-                            Browse All Templates
-                          </h3>
-                          <p className="text-sm text-[var(--text-muted)] mt-1">View all 18 finance templates</p>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 2: Template Selection */}
-              {currentStep === 'template' && (
-                <div className="space-y-6">
-                  <div className="text-center">
-                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Choose a Template</h2>
-                    <p className="text-[var(--text-secondary)]">Select a financial analysis template or start from scratch</p>
-                  </div>
-
-                  {/* Search & Categories */}
-                  <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-                    {/* Categories */}
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {TEMPLATE_CATEGORIES.map(cat => (
-                        <button
-                          key={cat.id}
-                          onClick={() => setSelectedCategory(cat.id)}
-                          className={`px-4 py-2 rounded-xl text-sm transition-all ${
-                            selectedCategory === cat.id
-                              ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
+                          className={`px-4 py-2 rounded-xl text-sm transition-all flex items-center gap-2 ${
+                            selectedIndustry === industry.id
+                              ? 'bg-[#4ECDC4] text-[#0a1929]'
                               : 'bg-[var(--card)] text-[var(--text-secondary)] hover:text-[var(--foreground)] border border-[var(--border-color)]'
                           }`}
                         >
-                          <span className="mr-2">{cat.icon}</span>
-                          {cat.name}
+                          {IndustryIcon && <IndustryIcon className="w-4 h-4" />}
+                          {industry.name}
                         </button>
-                      ))}
-                    </div>
+                      );
+                    })}
+                  </div>
 
-                    {/* Search */}
-                    <div className="relative">
+                  {/* Search */}
+                  <div className="flex justify-center">
+                    <div className="relative w-full max-w-md">
                       <Icons.search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                       <input
                         type="text"
                         placeholder="Search templates..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 pr-4 py-2 bg-[var(--card)] border border-[var(--border-color)] rounded-lg text-sm text-[var(--foreground)] placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
+                        className="w-full pl-10 pr-4 py-3 bg-[var(--card)] border border-[var(--border-color)] rounded-xl text-sm text-[var(--foreground)] placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -686,16 +680,18 @@ function Playground() {
                     </button>
                   </div>
 
-                  {/* Back button */}
-                  <div className="flex justify-center">
-                    <button
-                      onClick={() => setCurrentStep('industry')}
-                      className="btn-secondary"
-                    >
-                      <Icons.arrowLeft className="w-4 h-4 inline mr-2" />
-                      Back to Industry Selection
-                    </button>
-                  </div>
+                  {filteredTemplates.length === 0 && searchQuery && (
+                    <div className="text-center py-8">
+                      <Icons.search className="w-12 h-12 text-[var(--text-muted)] mx-auto mb-3 opacity-50" />
+                      <p className="text-[var(--text-secondary)]">No templates found for "{searchQuery}"</p>
+                      <button
+                        onClick={() => setSearchQuery('')}
+                        className="text-[#4ECDC4] text-sm mt-2 hover:underline"
+                      >
+                        Clear search
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -771,11 +767,11 @@ Tips for finance prompts:
                         Back
                       </button>
                       <button
-                        onClick={() => setCurrentStep('review')}
+                        onClick={() => setCurrentStep('export')}
                         disabled={selectedTemplate ? Object.values(variableValues).some(v => !v) : !prompt}
                         className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Continue to Review
+                        Get My Prompt
                         <Icons.arrowRight className="w-4 h-4 inline ml-2" />
                       </button>
                     </div>
@@ -827,224 +823,149 @@ Tips for finance prompts:
                 </div>
               )}
 
-              {/* Step 4: Review */}
-              {currentStep === 'review' && (
-                <div className="max-w-4xl mx-auto space-y-6">
+              {/* Step 3: Get Your Prompt (combined review + export) */}
+              {currentStep === 'export' && (
+                <div className="max-w-5xl mx-auto space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Review & Optimize</h2>
-                    <p className="text-[var(--text-secondary)]">Review your prompt and apply optimizations</p>
+                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Your Prompt is Ready!</h2>
+                    <p className="text-[var(--text-secondary)]">Review, optimize, and copy your prompt</p>
                   </div>
 
-                  {/* Analysis Cards */}
-                  <div className="grid md:grid-cols-4 gap-4">
-                    <div className="card p-4 text-center">
-                      <div className="text-3xl font-bold text-[#4ECDC4] tabular-nums">{analysisResults?.tokens || 0}</div>
-                      <div className="text-sm text-[var(--text-muted)]">Tokens</div>
-                    </div>
-                    <div className="card p-4 text-center">
-                      <div className="text-3xl font-bold text-[#14b8a6] tabular-nums">{analysisResults?.compressionSavings || 0}%</div>
-                      <div className="text-sm text-[var(--text-muted)]">Can Save</div>
-                    </div>
-                    <div className="card p-4 text-center">
-                      <div className={`text-3xl font-bold tabular-nums ${analysisResults?.piiCount ? 'text-[#dc2626]' : 'text-[#059669]'}`}>
-                        {analysisResults?.piiCount || 0}
+                  <div className="grid lg:grid-cols-3 gap-6">
+                    {/* Main Content - Prompt Preview */}
+                    <div className="lg:col-span-2 space-y-4">
+                      {/* Format Selection - Simplified */}
+                      <div className="flex flex-wrap gap-2">
+                        {EXPORT_FORMATS.slice(0, 4).map(format => (
+                          <button
+                            key={format.id}
+                            onClick={() => setSelectedExportFormat(format.id)}
+                            className={`px-4 py-2 rounded-xl text-sm transition-all ${
+                              selectedExportFormat === format.id
+                                ? 'bg-[#4ECDC4] text-[#0a1929]'
+                                : 'bg-[var(--card)] text-[var(--text-secondary)] hover:text-[var(--foreground)] border border-[var(--border-color)]'
+                            }`}
+                          >
+                            {format.name}
+                          </button>
+                        ))}
                       </div>
-                      <div className="text-sm text-[var(--text-muted)]">PII Found</div>
-                    </div>
-                    <div className="card p-4 text-center">
-                      <div className={`text-3xl font-bold capitalize ${
-                        analysisResults?.injectionRisk === 'none' ? 'text-[#059669]' :
-                        analysisResults?.injectionRisk === 'low' ? 'text-[#4ECDC4]' :
-                        'text-[#dc2626]'
-                      }`}>
-                        {analysisResults?.injectionRisk || 'None'}
-                      </div>
-                      <div className="text-sm text-[var(--text-muted)]">Risk Level</div>
-                    </div>
-                  </div>
 
-                  {/* Actions */}
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <button
-                      onClick={handleOptimize}
-                      className="card p-5 text-left hover:border-[#4ECDC4] transition-all group"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-[rgba(78,205,196,0.2)] flex items-center justify-center text-[#4ECDC4]">
-                          <Icons.compress className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4]">Compress Prompt</h3>
-                          <p className="text-sm text-[var(--text-muted)]">Remove filler words, save ~{analysisResults?.compressionSavings || 0}% tokens</p>
-                        </div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={handleSecurityScan}
-                      className="card p-5 text-left hover:border-[#4ECDC4] transition-all group"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-[rgba(220,38,38,0.2)] flex items-center justify-center text-[#dc2626]">
-                          <Icons.shield className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[#4ECDC4]">Redact PII</h3>
-                          <p className="text-sm text-[var(--text-muted)]">Remove {analysisResults?.piiCount || 0} sensitive items found</p>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-
-                  {/* Preview */}
-                  <div className="card p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm text-[var(--text-muted)]">Prompt Preview</span>
-                      {selectedTemplate && (
-                        <div className="flex gap-2">
-                          {selectedTemplate.outputFormats.map(format => (
-                            <span key={format} className={`badge badge-${format} text-xs`}>
-                              {format.toUpperCase()}
+                      {/* Prompt Preview */}
+                      <div className="card p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            {selectedTemplate && <span className="text-xl">{selectedTemplate.icon}</span>}
+                            <span className="font-medium text-[var(--foreground)]">
+                              {selectedTemplate?.name || 'Custom Prompt'}
                             </span>
-                          ))}
+                          </div>
+                          <button
+                            onClick={handleCopy}
+                            data-tour="run-button"
+                            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-medium ${
+                              copied
+                                ? 'bg-[#059669] text-white'
+                                : 'bg-[#4ECDC4] text-[#0a1929] hover:bg-[#3dbdb5]'
+                            }`}
+                          >
+                            <Icons.copy className="w-4 h-4" />
+                            {copied ? 'Copied!' : 'Copy Prompt'}
+                          </button>
+                        </div>
+                        <pre className="whitespace-pre-wrap text-sm text-[var(--text-secondary)] font-mono max-h-80 overflow-auto bg-[var(--background)] p-4 rounded-lg border border-[var(--border-color)]">
+                          {formatPromptForExport(selectedExportFormat)}
+                        </pre>
+                      </div>
+
+                      {/* Navigation */}
+                      <div className="flex gap-4">
+                        <button
+                          onClick={() => setCurrentStep('customize')}
+                          className="btn-secondary flex-1"
+                        >
+                          <Icons.arrowLeft className="w-4 h-4 inline mr-2" />
+                          Edit Details
+                        </button>
+                        <button
+                          onClick={() => {
+                            setCurrentStep('template');
+                            setSelectedIndustry(null);
+                            setSelectedTemplate(null);
+                            setPrompt('');
+                            setVariableValues({});
+                          }}
+                          className="btn-primary flex-1"
+                        >
+                          <Icons.plus className="w-4 h-4 inline mr-2" />
+                          Create Another
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Sidebar - Stats & Tools */}
+                    <div className="space-y-4">
+                      {/* Quick Stats */}
+                      <div className="card p-5">
+                        <h3 className="text-sm font-medium text-[var(--text-muted)] mb-4">Prompt Analysis</h3>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-[var(--text-secondary)]">Tokens</span>
+                            <span className="text-lg font-bold text-[#4ECDC4] tabular-nums">{analysisResults?.tokens || 0}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-[var(--text-secondary)]">Est. Cost</span>
+                            <span className="text-lg font-bold text-[var(--foreground)] tabular-nums">${analysisResults?.cost.toFixed(4) || '0.0000'}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-[var(--text-secondary)]">Security</span>
+                            <span className={`text-lg font-bold ${analysisResults?.piiCount ? 'text-[#dc2626]' : 'text-[#059669]'}`}>
+                              {analysisResults?.piiCount ? `${analysisResults.piiCount} issues` : '✓ Safe'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Quick Actions */}
+                      <div className="card p-5">
+                        <h3 className="text-sm font-medium text-[var(--text-muted)] mb-4">Optimize</h3>
+                        <div className="space-y-2">
+                          <button
+                            onClick={handleOptimize}
+                            className="w-full flex items-center gap-3 p-3 rounded-lg bg-[var(--background)] hover:bg-[rgba(78,205,196,0.1)] transition-colors text-left"
+                          >
+                            <Icons.compress className="w-5 h-5 text-[#4ECDC4]" />
+                            <div>
+                              <div className="text-sm font-medium text-[var(--foreground)]">Compress</div>
+                              <div className="text-xs text-[var(--text-muted)]">Save ~{analysisResults?.compressionSavings || 0}% tokens</div>
+                            </div>
+                          </button>
+                          <button
+                            onClick={handleSecurityScan}
+                            className="w-full flex items-center gap-3 p-3 rounded-lg bg-[var(--background)] hover:bg-[rgba(78,205,196,0.1)] transition-colors text-left"
+                          >
+                            <Icons.shield className="w-5 h-5 text-[#dc2626]" />
+                            <div>
+                              <div className="text-sm font-medium text-[var(--foreground)]">Redact PII</div>
+                              <div className="text-xs text-[var(--text-muted)]">Remove sensitive data</div>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Model Recommendation */}
+                      {selectedTemplate && (
+                        <div className="card p-5 bg-[rgba(78,205,196,0.1)] border-[rgba(78,205,196,0.2)]">
+                          <div className="flex items-center gap-2 text-[#4ECDC4] mb-2">
+                            <Icons.lightbulb className="w-4 h-4" />
+                            <span className="text-sm font-medium">Best Model</span>
+                          </div>
+                          <p className="text-xs text-[var(--text-secondary)]">
+                            {MODEL_RECOMMENDATIONS[selectedTemplate.difficulty].reason}
+                          </p>
                         </div>
                       )}
                     </div>
-                    <pre className="whitespace-pre-wrap text-sm text-[var(--text-secondary)] font-mono max-h-64 overflow-auto">
-                      {selectedTemplate ? generatePrompt() : prompt}
-                    </pre>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => setCurrentStep('customize')}
-                      className="btn-secondary flex-1"
-                    >
-                      <Icons.arrowLeft className="w-4 h-4 inline mr-2" />
-                      Back
-                    </button>
-                    <button
-                      onClick={() => setCurrentStep('export')}
-                      className="btn-primary flex-1"
-                    >
-                      Continue to Export
-                      <Icons.arrowRight className="w-4 h-4 inline ml-2" />
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 5: Export */}
-              {currentStep === 'export' && (
-                <div className="max-w-4xl mx-auto space-y-6">
-                  <div className="text-center">
-                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Your Prompt is Ready!</h2>
-                    <p className="text-[var(--text-secondary)]">Choose your export format and copy</p>
-                  </div>
-
-                  {/* Export Format Selection */}
-                  <div className="grid md:grid-cols-5 gap-3">
-                    {EXPORT_FORMATS.map(format => {
-                      const FormatIcon = Icons[format.icon as keyof typeof Icons];
-                      return (
-                        <button
-                          key={format.id}
-                          onClick={() => setSelectedExportFormat(format.id)}
-                          className={`card p-4 text-center transition-all ${
-                            selectedExportFormat === format.id
-                              ? 'border-[#4ECDC4] bg-[rgba(78,205,196,0.1)]'
-                              : 'hover:border-[#2d4a6f]'
-                          }`}
-                        >
-                          {FormatIcon && <FormatIcon className={`w-6 h-6 mx-auto mb-2 ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-[var(--text-muted)]'}`} />}
-                          <div className={`text-sm font-medium ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-[var(--foreground)]'}`}>
-                            {format.name}
-                          </div>
-                          <div className="text-xs text-[var(--text-muted)] mt-1">{format.description}</div>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Audit Mode Toggle */}
-                  <div className="card p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Icons.documentChart className="w-5 h-5 text-[var(--text-muted)]" />
-                        <div>
-                          <div className="text-sm font-medium text-[var(--foreground)]">Audit Mode</div>
-                          <div className="text-xs text-[var(--text-muted)]">Log exports for compliance tracking</div>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => setAuditMode(!auditMode)}
-                        className={`w-12 h-6 rounded-full transition-colors ${auditMode ? 'bg-[#4ECDC4]' : 'bg-[#334155]'}`}
-                      >
-                        <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${auditMode ? 'translate-x-6' : 'translate-x-0.5'}`} />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Final Prompt */}
-                  <div className="card p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm text-[var(--text-muted)]">
-                        {selectedExportFormat === 'copy' ? 'Final Prompt' : `${EXPORT_FORMATS.find(f => f.id === selectedExportFormat)?.name} Format`}
-                      </span>
-                      <button
-                        onClick={handleCopy}
-                        data-tour="run-button"
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                          copied ? 'bg-[#059669] text-[var(--foreground)]' : 'bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] hover:bg-[rgba(78,205,196,0.3)]'
-                        }`}
-                      >
-                        <Icons.copy className="w-4 h-4" />
-                        {copied ? 'Copied!' : 'Copy'}
-                      </button>
-                    </div>
-                    <pre className="whitespace-pre-wrap text-sm text-[var(--text-secondary)] font-mono max-h-64 overflow-auto">
-                      {formatPromptForExport(selectedExportFormat)}
-                    </pre>
-                  </div>
-
-                  {/* Stats Summary */}
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="card p-4 text-center">
-                      <div className="text-2xl font-bold text-[#4ECDC4] tabular-nums">{analysisResults?.tokens || 0}</div>
-                      <div className="text-xs text-[var(--text-muted)]">Total Tokens</div>
-                    </div>
-                    <div className="card p-4 text-center">
-                      <div className="text-2xl font-bold text-[var(--foreground)] tabular-nums">${analysisResults?.cost.toFixed(4) || '0.0000'}</div>
-                      <div className="text-xs text-[var(--text-muted)]">Estimated Cost</div>
-                    </div>
-                    <div className="card p-4 text-center">
-                      <div className="text-2xl font-bold text-[#059669]">✓</div>
-                      <div className="text-xs text-[var(--text-muted)]">Security Checked</div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => setCurrentStep('review')}
-                      className="btn-secondary flex-1"
-                    >
-                      <Icons.arrowLeft className="w-4 h-4 inline mr-2" />
-                      Back
-                    </button>
-                    <button
-                      onClick={() => {
-                        setCurrentStep('industry');
-                        setSelectedIndustry(null);
-                        setSelectedTemplate(null);
-                        setPrompt('');
-                        setVariableValues({});
-                      }}
-                      className="btn-primary flex-1"
-                    >
-                      <Icons.plus className="w-4 h-4 inline mr-2" />
-                      Create Another
-                    </button>
                   </div>
                 </div>
               )}
