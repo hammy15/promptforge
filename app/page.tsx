@@ -10,6 +10,7 @@ import HelpButton from './components/ui/HelpButton';
 import { Icons } from './components/Icons';
 import { ALL_TEMPLATES, TEMPLATE_CATEGORIES } from './components/PromptTemplates';
 import { DASHBOARD_WALKTHROUGH, TOOLTIPS } from './data/walkthrough-steps';
+import { ThemeToggle } from './components/ThemeToggle';
 
 // Quick start workflows for different roles
 const quickStartWorkflows = [
@@ -83,7 +84,7 @@ export default function Home() {
         <div className="fixed inset-0 bg-gradient-mesh pointer-events-none" />
 
         {/* Navigation */}
-        <nav className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-[#1e3a5f]">
+        <nav className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-[var(--border-color)]">
           <div className="flex items-center gap-8">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3">
@@ -102,17 +103,17 @@ export default function Home() {
                 Dashboard
               </Link>
               <Tooltip content="Create prompts with our guided wizard" position="bottom">
-                <Link href="/builder" data-tour="nav-builder" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                <Link href="/builder" data-tour="nav-builder" className="px-4 py-2 text-[var(--text-secondary)] hover:text-white transition-colors rounded-lg hover:bg-[var(--bg-elevated)]">
                   Prompt Builder
                 </Link>
               </Tooltip>
               <Tooltip content="Browse your saved prompts and templates" position="bottom">
-                <Link href="/prompts" data-tour="nav-prompts" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                <Link href="/prompts" data-tour="nav-prompts" className="px-4 py-2 text-[var(--text-secondary)] hover:text-white transition-colors rounded-lg hover:bg-[var(--bg-elevated)]">
                   My Prompts
                 </Link>
               </Tooltip>
               <Tooltip content="Test prompts with AI models" position="bottom">
-                <Link href="/playground" data-tour="nav-playground" className="px-4 py-2 text-[#94a3b8] hover:text-white transition-colors rounded-lg hover:bg-[#162a45]">
+                <Link href="/playground" data-tour="nav-playground" className="px-4 py-2 text-[var(--text-secondary)] hover:text-white transition-colors rounded-lg hover:bg-[var(--bg-elevated)]">
                   Playground
                 </Link>
               </Tooltip>
@@ -122,14 +123,15 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleShowHelp}
-              className="p-2 text-[#64748b] hover:text-[#4ECDC4] transition-colors"
+              className="p-2 text-[var(--text-muted)] hover:text-[#4ECDC4] transition-colors"
               title="Show onboarding"
             >
               <Icons.help className="w-5 h-5" />
             </button>
-            <button className="p-2 text-[#64748b] hover:text-white transition-colors">
+            <button className="p-2 text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors">
               <Icons.settings className="w-5 h-5" />
             </button>
+            <ThemeToggle />
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center text-[#0a1929] text-sm font-semibold">
               H
             </div>
@@ -140,40 +142,40 @@ export default function Home() {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">Welcome back</h1>
-            <p className="text-[#94a3b8]">Select a template or start from scratch to create your financial analysis prompt.</p>
+            <p className="text-[var(--text-secondary)]">Select a template or start from scratch to create your financial analysis prompt.</p>
           </div>
 
           {/* Stats & Quick Start Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             {/* Quick Stats */}
             <div className="card p-6" data-tour="quick-stats">
-              <h3 className="text-sm font-medium text-[#94a3b8] mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-4 flex items-center gap-2">
                 <Icons.chartLine className="w-4 h-4" />
                 Quick Stats
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-2xl font-bold text-[#4ECDC4] tabular-nums">$0.00</div>
-                  <div className="text-xs text-[#64748b]">Cost MTD</div>
+                  <div className="text-xs text-[var(--text-muted)]">Cost MTD</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white tabular-nums">0</div>
-                  <div className="text-xs text-[#64748b]">Executions</div>
+                  <div className="text-xs text-[var(--text-muted)]">Executions</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-[#14b8a6] tabular-nums">18</div>
-                  <div className="text-xs text-[#64748b]">Templates</div>
+                  <div className="text-xs text-[var(--text-muted)]">Templates</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-[#627d98] tabular-nums">5</div>
-                  <div className="text-xs text-[#64748b]">Categories</div>
+                  <div className="text-xs text-[var(--text-muted)]">Categories</div>
                 </div>
               </div>
             </div>
 
             {/* Recent Work */}
             <div className="card p-6">
-              <h3 className="text-sm font-medium text-[#94a3b8] mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-4 flex items-center gap-2">
                 <Icons.history className="w-4 h-4" />
                 Recent Work
               </h3>
@@ -184,18 +186,18 @@ export default function Home() {
                     <div className="flex-1 truncate">
                       <span className="text-white">{work.name}</span>
                     </div>
-                    <span className="text-[#64748b] text-xs">{work.time}</span>
+                    <span className="text-[var(--text-muted)] text-xs">{work.time}</span>
                   </div>
                 ))}
               </div>
               {recentWork.length === 0 && (
-                <p className="text-[#64748b] text-sm">No recent work yet</p>
+                <p className="text-[var(--text-muted)] text-sm">No recent work yet</p>
               )}
             </div>
 
             {/* Industry Quick Start */}
             <div className="card p-6" data-tour="quick-start">
-              <h3 className="text-sm font-medium text-[#94a3b8] mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-4 flex items-center gap-2">
                 <Icons.bolt className="w-4 h-4" />
                 Quick Start
               </h3>
@@ -206,7 +208,7 @@ export default function Home() {
                     <Link
                       key={workflow.id}
                       href={`/playground?template=${workflow.templates[0]}`}
-                      className="p-3 rounded-lg border border-[#1e3a5f] hover:border-[#2d4a6f] bg-[#0f2137] hover:bg-[#162a45] transition-all group"
+                      className="p-3 rounded-lg border border-[var(--border-color)] hover:border-[#2d4a6f] bg-[#0f2137] hover:bg-[var(--bg-elevated)] transition-all group"
                     >
                       <div className="flex items-center gap-2">
                         <div
@@ -215,7 +217,7 @@ export default function Home() {
                         >
                           {IconComponent && <IconComponent className="w-4 h-4" style={{ color: workflow.color }} />}
                         </div>
-                        <span className="text-xs text-[#94a3b8] group-hover:text-white transition-colors">
+                        <span className="text-xs text-[var(--text-secondary)] group-hover:text-white transition-colors">
                           {workflow.name}
                         </span>
                       </div>
@@ -233,13 +235,13 @@ export default function Home() {
 
               {/* Search */}
               <div className="relative">
-                <Icons.search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748b]" />
+                <Icons.search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                 <input
                   type="text"
                   placeholder="Search templates..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 bg-[#0a1929] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
+                  className="pl-10 pr-4 py-2 bg-[#0a1929] border border-[var(--border-color)] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
                 />
               </div>
             </div>
@@ -253,7 +255,7 @@ export default function Home() {
                   className={`px-4 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
                     activeCategory === cat.id
                       ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
-                      : 'text-[#94a3b8] hover:text-white hover:bg-[#162a45]'
+                      : 'text-[var(--text-secondary)] hover:text-white hover:bg-[var(--bg-elevated)]'
                   }`}
                 >
                   <span className="mr-2">{cat.icon}</span>
@@ -268,7 +270,7 @@ export default function Home() {
                 <Link
                   key={template.id}
                   href={`/playground?template=${template.id}`}
-                  className="group p-5 rounded-xl border border-[#1e3a5f] bg-[#0f2137] hover:border-[#4ECDC4] hover:bg-[#162a45] transition-all"
+                  className="group p-5 rounded-xl border border-[var(--border-color)] bg-[#0f2137] hover:border-[#4ECDC4] hover:bg-[var(--bg-elevated)] transition-all"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center text-2xl shrink-0">
@@ -278,14 +280,14 @@ export default function Home() {
                       <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors truncate">
                         {template.name}
                       </h3>
-                      <p className="text-sm text-[#64748b] line-clamp-2 mt-1">
+                      <p className="text-sm text-[var(--text-muted)] line-clamp-2 mt-1">
                         {template.description}
                       </p>
                       <div className="flex items-center gap-2 mt-3">
                         <span className={`badge badge-${template.difficulty}`}>
                           {template.difficulty}
                         </span>
-                        <span className="text-xs text-[#64748b]">{template.estimatedTime}</span>
+                        <span className="text-xs text-[var(--text-muted)]">{template.estimatedTime}</span>
                         {template.outputFormats.includes('excel') && (
                           <span className="badge badge-excel text-xs">Excel</span>
                         )}
@@ -318,7 +320,7 @@ export default function Home() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
                 <h2 className="text-2xl font-bold text-white mb-2">Build powerful prompts in 4 simple steps</h2>
-                <p className="text-[#94a3b8]">
+                <p className="text-[var(--text-secondary)]">
                   Create prompts for Claude Code, ChatGPT, Gemini, or Grok - no prompt engineering experience needed.
                 </p>
               </div>
@@ -336,20 +338,20 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="relative z-10 px-6 py-8 border-t border-[#1e3a5f] mt-12">
+        <footer className="relative z-10 px-6 py-8 border-t border-[var(--border-color)] mt-12">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-[#64748b]">
+            <div className="flex items-center gap-2 text-[var(--text-muted)]">
               <span className="text-[#4ECDC4] font-semibold">PromptForge</span>
               <span>•</span>
               <span>AI-Powered Financial Analysis</span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-[#64748b] text-sm">v2.0.0</span>
+              <span className="text-[var(--text-muted)] text-sm">v2.0.0</span>
               <a
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#64748b] hover:text-white transition-colors"
+                className="text-[var(--text-muted)] hover:text-white transition-colors"
               >
                 <Icons.github className="w-5 h-5" />
               </a>

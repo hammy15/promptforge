@@ -14,16 +14,17 @@ import AIAgentHelper from '../components/AIAgentHelper';
 import Walkthrough from '../components/ui/Walkthrough';
 import HelpButton from '../components/ui/HelpButton';
 import { PLAYGROUND_WALKTHROUGH } from '../data/walkthrough-steps';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 // Loading fallback component
 function PlaygroundLoading() {
   return (
-    <div className="min-h-screen bg-[#0a1929] flex items-center justify-center">
+    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
       <div className="text-center">
         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center mx-auto mb-4 animate-pulse">
           <Icons.chart className="w-7 h-7 text-[#0a1929]" />
         </div>
-        <p className="text-[#94a3b8]">Loading builder...</p>
+        <p className="text-[var(--text-secondary)]">Loading builder...</p>
       </div>
     </div>
   );
@@ -340,7 +341,7 @@ function Playground() {
       case 'currency':
         return (
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]">$</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]">$</span>
             <input
               type="text"
               value={variableValues[variable.name] || ''}
@@ -361,7 +362,7 @@ function Playground() {
               className={`${commonClasses} pr-8 tabular-nums`}
               placeholder={variable.default || '0'}
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748b]">%</span>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]">%</span>
           </div>
         );
 
@@ -424,12 +425,12 @@ function Playground() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a1929]">
+    <div className="min-h-screen bg-[var(--background)]">
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-mesh pointer-events-none opacity-30" />
 
       {/* Header */}
-      <header className="relative z-10 border-b border-[#1e3a5f]">
+      <header className="relative z-10 border-b border-[var(--border-color)]">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -450,13 +451,13 @@ function Playground() {
 
             {/* Mode Toggle */}
             <div className="flex items-center gap-4">
-              <div className="flex bg-[#0f2137] rounded-xl p-1 border border-[#1e3a5f]" data-tour="mode-toggle">
+              <div className="flex bg-[var(--card)] rounded-xl p-1 border border-[var(--border-color)]" data-tour="mode-toggle">
                 <button
                   onClick={() => setMode('simple')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     mode === 'simple'
                       ? 'bg-[#4ECDC4] text-[#0a1929]'
-                      : 'text-[#94a3b8] hover:text-white'
+                      : 'text-[var(--text-secondary)] hover:text-white'
                   }`}
                 >
                   <Icons.wand className="w-4 h-4 inline mr-2" />
@@ -467,7 +468,7 @@ function Playground() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     mode === 'expert'
                       ? 'bg-[#4ECDC4] text-[#0a1929]'
-                      : 'text-[#94a3b8] hover:text-white'
+                      : 'text-[var(--text-secondary)] hover:text-white'
                   }`}
                 >
                   <Icons.beaker className="w-4 h-4 inline mr-2" />
@@ -477,17 +478,18 @@ function Playground() {
 
               <button
                 onClick={() => setShowAgentHelper(!showAgentHelper)}
-                className={`p-2 transition-colors ${showAgentHelper ? 'text-[#4ECDC4]' : 'text-[#64748b] hover:text-[#4ECDC4]'}`}
+                className={`p-2 transition-colors ${showAgentHelper ? 'text-[#4ECDC4]' : 'text-[var(--text-muted)] hover:text-[#4ECDC4]'}`}
                 title="AI Assistant"
               >
                 <Icons.bot className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="p-2 text-[#64748b] hover:text-[#4ECDC4] transition-colors"
+                className="p-2 text-[var(--text-muted)] hover:text-[#4ECDC4] transition-colors"
               >
                 <Icons.history className="w-5 h-5" />
               </button>
+              <ThemeToggle />
             </div>
           </div>
         </div>
@@ -511,7 +513,7 @@ function Playground() {
                           ? 'bg-[#4ECDC4] text-[#0a1929]'
                           : index < currentStepIndex
                           ? 'bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] hover:bg-[rgba(78,205,196,0.3)]'
-                          : 'bg-[#0f2137] text-[#64748b] border border-[#1e3a5f]'
+                          : 'bg-[var(--card)] text-[var(--text-muted)] border border-[var(--border-color)]'
                       }`}
                     >
                       <span className="w-6 h-6 rounded-full bg-current/20 flex items-center justify-center text-sm">
@@ -534,7 +536,7 @@ function Playground() {
                 <div className="space-y-6">
                   <div className="text-center">
                     <h2 className="text-2xl font-bold text-white mb-2">Select Your Domain</h2>
-                    <p className="text-[#94a3b8]">Choose your primary use case to see relevant templates</p>
+                    <p className="text-[var(--text-secondary)]">Choose your primary use case to see relevant templates</p>
                   </div>
 
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -557,7 +559,7 @@ function Playground() {
                               <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors">
                                 {industry.name}
                               </h3>
-                              <p className="text-sm text-[#64748b] mt-1">{industry.description}</p>
+                              <p className="text-sm text-[var(--text-muted)] mt-1">{industry.description}</p>
                             </div>
                           </div>
                         </button>
@@ -575,13 +577,13 @@ function Playground() {
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-14 h-14 rounded-xl border-2 border-dashed border-[#334155] flex items-center justify-center">
-                          <Icons.search className="w-7 h-7 text-[#64748b]" />
+                          <Icons.search className="w-7 h-7 text-[var(--text-muted)]" />
                         </div>
                         <div>
                           <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors">
                             Browse All Templates
                           </h3>
-                          <p className="text-sm text-[#64748b] mt-1">View all 18 finance templates</p>
+                          <p className="text-sm text-[var(--text-muted)] mt-1">View all 18 finance templates</p>
                         </div>
                       </div>
                     </button>
@@ -594,7 +596,7 @@ function Playground() {
                 <div className="space-y-6">
                   <div className="text-center">
                     <h2 className="text-2xl font-bold text-white mb-2">Choose a Template</h2>
-                    <p className="text-[#94a3b8]">Select a financial analysis template or start from scratch</p>
+                    <p className="text-[var(--text-secondary)]">Select a financial analysis template or start from scratch</p>
                   </div>
 
                   {/* Search & Categories */}
@@ -608,7 +610,7 @@ function Playground() {
                           className={`px-4 py-2 rounded-xl text-sm transition-all ${
                             selectedCategory === cat.id
                               ? 'bg-[rgba(78,205,196,0.15)] text-[#4ECDC4] border border-[rgba(78,205,196,0.3)]'
-                              : 'bg-[#0f2137] text-[#94a3b8] hover:text-white border border-[#1e3a5f]'
+                              : 'bg-[var(--card)] text-[var(--text-secondary)] hover:text-white border border-[var(--border-color)]'
                           }`}
                         >
                           <span className="mr-2">{cat.icon}</span>
@@ -619,13 +621,13 @@ function Playground() {
 
                     {/* Search */}
                     <div className="relative">
-                      <Icons.search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748b]" />
+                      <Icons.search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                       <input
                         type="text"
                         placeholder="Search templates..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 pr-4 py-2 bg-[#0f2137] border border-[#1e3a5f] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
+                        className="pl-10 pr-4 py-2 bg-[var(--card)] border border-[var(--border-color)] rounded-lg text-sm text-white placeholder-[#64748b] focus:border-[#4ECDC4] focus:outline-none w-64"
                       />
                     </div>
                   </div>
@@ -646,12 +648,12 @@ function Playground() {
                             <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors truncate">
                               {template.name}
                             </h3>
-                            <p className="text-sm text-[#64748b] mt-1 line-clamp-2">{template.description}</p>
+                            <p className="text-sm text-[var(--text-muted)] mt-1 line-clamp-2">{template.description}</p>
                             <div className="flex flex-wrap gap-1 mt-2">
                               <span className={`badge badge-${template.difficulty}`}>
                                 {template.difficulty}
                               </span>
-                              <span className="text-xs text-[#64748b]">{template.estimatedTime}</span>
+                              <span className="text-xs text-[var(--text-muted)]">{template.estimatedTime}</span>
                               {template.outputFormats.includes('excel') && (
                                 <span className="badge badge-excel text-xs">Excel</span>
                               )}
@@ -672,13 +674,13 @@ function Playground() {
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl border-2 border-dashed border-[#334155] flex items-center justify-center">
-                          <Icons.plus className="w-6 h-6 text-[#64748b]" />
+                          <Icons.plus className="w-6 h-6 text-[var(--text-muted)]" />
                         </div>
                         <div>
                           <h3 className="font-semibold text-white group-hover:text-[#4ECDC4] transition-colors">
                             Start from Scratch
                           </h3>
-                          <p className="text-sm text-[#64748b] mt-1">Write your own prompt</p>
+                          <p className="text-sm text-[var(--text-muted)] mt-1">Write your own prompt</p>
                         </div>
                       </div>
                     </button>
@@ -721,7 +723,7 @@ function Playground() {
                                 <span className={`badge badge-${selectedTemplate.difficulty}`}>
                                   {selectedTemplate.difficulty}
                                 </span>
-                                <span className="text-xs text-[#94a3b8]">{selectedTemplate.estimatedTime}</span>
+                                <span className="text-xs text-[var(--text-secondary)]">{selectedTemplate.estimatedTime}</span>
                               </div>
                             </div>
                           </div>
@@ -730,10 +732,10 @@ function Playground() {
                         {/* Variable inputs */}
                         {selectedTemplate.variables.map(variable => (
                           <div key={variable.name} className="space-y-2">
-                            <label className="flex items-center gap-2 text-sm font-medium text-[#94a3b8]">
+                            <label className="flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)]">
                               <span className="text-[#4ECDC4]">{`{{${variable.name}}}`}</span>
                               {variable.type && (
-                                <span className="text-xs px-1.5 py-0.5 bg-[#1e3a5f] rounded text-[#64748b]">
+                                <span className="text-xs px-1.5 py-0.5 bg-[#1e3a5f] rounded text-[var(--text-muted)]">
                                   {variable.type}
                                 </span>
                               )}
@@ -783,14 +785,14 @@ Tips for finance prompts:
                   <div className="space-y-4" data-tour="output-panel">
                     <div className="flex items-center justify-between">
                       <h2 className="text-xl font-bold text-white">Live Preview</h2>
-                      <div className="flex items-center gap-2 text-sm text-[#64748b]">
+                      <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                         <Icons.eye className="w-4 h-4" />
                         Updates as you type
                       </div>
                     </div>
 
                     <div className="card p-6 min-h-[300px]">
-                      <pre className="whitespace-pre-wrap text-sm text-[#94a3b8] font-mono">
+                      <pre className="whitespace-pre-wrap text-sm text-[var(--text-secondary)] font-mono">
                         {selectedTemplate ? generatePrompt() : prompt || 'Your prompt will appear here...'}
                       </pre>
                     </div>
@@ -800,11 +802,11 @@ Tips for finance prompts:
                       <div className="grid grid-cols-2 gap-4">
                         <div className="card p-4 text-center">
                           <div className="text-2xl font-bold text-[#4ECDC4] tabular-nums">{analysisResults.tokens}</div>
-                          <div className="text-xs text-[#64748b]">Tokens</div>
+                          <div className="text-xs text-[var(--text-muted)]">Tokens</div>
                         </div>
                         <div className="card p-4 text-center">
                           <div className="text-2xl font-bold text-white tabular-nums">${analysisResults.cost.toFixed(4)}</div>
-                          <div className="text-xs text-[#64748b]">Est. Cost</div>
+                          <div className="text-xs text-[var(--text-muted)]">Est. Cost</div>
                         </div>
                       </div>
                     )}
@@ -816,7 +818,7 @@ Tips for finance prompts:
                           <Icons.lightbulb className="w-4 h-4" />
                           <span className="text-sm font-medium">Recommended Model</span>
                         </div>
-                        <p className="text-xs text-[#94a3b8]">
+                        <p className="text-xs text-[var(--text-secondary)]">
                           {MODEL_RECOMMENDATIONS[selectedTemplate.difficulty].reason}
                         </p>
                       </div>
@@ -830,24 +832,24 @@ Tips for finance prompts:
                 <div className="max-w-4xl mx-auto space-y-6">
                   <div className="text-center">
                     <h2 className="text-2xl font-bold text-white mb-2">Review & Optimize</h2>
-                    <p className="text-[#94a3b8]">Review your prompt and apply optimizations</p>
+                    <p className="text-[var(--text-secondary)]">Review your prompt and apply optimizations</p>
                   </div>
 
                   {/* Analysis Cards */}
                   <div className="grid md:grid-cols-4 gap-4">
                     <div className="card p-4 text-center">
                       <div className="text-3xl font-bold text-[#4ECDC4] tabular-nums">{analysisResults?.tokens || 0}</div>
-                      <div className="text-sm text-[#64748b]">Tokens</div>
+                      <div className="text-sm text-[var(--text-muted)]">Tokens</div>
                     </div>
                     <div className="card p-4 text-center">
                       <div className="text-3xl font-bold text-[#14b8a6] tabular-nums">{analysisResults?.compressionSavings || 0}%</div>
-                      <div className="text-sm text-[#64748b]">Can Save</div>
+                      <div className="text-sm text-[var(--text-muted)]">Can Save</div>
                     </div>
                     <div className="card p-4 text-center">
                       <div className={`text-3xl font-bold tabular-nums ${analysisResults?.piiCount ? 'text-[#dc2626]' : 'text-[#059669]'}`}>
                         {analysisResults?.piiCount || 0}
                       </div>
-                      <div className="text-sm text-[#64748b]">PII Found</div>
+                      <div className="text-sm text-[var(--text-muted)]">PII Found</div>
                     </div>
                     <div className="card p-4 text-center">
                       <div className={`text-3xl font-bold capitalize ${
@@ -857,7 +859,7 @@ Tips for finance prompts:
                       }`}>
                         {analysisResults?.injectionRisk || 'None'}
                       </div>
-                      <div className="text-sm text-[#64748b]">Risk Level</div>
+                      <div className="text-sm text-[var(--text-muted)]">Risk Level</div>
                     </div>
                   </div>
 
@@ -873,7 +875,7 @@ Tips for finance prompts:
                         </div>
                         <div>
                           <h3 className="font-semibold text-white group-hover:text-[#4ECDC4]">Compress Prompt</h3>
-                          <p className="text-sm text-[#64748b]">Remove filler words, save ~{analysisResults?.compressionSavings || 0}% tokens</p>
+                          <p className="text-sm text-[var(--text-muted)]">Remove filler words, save ~{analysisResults?.compressionSavings || 0}% tokens</p>
                         </div>
                       </div>
                     </button>
@@ -888,7 +890,7 @@ Tips for finance prompts:
                         </div>
                         <div>
                           <h3 className="font-semibold text-white group-hover:text-[#4ECDC4]">Redact PII</h3>
-                          <p className="text-sm text-[#64748b]">Remove {analysisResults?.piiCount || 0} sensitive items found</p>
+                          <p className="text-sm text-[var(--text-muted)]">Remove {analysisResults?.piiCount || 0} sensitive items found</p>
                         </div>
                       </div>
                     </button>
@@ -897,7 +899,7 @@ Tips for finance prompts:
                   {/* Preview */}
                   <div className="card p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm text-[#64748b]">Prompt Preview</span>
+                      <span className="text-sm text-[var(--text-muted)]">Prompt Preview</span>
                       {selectedTemplate && (
                         <div className="flex gap-2">
                           {selectedTemplate.outputFormats.map(format => (
@@ -908,7 +910,7 @@ Tips for finance prompts:
                         </div>
                       )}
                     </div>
-                    <pre className="whitespace-pre-wrap text-sm text-[#94a3b8] font-mono max-h-64 overflow-auto">
+                    <pre className="whitespace-pre-wrap text-sm text-[var(--text-secondary)] font-mono max-h-64 overflow-auto">
                       {selectedTemplate ? generatePrompt() : prompt}
                     </pre>
                   </div>
@@ -937,7 +939,7 @@ Tips for finance prompts:
                 <div className="max-w-4xl mx-auto space-y-6">
                   <div className="text-center">
                     <h2 className="text-2xl font-bold text-white mb-2">Your Prompt is Ready!</h2>
-                    <p className="text-[#94a3b8]">Choose your export format and copy</p>
+                    <p className="text-[var(--text-secondary)]">Choose your export format and copy</p>
                   </div>
 
                   {/* Export Format Selection */}
@@ -954,11 +956,11 @@ Tips for finance prompts:
                               : 'hover:border-[#2d4a6f]'
                           }`}
                         >
-                          {FormatIcon && <FormatIcon className={`w-6 h-6 mx-auto mb-2 ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`} />}
+                          {FormatIcon && <FormatIcon className={`w-6 h-6 mx-auto mb-2 ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-[var(--text-muted)]'}`} />}
                           <div className={`text-sm font-medium ${selectedExportFormat === format.id ? 'text-[#4ECDC4]' : 'text-white'}`}>
                             {format.name}
                           </div>
-                          <div className="text-xs text-[#64748b] mt-1">{format.description}</div>
+                          <div className="text-xs text-[var(--text-muted)] mt-1">{format.description}</div>
                         </button>
                       );
                     })}
@@ -968,10 +970,10 @@ Tips for finance prompts:
                   <div className="card p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <Icons.documentChart className="w-5 h-5 text-[#64748b]" />
+                        <Icons.documentChart className="w-5 h-5 text-[var(--text-muted)]" />
                         <div>
                           <div className="text-sm font-medium text-white">Audit Mode</div>
-                          <div className="text-xs text-[#64748b]">Log exports for compliance tracking</div>
+                          <div className="text-xs text-[var(--text-muted)]">Log exports for compliance tracking</div>
                         </div>
                       </div>
                       <button
@@ -986,7 +988,7 @@ Tips for finance prompts:
                   {/* Final Prompt */}
                   <div className="card p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm text-[#64748b]">
+                      <span className="text-sm text-[var(--text-muted)]">
                         {selectedExportFormat === 'copy' ? 'Final Prompt' : `${EXPORT_FORMATS.find(f => f.id === selectedExportFormat)?.name} Format`}
                       </span>
                       <button
@@ -1000,7 +1002,7 @@ Tips for finance prompts:
                         {copied ? 'Copied!' : 'Copy'}
                       </button>
                     </div>
-                    <pre className="whitespace-pre-wrap text-sm text-[#94a3b8] font-mono max-h-64 overflow-auto">
+                    <pre className="whitespace-pre-wrap text-sm text-[var(--text-secondary)] font-mono max-h-64 overflow-auto">
                       {formatPromptForExport(selectedExportFormat)}
                     </pre>
                   </div>
@@ -1009,15 +1011,15 @@ Tips for finance prompts:
                   <div className="grid grid-cols-3 gap-4">
                     <div className="card p-4 text-center">
                       <div className="text-2xl font-bold text-[#4ECDC4] tabular-nums">{analysisResults?.tokens || 0}</div>
-                      <div className="text-xs text-[#64748b]">Total Tokens</div>
+                      <div className="text-xs text-[var(--text-muted)]">Total Tokens</div>
                     </div>
                     <div className="card p-4 text-center">
                       <div className="text-2xl font-bold text-white tabular-nums">${analysisResults?.cost.toFixed(4) || '0.0000'}</div>
-                      <div className="text-xs text-[#64748b]">Estimated Cost</div>
+                      <div className="text-xs text-[var(--text-muted)]">Estimated Cost</div>
                     </div>
                     <div className="card p-4 text-center">
                       <div className="text-2xl font-bold text-[#059669]">✓</div>
-                      <div className="text-xs text-[#64748b]">Security Checked</div>
+                      <div className="text-xs text-[var(--text-muted)]">Security Checked</div>
                     </div>
                   </div>
 
@@ -1068,8 +1070,8 @@ Tips for finance prompts:
 
       {/* History Panel */}
       {showHistory && (
-        <div className="fixed inset-y-0 right-0 w-80 bg-[#0f2137] border-l border-[#1e3a5f] z-50 animate-slide-in">
-          <div className="p-4 border-b border-[#1e3a5f] flex items-center justify-between">
+        <div className="fixed inset-y-0 right-0 w-80 bg-[var(--card)] border-l border-[var(--border-color)] z-50 animate-slide-in">
+          <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between">
             <h3 className="font-semibold text-white">Recent Prompts</h3>
             <button onClick={() => setShowHistory(false)} className="p-1 hover:text-[#4ECDC4]">
               <Icons.x className="w-5 h-5" />
@@ -1077,7 +1079,7 @@ Tips for finance prompts:
           </div>
           <div className="p-4 space-y-3 overflow-auto max-h-[calc(100vh-64px)]">
             {history.length === 0 ? (
-              <p className="text-[#64748b] text-sm">No prompts yet. Create one to get started!</p>
+              <p className="text-[var(--text-muted)] text-sm">No prompts yet. Create one to get started!</p>
             ) : (
               history.map((item, i) => (
                 <button
@@ -1089,7 +1091,7 @@ Tips for finance prompts:
                   }}
                   className="w-full p-3 card text-left hover:border-[#4ECDC4] transition-all"
                 >
-                  <p className="text-sm text-[#94a3b8] line-clamp-3">{item}</p>
+                  <p className="text-sm text-[var(--text-secondary)] line-clamp-3">{item}</p>
                 </button>
               ))
             )}
@@ -1155,12 +1157,12 @@ function ExpertMode({
         const vars = extractVariables(prompt);
         setResult(
           <div className="space-y-3">
-            <p className="text-sm text-[#94a3b8]">Found {vars.length} variables:</p>
+            <p className="text-sm text-[var(--text-secondary)]">Found {vars.length} variables:</p>
             {vars.map(v => (
               <div key={v.name} className="flex items-center gap-2 text-sm">
                 <code className="px-2 py-1 bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] rounded">{`{{${v.name}}}`}</code>
-                {v.defaultValue && <span className="text-[#64748b]">default: {v.defaultValue}</span>}
-                {v.type && <span className="text-[#64748b]">type: {v.type}</span>}
+                {v.defaultValue && <span className="text-[var(--text-muted)]">default: {v.defaultValue}</span>}
+                {v.type && <span className="text-[var(--text-muted)]">type: {v.type}</span>}
               </div>
             ))}
           </div>
@@ -1175,15 +1177,15 @@ function ExpertMode({
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
                 <div className="text-xl font-bold text-white tabular-nums">{compressed.originalTokens}</div>
-                <div className="text-xs text-[#64748b]">Original</div>
+                <div className="text-xs text-[var(--text-muted)]">Original</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-[#4ECDC4] tabular-nums">{compressed.compressedTokens}</div>
-                <div className="text-xs text-[#64748b]">Compressed</div>
+                <div className="text-xs text-[var(--text-muted)]">Compressed</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-[#059669] tabular-nums">{compressed.savings}%</div>
-                <div className="text-xs text-[#64748b]">Saved</div>
+                <div className="text-xs text-[var(--text-muted)]">Saved</div>
               </div>
             </div>
           </div>
@@ -1199,13 +1201,13 @@ function ExpertMode({
           <div className="space-y-3">
             <div className="flex items-center gap-4">
               <div>
-                <span className="text-sm text-[#94a3b8]">PII: </span>
+                <span className="text-sm text-[var(--text-secondary)]">PII: </span>
                 <span className={`font-bold ${pii.length ? 'text-[#dc2626]' : 'text-[#059669]'}`}>
                   {pii.length} found
                 </span>
               </div>
               <div>
-                <span className="text-sm text-[#94a3b8]">Risk: </span>
+                <span className="text-sm text-[var(--text-secondary)]">Risk: </span>
                 <span className={`font-bold capitalize ${
                   riskLevel === 'none' ? 'text-[#059669]' :
                   riskLevel === 'low' ? 'text-[#4ECDC4]' : 'text-[#dc2626]'
@@ -1226,11 +1228,11 @@ function ExpertMode({
             <div className="grid grid-cols-2 gap-3">
               <div className="text-center">
                 <div className="text-xl font-bold text-[#4ECDC4] tabular-nums">{cost.inputTokens}</div>
-                <div className="text-xs text-[#64748b]">Input Tokens</div>
+                <div className="text-xs text-[var(--text-muted)]">Input Tokens</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-white tabular-nums">${cost.totalCost.toFixed(4)}</div>
-                <div className="text-xs text-[#64748b]">Per Request</div>
+                <div className="text-xs text-[var(--text-muted)]">Per Request</div>
               </div>
             </div>
           </div>
@@ -1273,7 +1275,7 @@ function ExpertMode({
             <select
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className="bg-[#0f2137] border border-[#1e3a5f] rounded-lg px-3 py-2 text-sm text-white"
+              className="bg-[var(--card)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-sm text-white"
               data-tour="model-selector"
             >
               {MODEL_PRICING.map((m) => (
@@ -1310,21 +1312,21 @@ Expert tips:
         {analysisResults && (
           <div className="flex items-center gap-6 text-sm">
             <div className="flex items-center gap-2">
-              <span className="text-[#64748b]">Tokens:</span>
+              <span className="text-[var(--text-muted)]">Tokens:</span>
               <span className="text-[#4ECDC4] font-medium tabular-nums">{analysisResults.tokens}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[#64748b]">Cost:</span>
+              <span className="text-[var(--text-muted)]">Cost:</span>
               <span className="text-white font-medium tabular-nums">${analysisResults.cost.toFixed(4)}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[#64748b]">PII:</span>
+              <span className="text-[var(--text-muted)]">PII:</span>
               <span className={`font-medium tabular-nums ${analysisResults.piiCount ? 'text-[#dc2626]' : 'text-[#059669]'}`}>
                 {analysisResults.piiCount}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[#64748b]">Risk:</span>
+              <span className="text-[var(--text-muted)]">Risk:</span>
               <span className={`font-medium capitalize ${
                 analysisResults.injectionRisk === 'none' ? 'text-[#059669]' :
                 analysisResults.injectionRisk === 'low' ? 'text-[#4ECDC4]' : 'text-[#dc2626]'
@@ -1339,10 +1341,10 @@ Expert tips:
         <div className="card p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Icons.documentChart className="w-5 h-5 text-[#64748b]" />
+              <Icons.documentChart className="w-5 h-5 text-[var(--text-muted)]" />
               <div>
                 <div className="text-sm font-medium text-white">Audit Mode</div>
-                <div className="text-xs text-[#64748b]">Log exports for compliance tracking</div>
+                <div className="text-xs text-[var(--text-muted)]">Log exports for compliance tracking</div>
               </div>
             </div>
             <button
@@ -1366,7 +1368,7 @@ Expert tips:
               <div key={f.id} className="card overflow-hidden">
                 <button
                   onClick={() => setActiveFeature(activeFeature === f.id ? null : f.id)}
-                  className="w-full p-4 flex items-center justify-between hover:bg-[#162a45] transition-colors"
+                  className="w-full p-4 flex items-center justify-between hover:bg-[var(--bg-elevated)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-[rgba(78,205,196,0.2)] flex items-center justify-center text-[#4ECDC4]">
@@ -1374,19 +1376,19 @@ Expert tips:
                     </div>
                     <div className="text-left">
                       <div className="font-medium text-white">{f.name}</div>
-                      <div className="text-xs text-[#64748b]">{f.desc}</div>
+                      <div className="text-xs text-[var(--text-muted)]">{f.desc}</div>
                     </div>
                   </div>
                   <Icons.chevronDown
-                    className={`w-5 h-5 text-[#64748b] transition-transform ${activeFeature === f.id ? 'rotate-180' : ''}`}
+                    className={`w-5 h-5 text-[var(--text-muted)] transition-transform ${activeFeature === f.id ? 'rotate-180' : ''}`}
                   />
                 </button>
 
                 {activeFeature === f.id && (
-                  <div className="p-4 border-t border-[#1e3a5f] bg-[#0a1929] animate-fade-in">
+                  <div className="p-4 border-t border-[var(--border-color)] bg-[var(--background)] animate-fade-in">
                     {f.id === 'compress' && (
                       <div className="mb-4">
-                        <label className="text-xs text-[#64748b] mb-2 block">Aggressiveness</label>
+                        <label className="text-xs text-[var(--text-muted)] mb-2 block">Aggressiveness</label>
                         <div className="flex gap-2">
                           {(['low', 'medium', 'high'] as const).map((level) => (
                             <button
@@ -1395,7 +1397,7 @@ Expert tips:
                               className={`flex-1 py-2 rounded-lg text-sm capitalize ${
                                 compressionLevel === level
                                   ? 'bg-[#4ECDC4] text-[#0a1929]'
-                                  : 'bg-[#0f2137] text-[#94a3b8] border border-[#1e3a5f]'
+                                  : 'bg-[var(--card)] text-[var(--text-secondary)] border border-[var(--border-color)]'
                               }`}
                             >
                               {level}
@@ -1407,11 +1409,11 @@ Expert tips:
 
                     {f.id === 'cost' && (
                       <div className="mb-4">
-                        <label className="text-xs text-[#64748b] mb-2 block">Model</label>
+                        <label className="text-xs text-[var(--text-muted)] mb-2 block">Model</label>
                         <select
                           value={selectedModel}
                           onChange={(e) => setSelectedModel(e.target.value)}
-                          className="w-full bg-[#0f2137] border border-[#1e3a5f] rounded-lg px-3 py-2 text-sm text-white"
+                          className="w-full bg-[var(--card)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-sm text-white"
                         >
                           {MODEL_PRICING.map((m) => (
                             <option key={m.id} value={m.id}>{m.name} - ${m.inputPricePerMillion}/1M</option>
@@ -1422,7 +1424,7 @@ Expert tips:
 
                     {f.id === 'format' && (
                       <div className="mb-4">
-                        <label className="text-xs text-[#64748b] mb-2 block">Output Format</label>
+                        <label className="text-xs text-[var(--text-muted)] mb-2 block">Output Format</label>
                         <div className="grid grid-cols-2 gap-2">
                           {[
                             { id: 'standard', label: 'Standard' },
@@ -1436,7 +1438,7 @@ Expert tips:
                               className={`py-2 rounded-lg text-sm ${
                                 outputFormat === fmt.id
                                   ? 'bg-[#4ECDC4] text-[#0a1929]'
-                                  : 'bg-[#0f2137] text-[#94a3b8] border border-[#1e3a5f]'
+                                  : 'bg-[var(--card)] text-[var(--text-secondary)] border border-[var(--border-color)]'
                               }`}
                             >
                               {fmt.label}
@@ -1455,7 +1457,7 @@ Expert tips:
                     </button>
 
                     {result && activeFeature === f.id && (
-                      <div className="mt-4 p-3 bg-[#0f2137] rounded-lg border border-[#1e3a5f]">
+                      <div className="mt-4 p-3 bg-[var(--card)] rounded-lg border border-[var(--border-color)]">
                         {result}
                       </div>
                     )}
@@ -1472,7 +1474,7 @@ Expert tips:
             <Icons.lightbulb className="w-4 h-4" />
             <span className="text-sm font-medium">Finance Pro Tip</span>
           </div>
-          <p className="text-xs text-[#94a3b8]">
+          <p className="text-xs text-[var(--text-secondary)]">
             Use the Format tool to add Excel-ready or slide-friendly output instructions.
             Enable Audit Mode for compliance tracking in regulated environments.
           </p>
