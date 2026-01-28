@@ -7,6 +7,7 @@ type Theme = 'light' | 'dark';
 interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
+  mounted: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -22,6 +23,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (saved) {
       setTheme(saved);
     }
+    // Apply initial theme class
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(saved || 'light');
   }, []);
 
   useEffect(() => {
@@ -37,13 +41,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
 
-  // Prevent flash of wrong theme
-  if (!mounted) {
-    return null;
-  }
-
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, mounted }}>
       {children}
     </ThemeContext.Provider>
   );

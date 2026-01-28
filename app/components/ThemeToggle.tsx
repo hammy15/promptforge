@@ -3,7 +3,16 @@
 import { useTheme } from './ThemeProvider';
 
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, mounted } = useTheme();
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <button className="p-2 rounded-lg transition-colors hover:bg-[var(--muted)]" aria-label="Toggle theme">
+        <div className="w-5 h-5" />
+      </button>
+    );
+  }
 
   return (
     <button
