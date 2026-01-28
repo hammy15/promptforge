@@ -126,7 +126,7 @@ export default function Home() {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--foreground)] mb-6 leading-tight">
                 Build AI Prompts for{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4ECDC4] to-[#3EB489]">
-                  Financial Analysis
+                  Healthcare & Finance
                 </span>
               </h1>
 
@@ -309,7 +309,7 @@ export default function Home() {
                   Ready to Build Better Prompts?
                 </h2>
                 <p className="text-[#0a1929]/70 mb-8 max-w-xl mx-auto">
-                  Join thousands of finance professionals creating powerful AI prompts with PromptForge.
+                  Join thousands of healthcare and finance professionals creating powerful AI prompts with PromptForge.
                 </p>
                 <Link
                   href="/playground"
