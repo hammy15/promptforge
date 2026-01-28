@@ -83,6 +83,14 @@ const INDUSTRY_OPTIONS = [
     color: '#059669',
     categories: ['analysis'],
   },
+  {
+    id: 'senior-housing',
+    name: 'Senior Housing',
+    description: 'SNF, ALF, ILF pro forma analysis',
+    icon: 'home',
+    color: '#10b981',
+    categories: ['Senior Housing'],
+  },
 ];
 
 // Export format options
