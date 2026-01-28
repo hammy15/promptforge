@@ -569,3 +569,356 @@ body {
   --category-color: var(--navy-400);
   --category-bg: rgba(72, 101, 129, 0.1);
 }
+
+/* ============================================
+   PRINT STYLES - Professional Clinical Output
+   ============================================ */
+
+@media print {
+  /* Reset for printing */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Hide non-essential UI elements */
+  .no-print,
+  .print-hide,
+  nav,
+  .navigation,
+  .sidebar,
+  .theme-toggle,
+  button:not(.print-show),
+  .tooltip,
+  .modal-backdrop,
+  footer,
+  .walkthrough {
+    display: none !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: letter;
+    margin: 0.75in;
+  }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  /* Headers for clinical documentation */
+  h1 {
+    font-size: 18pt;
+    font-weight: bold;
+    margin-bottom: 0.5in;
+    padding-bottom: 0.1in;
+    border-bottom: 2px solid #000;
+  }
+
+  h2 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 0.3in;
+    margin-bottom: 0.15in;
+    color: #333;
+  }
+
+  h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 0.2in;
+    margin-bottom: 0.1in;
+  }
+
+  /* Main content area */
+  .print-content,
+  .prompt-output,
+  .assessment-content {
+    background: #fff !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Clinical assessment styling */
+  .eligibility-checklist {
+    page-break-inside: avoid;
+  }
+
+  .criteria-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.1in 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .criteria-met {
+    color: #059669;
+  }
+
+  .criteria-unmet {
+    color: #dc2626;
+  }
+
+  /* Status banner for eligibility */
+  .eligibility-status {
+    text-align: center;
+    padding: 0.15in;
+    margin: 0.2in 0;
+    font-weight: bold;
+    font-size: 14pt;
+    border: 2px solid;
+  }
+
+  .eligibility-status.eligible {
+    border-color: #059669;
+    background: #d1fae5 !important;
+    color: #065f46;
+  }
+
+  .eligibility-status.needs-review {
+    border-color: #f59e0b;
+    background: #fef3c7 !important;
+    color: #92400e;
+  }
+
+  /* Score display */
+  .score-display {
+    display: inline-block;
+    padding: 0.05in 0.15in;
+    border: 1px solid #333;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.15in 0;
+    font-size: 10pt;
+  }
+
+  th, td {
+    padding: 0.08in 0.1in;
+    text-align: left;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    background: #f3f4f6 !important;
+    font-weight: bold;
+  }
+
+  /* Code/prompt blocks */
+  pre, code, .prompt-text {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 9pt;
+    background: #f9fafb !important;
+    padding: 0.15in;
+    border: 1px solid #e5e7eb;
+    page-break-inside: avoid;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Patient information header */
+  .patient-info {
+    background: #f9fafb !important;
+    padding: 0.15in;
+    margin-bottom: 0.2in;
+    border: 1px solid #e5e7eb;
+  }
+
+  .patient-info .field {
+    display: flex;
+    margin-bottom: 0.05in;
+  }
+
+  .patient-info .field-label {
+    min-width: 1.5in;
+    font-weight: bold;
+  }
+
+  /* Recommendations section */
+  .recommendations {
+    background: #fffbeb !important;
+    border-left: 4px solid #f59e0b;
+    padding: 0.1in 0.15in;
+    margin: 0.15in 0;
+  }
+
+  /* Signature line */
+  .signature-line {
+    margin-top: 0.5in;
+    padding-top: 0.3in;
+    border-top: 1px solid #000;
+  }
+
+  .signature-line .date-line {
+    margin-top: 0.15in;
+  }
+
+  /* Page breaks */
+  .page-break {
+    page-break-before: always;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* Footer for each page */
+  .print-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8pt;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 0.1in;
+  }
+
+  /* Links - show URL */
+  a[href]:after {
+    content: none; /* Don't show URLs in clinical docs */
+  }
+
+  /* Cards become bordered boxes */
+  .card {
+    border: 1px solid #e5e7eb !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    margin-bottom: 0.15in;
+    padding: 0.15in !important;
+  }
+
+  /* Remove interactive elements styling */
+  .card:hover {
+    border-color: #e5e7eb !important;
+  }
+
+  /* Ensure good contrast */
+  .text-muted,
+  .text-secondary,
+  [class*="text-muted"],
+  [class*="text-secondary"] {
+    color: #4a5568 !important;
+  }
+
+  /* Healthcare specific - LCD criteria checkboxes */
+  .lcd-criterion {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.1in;
+  }
+
+  .lcd-criterion .checkbox {
+    width: 0.15in;
+    height: 0.15in;
+    border: 1px solid #000;
+    margin-right: 0.1in;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lcd-criterion .checkbox.checked {
+    background: #059669 !important;
+    color: #fff;
+  }
+
+  .lcd-criterion .checkbox.unchecked {
+    background: #fff !important;
+  }
+
+  /* Score breakdown table */
+  .score-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.1in;
+    margin: 0.15in 0;
+  }
+
+  .score-breakdown .score-item {
+    text-align: center;
+    padding: 0.08in;
+    border: 1px solid #e5e7eb;
+  }
+
+  .score-breakdown .score-value {
+    font-size: 16pt;
+    font-weight: bold;
+  }
+
+  .score-breakdown .score-label {
+    font-size: 8pt;
+    color: #666;
+  }
+
+  /* Watermark for draft documents */
+  .print-draft::before {
+    content: 'DRAFT';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 72pt;
+    color: rgba(0, 0, 0, 0.1);
+    z-index: -1;
+  }
+
+  /* Hide scrollbar hide class elements */
+  .scrollbar-hide {
+    overflow: visible !important;
+  }
+}
+
+/* Print preview button styling */
+.print-preview-btn {
+  @apply flex items-center gap-2 px-4 py-2 rounded-lg transition-all;
+  background: var(--muted);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.print-preview-btn:hover {
+  border-color: var(--mint-400);
+  color: var(--mint-400);
+}
+
+/* Printable section marker */
+.printable-section {
+  position: relative;
+}
+
+.printable-section::before {
+  content: 'Printable';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  background: var(--muted);
+  color: var(--text-muted);
+  border-radius: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.printable-section:hover::before {
+  opacity: 1;
+}
+
+@media print {
+  .printable-section::before {
+    display: none;
+  }
+}
