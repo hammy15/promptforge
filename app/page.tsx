@@ -8,7 +8,7 @@ import Walkthrough from './components/ui/Walkthrough';
 import Tooltip from './components/ui/Tooltip';
 import HelpButton from './components/ui/HelpButton';
 import { Icons } from './components/Icons';
-import { PROMPT_TEMPLATES, TEMPLATE_CATEGORIES } from './components/PromptTemplates';
+import { ALL_TEMPLATES, TEMPLATE_CATEGORIES } from './components/PromptTemplates';
 import { DASHBOARD_WALKTHROUGH, TOOLTIPS } from './data/walkthrough-steps';
 
 // Quick start workflows for different roles
@@ -66,8 +66,8 @@ export default function Home() {
     setShowWalkthrough(true);
   };
 
-  const filteredTemplates = PROMPT_TEMPLATES.filter(t => {
-    const matchesCategory = activeCategory === 'all' || t.category === activeCategory;
+  const filteredTemplates = ALL_TEMPLATES.filter(t => {
+    const matchesCategory = activeCategory === 'all' || t.category === activeCategory || t.categorySlug === activeCategory;
     const matchesSearch = searchQuery === '' ||
       t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       t.description.toLowerCase().includes(searchQuery.toLowerCase());

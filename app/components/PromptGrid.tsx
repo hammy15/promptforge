@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import PromptCard, { PromptCardData } from './PromptCard';
 import { Icons } from './Icons';
-import { PROMPT_TEMPLATES, TEMPLATE_CATEGORIES } from './PromptTemplates';
+import { ALL_TEMPLATES, TEMPLATE_CATEGORIES } from './PromptTemplates';
 
 interface PromptGridProps {
   prompts?: PromptCardData[];
@@ -27,7 +27,7 @@ export default function PromptGrid({
   // Convert templates to PromptCardData if no prompts provided
   const allPrompts: PromptCardData[] = useMemo(() => {
     if (prompts) return prompts;
-    return PROMPT_TEMPLATES.map(t => ({
+    return ALL_TEMPLATES.map(t => ({
       id: t.id,
       name: t.name,
       description: t.description,

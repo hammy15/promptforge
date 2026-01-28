@@ -1,7 +1,9 @@
 'use client';
 
 // Finance-focused prompt templates for business professionals
-// 18 templates across 5 categories
+// 18 templates across 5 categories + 12 Senior Housing Pro Forma templates
+
+import { SENIOR_HOUSING_TEMPLATES } from '../data/senior-housing/templates';
 
 export interface PromptTemplate {
   id: string;
@@ -1458,31 +1460,54 @@ export const TEMPLATE_CATEGORIES = [
   { id: 'Strategy & Planning', name: 'Strategy & Planning', icon: '⚡', slug: 'strategy-planning', color: '#8b5cf6' },
   { id: 'M&A & Deal Work', name: 'M&A & Deal Work', icon: '🤝', slug: 'ma-deal-work', color: '#f97316' },
   { id: 'Professional Reporting', name: 'Professional Reporting', icon: '📑', slug: 'professional-reporting', color: '#627d98' },
+  { id: 'Senior Housing', name: 'Senior Housing', icon: '🏥', slug: 'senior-housing', color: '#10b981' },
+];
+
+// Merge all templates (core + senior housing)
+export const ALL_TEMPLATES: PromptTemplate[] = [
+  ...PROMPT_TEMPLATES,
+  ...SENIOR_HOUSING_TEMPLATES.map(t => ({
+    ...t,
+    // Ensure compatibility with PromptTemplate interface
+    requiredInputs: t.variables.filter(v => !v.default).map(v => v.name),
+  })),
 ];
 
 // Helper function to get templates by category
 export function getTemplatesByCategory(categoryId: string): PromptTemplate[] {
-  if (categoryId === 'all') return PROMPT_TEMPLATES;
-  return PROMPT_TEMPLATES.filter(t => t.category === categoryId);
+  if (categoryId === 'all') return ALL_TEMPLATES;
+  return ALL_TEMPLATES.filter(t => t.category === categoryId || t.categorySlug === categoryId);
 }
 
 // Helper function to get templates by difficulty
 export function getTemplatesByDifficulty(difficulty: 'beginner' | 'intermediate' | 'advanced'): PromptTemplate[] {
-  return PROMPT_TEMPLATES.filter(t => t.difficulty === difficulty);
+  return ALL_TEMPLATES.filter(t => t.difficulty === difficulty);
 }
 
 // Helper function to get templates by output format
 export function getTemplatesByOutputFormat(format: 'excel' | 'powerpoint' | 'pdf' | 'memo'): PromptTemplate[] {
-  return PROMPT_TEMPLATES.filter(t => t.outputFormats.includes(format));
+  return ALL_TEMPLATES.filter(t => t.outputFormats.includes(format));
 }
 
 // Helper function to search templates
 export function searchTemplates(query: string): PromptTemplate[] {
   const lowerQuery = query.toLowerCase();
-  return PROMPT_TEMPLATES.filter(t =>
+  return ALL_TEMPLATES.filter(t =>
     t.name.toLowerCase().includes(lowerQuery) ||
     t.description.toLowerCase().includes(lowerQuery) ||
     t.tags.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
     t.category.toLowerCase().includes(lowerQuery)
+  );
+}
+
+// Helper to get senior housing templates only
+export function getSeniorHousingTemplates(): PromptTemplate[] {
+  return ALL_TEMPLATES.filter(t => t.categorySlug === 'senior-housing');
+}
+
+// Helper to get templates by facility type (SNF, ALF, ILF, CCRC)
+export function getTemplatesByFacilityType(facilityType: 'snf' | 'alf' | 'ilf' | 'ccrc'): PromptTemplate[] {
+  return SENIOR_HOUSING_TEMPLATES.filter(t =>
+    t.facilityTypes.includes(facilityType)
   );
 }

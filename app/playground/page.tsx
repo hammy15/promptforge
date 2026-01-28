@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Icons, Icon } from '../components/Icons';
 import { Tooltip, HelpTooltip } from '../components/Tooltip';
-import { PROMPT_TEMPLATES, TEMPLATE_CATEGORIES, PromptTemplate, getTemplatesByCategory } from '../components/PromptTemplates';
+import { ALL_TEMPLATES, TEMPLATE_CATEGORIES, PromptTemplate, getTemplatesByCategory } from '../components/PromptTemplates';
 import { compressPrompt } from '@/features/smart-compression';
 import { detectPII, redactPII, detectInjection, getInjectionRiskLevel } from '@/features/security';
 import { extractVariables, substituteVariables } from '@/features/variable-system';
@@ -148,7 +148,7 @@ function Playground() {
     }
 
     if (templateId) {
-      const template = PROMPT_TEMPLATES.find(t => t.id === templateId);
+      const template = ALL_TEMPLATES.find(t => t.id === templateId);
       if (template) {
         handleSelectTemplate(template);
       }
@@ -304,8 +304,8 @@ function Playground() {
   };
 
   // Get templates for current category/industry
-  const filteredTemplates = PROMPT_TEMPLATES.filter(t => {
-    const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory;
+  const filteredTemplates = ALL_TEMPLATES.filter(t => {
+    const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory || t.categorySlug === selectedCategory;
     const matchesSearch = searchQuery === '' ||
       t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       t.description.toLowerCase().includes(searchQuery.toLowerCase());
