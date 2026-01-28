@@ -89,7 +89,7 @@ const INDUSTRY_OPTIONS = [
     description: 'SNF, ALF, ILF pro forma analysis',
     icon: 'home',
     color: '#10b981',
-    categories: ['Senior Housing'],
+    categories: ['senior-housing'],
   },
 ];
 
