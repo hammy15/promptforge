@@ -112,14 +112,18 @@ const MODEL_RECOMMENDATIONS = {
 
 // Demo data for one-click example
 const DEMO_EXAMPLE = {
-  templateId: 'dcf-model',
+  templateId: 'dcf-valuation',
   variables: {
     company_name: 'Acme Corporation',
-    revenue: '150,000,000',
-    growth_rate: '12',
-    discount_rate: '10',
-    terminal_growth: '2.5',
+    industry: 'Technology',
+    current_revenue: '150',
+    ebitda_margin: '22',
+    historical_growth: '18',
     projection_years: '5',
+    terminal_growth: '2.5',
+    wacc_low: '9',
+    wacc_high: '11',
+    tax_rate: '25',
   },
 };
 
