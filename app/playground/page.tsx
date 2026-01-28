@@ -42,8 +42,16 @@ export default function PlaygroundPage() {
 type Mode = 'simple' | 'expert';
 type Step = 'template' | 'customize' | 'export';
 
-// Industry/use-case options for finance professionals
+// Industry/use-case options for professionals
 const INDUSTRY_OPTIONS = [
+  {
+    id: 'healthcare',
+    name: 'Healthcare & Hospice',
+    description: 'Hospice eligibility, palliative care, clinical assessments',
+    icon: 'heart',
+    color: '#dc2626',
+    categories: ['healthcare'],
+  },
   {
     id: 'ma',
     name: 'M&A & Deal Work',
@@ -110,20 +118,24 @@ const MODEL_RECOMMENDATIONS = {
   advanced: { model: 'claude-opus-4-5-20250514', reason: 'Maximum capability for complex financial modeling' },
 };
 
-// Demo data for one-click example
+// Demo data for one-click example - Healthcare hospice eligibility
 const DEMO_EXAMPLE = {
-  templateId: 'dcf-valuation',
+  templateId: 'hospice-eligibility-general',
   variables: {
-    company_name: 'Acme Corporation',
-    industry: 'Technology',
-    current_revenue: '150',
-    ebitda_margin: '22',
-    historical_growth: '18',
-    projection_years: '5',
-    terminal_growth: '2.5',
-    wacc_low: '9',
-    wacc_high: '11',
-    tax_rate: '25',
+    patient_name: 'John Smith',
+    patient_age: '78',
+    primary_diagnosis: 'Heart Failure',
+    secondary_diagnoses: 'Type 2 Diabetes, Chronic Kidney Disease Stage 4, Atrial Fibrillation',
+    pps_score: '40',
+    kps_score: '40',
+    adl_dependencies: '5',
+    weight_change: '-15 lbs',
+    weight_timeframe: '6 months',
+    nutritional_status: 'Reduced intake',
+    hospitalizations: '3',
+    infections: 'UTI x2, Pneumonia x1',
+    curative_treatment: 'Declined further curative treatment',
+    care_goals: 'Patient and family wish to focus on comfort and quality of life. Patient wants to remain at home with family.',
   },
 };
 

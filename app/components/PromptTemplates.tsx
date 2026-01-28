@@ -1,9 +1,10 @@
 'use client';
 
-// Finance-focused prompt templates for business professionals
-// 18 templates across 5 categories + 12 Senior Housing Pro Forma templates
+// Professional prompt templates for business and healthcare professionals
+// Finance templates + Senior Housing Pro Forma + Healthcare/Hospice eligibility
 
 import { SENIOR_HOUSING_TEMPLATES } from '../data/senior-housing/templates';
+import { HEALTHCARE_TEMPLATES } from '../data/healthcare/templates';
 
 export interface PromptTemplate {
   id: string;
@@ -1455,16 +1456,18 @@ Write in active voice with clear, concise language appropriate for {{audience}}.
 
 export const TEMPLATE_CATEGORIES = [
   { id: 'all', name: 'All Templates', icon: '✨', slug: 'all', color: '#4ECDC4' },
+  { id: 'Healthcare', name: 'Healthcare & Hospice', icon: '🏥', slug: 'healthcare', color: '#dc2626' },
   { id: 'Financial Analysis', name: 'Financial Analysis', icon: '📊', slug: 'financial-analysis', color: '#4ECDC4' },
   { id: 'Investment Research', name: 'Investment Research', icon: '🔍', slug: 'investment-research', color: '#14b8a6' },
   { id: 'Strategy & Planning', name: 'Strategy & Planning', icon: '⚡', slug: 'strategy-planning', color: '#8b5cf6' },
   { id: 'M&A & Deal Work', name: 'M&A & Deal Work', icon: '🤝', slug: 'ma-deal-work', color: '#f97316' },
   { id: 'Professional Reporting', name: 'Professional Reporting', icon: '📑', slug: 'professional-reporting', color: '#627d98' },
-  { id: 'Senior Housing', name: 'Senior Housing', icon: '🏥', slug: 'senior-housing', color: '#10b981' },
+  { id: 'Senior Housing', name: 'Senior Housing', icon: '🏠', slug: 'senior-housing', color: '#10b981' },
 ];
 
-// Merge all templates (core + senior housing)
+// Merge all templates (core + senior housing + healthcare)
 export const ALL_TEMPLATES: PromptTemplate[] = [
+  ...HEALTHCARE_TEMPLATES, // Healthcare first for prominence
   ...PROMPT_TEMPLATES,
   ...SENIOR_HOUSING_TEMPLATES.map(t => ({
     ...t,
