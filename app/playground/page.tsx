@@ -1064,6 +1064,8 @@ Tips for finance prompts:
             copied={copied}
             auditMode={auditMode}
             setAuditMode={setAuditMode}
+            showAgentHelper={showAgentHelper}
+            setShowAgentHelper={setShowAgentHelper}
           />
         )}
       </main>
@@ -1127,6 +1129,8 @@ function ExpertMode({
   copied,
   auditMode,
   setAuditMode,
+  showAgentHelper,
+  setShowAgentHelper,
 }: {
   prompt: string;
   setPrompt: (p: string) => void;
@@ -1137,6 +1141,8 @@ function ExpertMode({
   copied: boolean;
   auditMode: boolean;
   setAuditMode: (v: boolean) => void;
+  showAgentHelper: boolean;
+  setShowAgentHelper: (v: boolean) => void;
 }) {
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
   const [compressionLevel, setCompressionLevel] = useState<'low' | 'medium' | 'high'>('medium');
