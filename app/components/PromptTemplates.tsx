@@ -5,6 +5,7 @@
 
 import { SENIOR_HOUSING_TEMPLATES } from '../data/senior-housing/templates';
 import { HEALTHCARE_TEMPLATES } from '../data/healthcare/templates';
+import { BUSINESS_TEMPLATES } from '../data/healthcare/business-templates';
 
 export interface PromptTemplate {
   id: string;
@@ -1465,9 +1466,10 @@ export const TEMPLATE_CATEGORIES = [
   { id: 'Senior Housing', name: 'Senior Housing', icon: '🏠', slug: 'senior-housing', color: '#10b981' },
 ];
 
-// Merge all templates (core + senior housing + healthcare)
+// Merge all templates (core + senior housing + healthcare + business)
 export const ALL_TEMPLATES: PromptTemplate[] = [
   ...HEALTHCARE_TEMPLATES, // Healthcare first for prominence
+  ...BUSINESS_TEMPLATES, // Business/finance templates
   ...PROMPT_TEMPLATES,
   ...SENIOR_HOUSING_TEMPLATES.map(t => ({
     ...t,
