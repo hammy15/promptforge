@@ -5,14 +5,14 @@ import Link from 'next/link';
 import { Icons } from '../components/Icons';
 import { ThemeToggle } from '../components/ThemeToggle';
 
-// Ocean blue color palette (Hammy Design)
-const oceanColors = {
-  primary: '#0EA5E9',
-  secondary: '#06B6D4',
-  accent: '#38BDF8',
-  deep: '#0284C7',
-  light: '#E0F2FE',
-  dark: '#0C4A6E',
+// Turquoise color palette (Hammy Design - consistent across app)
+const brandColors = {
+  primary: '#4ECDC4',
+  secondary: '#3EB489',
+  accent: '#5ED4CB',
+  deep: '#3AA89F',
+  light: '#E0FAF7',
+  dark: '#1A5952',
 };
 
 // Task types for prompt building
@@ -144,11 +144,11 @@ export default function Prompts101() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0EA5E9] to-[#06B6D4] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center">
                 <Icons.chart className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold">
-                <span className="text-[#0EA5E9]">Prompt</span>
+                <span className="text-[#4ECDC4]">Prompt</span>
                 <span className="text-[var(--foreground)]">Forge</span>
               </span>
             </Link>
@@ -157,7 +157,10 @@ export default function Prompts101() {
               <Link href="/" className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--muted)]">
                 Home
               </Link>
-              <Link href="/prompts-101" className="px-4 py-2 text-[#0EA5E9] font-medium rounded-lg bg-[rgba(14,165,233,0.1)]">
+              <Link href="/claude-code" className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--muted)] flex items-center gap-1">
+                <span>⚡</span> Claude Code
+              </Link>
+              <Link href="/prompts-101" className="px-4 py-2 text-[#4ECDC4] font-medium rounded-lg bg-[rgba(78,205,196,0.1)]">
                 Prompts 101
               </Link>
               <Link href="/playground" className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--muted)]">
@@ -175,17 +178,17 @@ export default function Prompts101() {
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-[var(--border-color)]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0EA5E9]/10 via-transparent to-[#06B6D4]/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#4ECDC4]/10 via-transparent to-[#3EB489]/10" />
         <div className="max-w-7xl mx-auto px-6 py-12 md:py-16 relative">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(14,165,233,0.1)] border border-[rgba(14,165,233,0.3)] text-[#0EA5E9] text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(14,165,233,0.1)] border border-[rgba(14,165,233,0.3)] text-[#4ECDC4] text-sm font-medium mb-4">
               <span className="text-lg">🎓</span>
               Learn to Build Effective AI Prompts
             </div>
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--foreground)] mb-4 leading-tight">
               Prompts{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0EA5E9] to-[#06B6D4]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4ECDC4] to-[#3EB489]">
                 101
               </span>
             </h1>
@@ -207,7 +210,7 @@ export default function Prompts101() {
               onClick={() => setActiveSection(section.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                 activeSection === section.id
-                  ? 'bg-gradient-to-r from-[#0EA5E9] to-[#06B6D4] text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] text-white shadow-lg'
                   : 'bg-[var(--muted)] text-[var(--text-secondary)] hover:bg-[var(--card)]'
               }`}
             >
@@ -226,7 +229,7 @@ export default function Prompts101() {
                 <h2 className="text-xl font-bold text-[var(--foreground)]">Build Your Prompt</h2>
                 <button
                   onClick={handleReset}
-                  className="text-sm text-[var(--text-muted)] hover:text-[#0EA5E9] transition-colors"
+                  className="text-sm text-[var(--text-muted)] hover:text-[#4ECDC4] transition-colors"
                 >
                   Reset
                 </button>
@@ -235,7 +238,7 @@ export default function Prompts101() {
               {/* Step 1: What do you want to do? */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-[#0EA5E9] text-white flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-[#4ECDC4] text-white flex items-center justify-center font-bold text-sm">
                     1
                   </div>
                   <h3 className="font-semibold text-[var(--foreground)]">What do you want the AI to do?</h3>
@@ -248,8 +251,8 @@ export default function Prompts101() {
                       onClick={() => setTaskType(task.id)}
                       className={`p-3 rounded-xl border-2 text-left transition-all ${
                         taskType === task.id
-                          ? 'border-[#0EA5E9] bg-[rgba(14,165,233,0.1)]'
-                          : 'border-[var(--border-color)] hover:border-[#0EA5E9]/50'
+                          ? 'border-[#4ECDC4] bg-[rgba(14,165,233,0.1)]'
+                          : 'border-[var(--border-color)] hover:border-[#4ECDC4]/50'
                       }`}
                     >
                       <div className="text-2xl mb-1">{task.icon}</div>
@@ -263,7 +266,7 @@ export default function Prompts101() {
                   value={taskDescription}
                   onChange={(e) => setTaskDescription(e.target.value)}
                   placeholder="Describe specifically what you want... (e.g., 'a financial report for Q3 earnings' or 'a Python script to scrape websites')"
-                  className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#0EA5E9] focus:outline-none resize-none"
+                  className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none resize-none"
                   rows={3}
                 />
               </div>
@@ -271,7 +274,7 @@ export default function Prompts101() {
               {/* Step 2: Context */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-[#06B6D4] text-white flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-[#3EB489] text-white flex items-center justify-center font-bold text-sm">
                     2
                   </div>
                   <h3 className="font-semibold text-[var(--foreground)]">Any background the AI should know?</h3>
@@ -282,7 +285,7 @@ export default function Prompts101() {
                   value={context}
                   onChange={(e) => setContext(e.target.value)}
                   placeholder="Add context like: who you are, what the situation is, relevant background info..."
-                  className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#0EA5E9] focus:outline-none resize-none"
+                  className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none resize-none"
                   rows={3}
                 />
               </div>
@@ -290,7 +293,7 @@ export default function Prompts101() {
               {/* Step 3: Tone & Format */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-[#38BDF8] text-white flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-[#5ED4CB] text-white flex items-center justify-center font-bold text-sm">
                     3
                   </div>
                   <h3 className="font-semibold text-[var(--foreground)]">How should the response be?</h3>
@@ -306,7 +309,7 @@ export default function Prompts101() {
                           onClick={() => setTone(t.id)}
                           className={`px-3 py-2 rounded-lg text-sm transition-all ${
                             tone === t.id
-                              ? 'bg-[#0EA5E9] text-white'
+                              ? 'bg-[#4ECDC4] text-white'
                               : 'bg-[var(--muted)] text-[var(--text-secondary)] hover:bg-[var(--card)]'
                           }`}
                         >
@@ -325,7 +328,7 @@ export default function Prompts101() {
                           onClick={() => setOutputFormat(o.id)}
                           className={`px-3 py-2 rounded-lg text-sm transition-all ${
                             outputFormat === o.id
-                              ? 'bg-[#0EA5E9] text-white'
+                              ? 'bg-[#4ECDC4] text-white'
                               : 'bg-[var(--muted)] text-[var(--text-secondary)] hover:bg-[var(--card)]'
                           }`}
                         >
@@ -340,7 +343,7 @@ export default function Prompts101() {
               {/* Step 4: Constraints & Examples */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-[#0284C7] text-white flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-[#3AA89F] text-white flex items-center justify-center font-bold text-sm">
                     4
                   </div>
                   <h3 className="font-semibold text-[var(--foreground)]">Any rules or examples?</h3>
@@ -357,7 +360,7 @@ export default function Prompts101() {
                       value={constraints}
                       onChange={(e) => setConstraints(e.target.value)}
                       placeholder="e.g., 'Keep under 500 words' or 'Don't use technical jargon'"
-                      className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#0EA5E9] focus:outline-none"
+                      className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none"
                     />
                   </div>
 
@@ -369,7 +372,7 @@ export default function Prompts101() {
                       value={examples}
                       onChange={(e) => setExamples(e.target.value)}
                       placeholder="Paste an example of the output style you want..."
-                      className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#0EA5E9] focus:outline-none resize-none"
+                      className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none resize-none"
                       rows={3}
                     />
                   </div>
@@ -388,7 +391,7 @@ export default function Prompts101() {
                       onClick={() => setSelectedPlatform(platform.id)}
                       className={`p-2 rounded-lg transition-all ${
                         selectedPlatform === platform.id
-                          ? 'bg-[var(--muted)] ring-2 ring-[#0EA5E9]'
+                          ? 'bg-[var(--muted)] ring-2 ring-[#4ECDC4]'
                           : 'hover:bg-[var(--muted)]'
                       }`}
                       title={`Use with ${platform.name}`}
@@ -418,7 +421,7 @@ export default function Prompts101() {
                 <div className="flex gap-3">
                   <button
                     onClick={handleCopy}
-                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#06B6D4] text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
                   >
                     {copied ? (
                       <>
@@ -436,7 +439,7 @@ export default function Prompts101() {
                     href={LLM_PLATFORMS.find(p => p.id === selectedPlatform)?.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-3 rounded-xl border border-[var(--border-color)] text-[var(--foreground)] font-medium hover:border-[#0EA5E9] transition-all flex items-center gap-2"
+                    className="px-6 py-3 rounded-xl border border-[var(--border-color)] text-[var(--foreground)] font-medium hover:border-[#4ECDC4] transition-all flex items-center gap-2"
                   >
                     Open {LLM_PLATFORMS.find(p => p.id === selectedPlatform)?.name}
                     <Icons.arrowRight className="w-4 h-4" />
@@ -506,8 +509,8 @@ export default function Prompts101() {
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-[#0EA5E9]/5 border border-[#0EA5E9]/20">
-                    <div className="flex items-center gap-2 text-[#0EA5E9] text-sm">
+                  <div className="p-3 rounded-xl bg-[#4ECDC4]/5 border border-[#4ECDC4]/20">
+                    <div className="flex items-center gap-2 text-[#4ECDC4] text-sm">
                       <span>💡</span>
                       <span>{item.tip}</span>
                     </div>
@@ -602,7 +605,7 @@ Executive summary with clear takeaways.`,
                     onClick={() => {
                       navigator.clipboard.writeText(example.prompt);
                     }}
-                    className="mt-4 px-4 py-2 rounded-lg bg-[#0EA5E9] text-white text-sm font-medium hover:bg-[#0284C7] transition-colors"
+                    className="mt-4 px-4 py-2 rounded-lg bg-[#4ECDC4] text-white text-sm font-medium hover:bg-[#3AA89F] transition-colors"
                   >
                     Copy This Prompt
                   </button>
@@ -672,7 +675,7 @@ Executive summary with clear takeaways.`,
                         href={platform.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-[#0EA5E9] hover:underline"
+                        className="text-sm text-[#4ECDC4] hover:underline"
                       >
                         {platform.url.replace('https://', '')} →
                       </a>
@@ -684,7 +687,7 @@ Executive summary with clear takeaways.`,
                   <ul className="space-y-2">
                     {platform.tips.map((tip, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-muted)]">
-                        <span className="text-[#0EA5E9]">•</span>
+                        <span className="text-[#4ECDC4]">•</span>
                         {tip}
                       </li>
                     ))}
@@ -694,7 +697,7 @@ Executive summary with clear takeaways.`,
             </div>
 
             {/* How to use */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-[#0EA5E9]/5 to-[#06B6D4]/5 border border-[#0EA5E9]/20">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-[#4ECDC4]/5 to-[#3EB489]/5 border border-[#4ECDC4]/20">
               <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">How to Use Your Prompt</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 {[
@@ -704,7 +707,7 @@ Executive summary with clear takeaways.`,
                 ].map((item) => (
                   <div key={item.step} className="text-center">
                     <div className="text-3xl mb-2">{item.icon}</div>
-                    <div className="w-8 h-8 rounded-full bg-[#0EA5E9] text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">
+                    <div className="w-8 h-8 rounded-full bg-[#4ECDC4] text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">
                       {item.step}
                     </div>
                     <h4 className="font-semibold text-[var(--foreground)]">{item.title}</h4>
@@ -721,7 +724,7 @@ Executive summary with clear takeaways.`,
       <footer className="border-t border-[var(--border-color)] py-8 mt-12">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-[var(--text-muted)]">
-            <span className="text-[#0EA5E9] font-semibold">PromptForge</span>
+            <span className="text-[#4ECDC4] font-semibold">PromptForge</span>
             <span>•</span>
             <span>Prompts 101 - Build Better AI Prompts</span>
           </div>

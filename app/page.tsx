@@ -98,6 +98,9 @@ export default function Home() {
                 <Link href="/" className="px-4 py-2 text-[#4ECDC4] font-medium rounded-lg bg-[rgba(78,205,196,0.1)]">
                   Home
                 </Link>
+                <Link href="/claude-code" className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--muted)] flex items-center gap-1">
+                  <span>⚡</span> Claude Code
+                </Link>
                 <Link href="/prompts-101" className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--muted)]">
                   Prompts 101
                 </Link>

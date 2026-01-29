@@ -125,9 +125,9 @@ export default function GuidedPromptBuilder() {
     (state.intent ? generatePrompt(state.intent, state.targetLLM, state.options).prompt : '');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0a1929] to-[#0f2137]">
+    <div className="py-8">
       {/* Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 h-1 bg-[#1e3a5f] z-50">
+      <div className="fixed top-[73px] left-0 right-0 h-1 bg-[var(--muted)] z-40">
         <div
           className="h-full bg-gradient-to-r from-[#4ECDC4] to-[#3EB489] transition-all duration-500"
           style={{ width: `${(state.step / 4) * 100}%` }}
@@ -135,7 +135,7 @@ export default function GuidedPromptBuilder() {
       </div>
 
       {/* Step Indicators */}
-      <div className="pt-8 pb-4 px-4">
+      <div className="pt-4 pb-4 px-4">
         <div className="max-w-xl mx-auto flex items-center justify-center gap-2">
           {[1, 2, 3, 4].map((num) => (
             <div key={num} className="flex items-center">
@@ -145,7 +145,7 @@ export default function GuidedPromptBuilder() {
                     ? 'bg-[#4ECDC4] text-[#0a1929]'
                     : num === state.step
                     ? 'bg-[#4ECDC4] text-[#0a1929] ring-4 ring-[#4ECDC4]/30'
-                    : 'bg-[#1e3a5f] text-[#64748b]'
+                    : 'bg-[var(--muted)] text-[var(--text-muted)]'
                 }`}
               >
                 {num < state.step ? (
@@ -159,7 +159,7 @@ export default function GuidedPromptBuilder() {
               {num < 4 && (
                 <div
                   className={`w-12 h-0.5 mx-1 transition-colors ${
-                    num < state.step ? 'bg-[#4ECDC4]' : 'bg-[#1e3a5f]'
+                    num < state.step ? 'bg-[#4ECDC4]' : 'bg-[var(--border-color)]'
                   }`}
                 />
               )}
@@ -167,10 +167,10 @@ export default function GuidedPromptBuilder() {
           ))}
         </div>
         <div className="max-w-xl mx-auto flex items-center justify-between mt-2 px-2">
-          <span className={`text-xs ${state.step >= 1 ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`}>Intent</span>
-          <span className={`text-xs ${state.step >= 2 ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`}>AI</span>
-          <span className={`text-xs ${state.step >= 3 ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`}>Options</span>
-          <span className={`text-xs ${state.step >= 4 ? 'text-[#4ECDC4]' : 'text-[#64748b]'}`}>Done</span>
+          <span className={`text-xs ${state.step >= 1 ? 'text-[#4ECDC4]' : 'text-[var(--text-muted)]'}`}>Intent</span>
+          <span className={`text-xs ${state.step >= 2 ? 'text-[#4ECDC4]' : 'text-[var(--text-muted)]'}`}>AI</span>
+          <span className={`text-xs ${state.step >= 3 ? 'text-[#4ECDC4]' : 'text-[var(--text-muted)]'}`}>Options</span>
+          <span className={`text-xs ${state.step >= 4 ? 'text-[#4ECDC4]' : 'text-[var(--text-muted)]'}`}>Done</span>
         </div>
       </div>
 
@@ -231,9 +231,9 @@ export default function GuidedPromptBuilder() {
       {state.step >= 3 && !showPreview && (
         <button
           onClick={() => setShowPreview(true)}
-          className="hidden md:flex fixed right-6 bottom-20 items-center gap-2 px-4 py-3 rounded-xl bg-[#1e3a5f] text-white hover:bg-[#2d4a6f] transition-colors shadow-lg"
+          className="hidden md:flex fixed right-6 bottom-20 items-center gap-2 px-4 py-3 rounded-xl bg-[var(--card)] border border-[var(--border-color)] text-[var(--foreground)] hover:border-[#4ECDC4] transition-colors shadow-lg"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-5 h-5 text-[#4ECDC4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
           </svg>

@@ -485,71 +485,90 @@ function Playground() {
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-mesh pointer-events-none opacity-30" />
 
-      {/* Header */}
-      <header className="relative z-10 border-b border-[var(--border-color)]">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+      {/* Navigation - Consistent with all pages */}
+      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-[var(--background)]/80 border-b border-[var(--border-color)]">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4ECDC4] to-[#3EB489] flex items-center justify-center">
                 <Icons.chart className="w-6 h-6 text-[#0a1929]" />
               </div>
-              <div>
+              <div className="flex items-center gap-2">
                 <span className="text-xl font-bold">
                   <span className="text-[#4ECDC4]">Prompt</span>
                   <span className="text-[var(--foreground)]">Forge</span>
                 </span>
-                <span className="ml-2 text-xs px-2 py-0.5 bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] rounded-full">
+                <span className="text-xs px-2 py-0.5 bg-[rgba(78,205,196,0.2)] text-[#4ECDC4] rounded-full">
                   {mode === 'simple' ? 'Simple' : 'Expert'}
                 </span>
               </div>
             </Link>
 
-            {/* Mode Toggle */}
-            <div className="flex items-center gap-4">
-              <div className="flex bg-[var(--card)] rounded-xl p-1 border border-[var(--border-color)]" data-tour="mode-toggle">
-                <button
-                  onClick={() => setMode('simple')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    mode === 'simple'
-                      ? 'bg-[#4ECDC4] text-[#0a1929]'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
-                  }`}
-                >
-                  <Icons.wand className="w-4 h-4 inline mr-2" />
-                  Simple
-                </button>
-                <button
-                  onClick={() => setMode('expert')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    mode === 'expert'
-                      ? 'bg-[#4ECDC4] text-[#0a1929]'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
-                  }`}
-                >
-                  <Icons.beaker className="w-4 h-4 inline mr-2" />
-                  Expert
-                </button>
-              </div>
-
-              <button
-                onClick={() => setShowAgentHelper(!showAgentHelper)}
-                className={`p-2 transition-colors ${showAgentHelper ? 'text-[#4ECDC4]' : 'text-[var(--text-muted)] hover:text-[#4ECDC4]'}`}
-                title="AI Assistant"
-              >
-                <Icons.bot className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setShowHistory(!showHistory)}
-                className="p-2 text-[var(--text-muted)] hover:text-[#4ECDC4] transition-colors"
-              >
-                <Icons.history className="w-5 h-5" />
-              </button>
-              <ThemeToggle />
+            <div className="hidden md:flex items-center gap-1">
+              <Link href="/" className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--muted)]">
+                Home
+              </Link>
+              <Link href="/claude-code" className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--muted)] flex items-center gap-1">
+                <span>⚡</span> Claude Code
+              </Link>
+              <Link href="/prompts-101" className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--muted)]">
+                Prompts 101
+              </Link>
+              <Link href="/playground" className="px-4 py-2 text-[#4ECDC4] font-medium rounded-lg bg-[rgba(78,205,196,0.1)]">
+                Playground
+              </Link>
+              <Link href="/builder" className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--muted)]">
+                Builder
+              </Link>
             </div>
           </div>
+
+          {/* Right side controls */}
+          <div className="flex items-center gap-3">
+            {/* Mode Toggle */}
+            <div className="flex bg-[var(--card)] rounded-xl p-1 border border-[var(--border-color)]" data-tour="mode-toggle">
+              <button
+                onClick={() => setMode('simple')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  mode === 'simple'
+                    ? 'bg-[#4ECDC4] text-[#0a1929]'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                <Icons.wand className="w-4 h-4 inline mr-1.5" />
+                Simple
+              </button>
+              <button
+                onClick={() => setMode('expert')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  mode === 'expert'
+                    ? 'bg-[#4ECDC4] text-[#0a1929]'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                <Icons.beaker className="w-4 h-4 inline mr-1.5" />
+                Expert
+              </button>
+            </div>
+
+            <button
+              onClick={() => setShowAgentHelper(!showAgentHelper)}
+              className={`p-2 rounded-lg transition-colors ${showAgentHelper ? 'text-[#4ECDC4] bg-[rgba(78,205,196,0.1)]' : 'text-[var(--text-muted)] hover:text-[#4ECDC4] hover:bg-[var(--muted)]'}`}
+              title="AI Assistant"
+            >
+              <Icons.bot className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setShowHistory(!showHistory)}
+              className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[#4ECDC4] hover:bg-[var(--muted)] transition-colors"
+              title="History"
+            >
+              <Icons.history className="w-5 h-5" />
+            </button>
+            <ThemeToggle />
+          </div>
         </div>
-      </header>
+      </nav>
 
       <main className="relative z-10 max-w-7xl mx-auto px-6 py-8">
         {/* Simple Mode */}
