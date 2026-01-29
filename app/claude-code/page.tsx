@@ -42,91 +42,170 @@ interface PromptScore {
 }
 
 // ============================================================================
-// CONSTANTS & DATA
+// BEGINNER-FRIENDLY CONSTANTS & DATA
 // ============================================================================
 
-// Claude Code specific task types
+// Claude Code specific task types - with extensive help for beginners
 const CLAUDE_CODE_TASKS = [
   {
     id: 'build-app',
     label: 'Build an App',
     icon: '🚀',
-    description: 'Create a full application from scratch',
-    examples: ['Build a todo app with React', 'Create a CLI tool in Python', 'Build a REST API with Node.js'],
+    description: 'Create something new from scratch',
+    helpText: 'Perfect for starting a new project. Just describe what you want to build!',
+    examples: ['A simple to-do list app', 'A weather dashboard', 'A recipe organizer'],
+    defaultDescription: 'I want to build a simple web application',
+    smartDefaults: {
+      includeAuth: false,
+      includeDatabase: true,
+      includeTests: true,
+      includeDeployment: true,
+    },
   },
   {
     id: 'add-feature',
     label: 'Add Feature',
     icon: '✨',
-    description: 'Add new functionality to existing code',
-    examples: ['Add authentication', 'Add dark mode', 'Add search functionality'],
+    description: 'Add something new to existing code',
+    helpText: 'Have existing code? Describe what new functionality you want to add.',
+    examples: ['Add a search bar', 'Add user login', 'Add dark mode toggle'],
+    defaultDescription: 'I want to add a new feature to my existing project',
+    smartDefaults: {
+      preserveExisting: true,
+      backwards_compatible: true,
+    },
   },
   {
     id: 'fix-bug',
     label: 'Fix Bug',
     icon: '🐛',
-    description: 'Debug and fix issues in code',
-    examples: ['Fix failing tests', 'Fix performance issue', 'Fix type errors'],
+    description: 'Something broken? Get it fixed!',
+    helpText: 'Paste your code and describe what\'s going wrong. Claude will help debug it.',
+    examples: ['Button not working', 'Data not saving', 'Page not loading'],
+    defaultDescription: 'I have a bug in my code that I need help fixing',
+    smartDefaults: {
+      needsErrorMessage: true,
+      needsExpectedBehavior: true,
+    },
   },
   {
     id: 'refactor',
     label: 'Refactor',
     icon: '♻️',
-    description: 'Improve code structure and quality',
-    examples: ['Split into smaller functions', 'Add TypeScript types', 'Improve performance'],
+    description: 'Make your code better & cleaner',
+    helpText: 'Already working code but want it cleaner or faster? This is for you.',
+    examples: ['Clean up messy function', 'Improve performance', 'Add TypeScript types'],
+    defaultDescription: 'I want to improve and clean up my existing code',
+    smartDefaults: {
+      maintainFunctionality: true,
+      improveReadability: true,
+    },
   },
   {
     id: 'explain',
     label: 'Explain Code',
     icon: '📖',
     description: 'Understand how code works',
-    examples: ['Explain this function', 'What does this regex do', 'How does this algorithm work'],
+    helpText: 'Confused by some code? Paste it and get a clear, simple explanation.',
+    examples: ['What does this function do?', 'How does this algorithm work?', 'Explain this regex'],
+    defaultDescription: 'I want to understand how this code works',
+    smartDefaults: {
+      includeVisualExplanation: true,
+      stepByStep: true,
+    },
   },
   {
     id: 'write-tests',
     label: 'Write Tests',
     icon: '🧪',
     description: 'Create tests for your code',
-    examples: ['Write unit tests', 'Add integration tests', 'Test edge cases'],
+    helpText: 'Tests help ensure your code works correctly. Paste your code to generate tests.',
+    examples: ['Test my login function', 'Add unit tests', 'Test error handling'],
+    defaultDescription: 'I want to write tests for my code',
+    smartDefaults: {
+      includeEdgeCases: true,
+      includeErrorCases: true,
+    },
   },
 ];
 
-// Tech stack options
+// Tech stack options with beginner-friendly descriptions
 const TECH_STACKS = [
-  { id: 'react', label: 'React', icon: '⚛️' },
-  { id: 'nextjs', label: 'Next.js', icon: '▲' },
-  { id: 'vue', label: 'Vue', icon: '💚' },
-  { id: 'svelte', label: 'Svelte', icon: '🔥' },
-  { id: 'python', label: 'Python', icon: '🐍' },
-  { id: 'node', label: 'Node.js', icon: '💚' },
-  { id: 'typescript', label: 'TypeScript', icon: '📘' },
-  { id: 'rust', label: 'Rust', icon: '🦀' },
-  { id: 'go', label: 'Go', icon: '🔵' },
-  { id: 'java', label: 'Java', icon: '☕' },
-  { id: 'csharp', label: 'C#', icon: '💜' },
-  { id: 'other', label: 'Other', icon: '📦' },
+  { id: 'react', label: 'React', icon: '⚛️', desc: 'Most popular for web apps' },
+  { id: 'nextjs', label: 'Next.js', icon: '▲', desc: 'React + server features' },
+  { id: 'vue', label: 'Vue', icon: '💚', desc: 'Beginner-friendly framework' },
+  { id: 'svelte', label: 'Svelte', icon: '🔥', desc: 'Fast & simple' },
+  { id: 'python', label: 'Python', icon: '🐍', desc: 'Great for beginners' },
+  { id: 'node', label: 'Node.js', icon: '💚', desc: 'JavaScript backend' },
+  { id: 'typescript', label: 'TypeScript', icon: '📘', desc: 'JavaScript with types' },
+  { id: 'rust', label: 'Rust', icon: '🦀', desc: 'High performance' },
+  { id: 'go', label: 'Go', icon: '🔵', desc: 'Simple & fast' },
+  { id: 'java', label: 'Java', icon: '☕', desc: 'Enterprise standard' },
+  { id: 'csharp', label: 'C#', icon: '💜', desc: '.NET framework' },
+  { id: 'other', label: 'Other', icon: '📦', desc: 'Something else' },
 ];
 
-// Output preferences
+// Output preferences with helpful explanations
 const OUTPUT_PREFS = [
-  { id: 'code-only', label: 'Code Only', desc: 'Just the code, minimal commentary' },
-  { id: 'explained', label: 'Explained', desc: 'Code with inline comments and explanations' },
-  { id: 'step-by-step', label: 'Step-by-Step', desc: 'Break down into sequential steps' },
-  { id: 'diff', label: 'Diff Format', desc: 'Show changes in diff format' },
+  { id: 'explained', label: '✨ Explained (Recommended)', desc: 'Code with helpful comments - perfect for learning!', recommended: true },
+  { id: 'step-by-step', label: '📋 Step-by-Step', desc: 'Detailed walkthrough - great if you\'re new to this' },
+  { id: 'code-only', label: '💻 Code Only', desc: 'Just the code, no extra commentary - for experienced devs' },
+  { id: 'diff', label: '📝 Diff Format', desc: 'Shows what changed - good for reviewing edits' },
 ];
 
-// Available XML tags for custom builder
-const XML_TAGS = [
-  { id: 'task', label: 'Task', desc: 'Main objective', color: '#4ECDC4' },
-  { id: 'context', label: 'Context', desc: 'Background info', color: '#3EB489' },
-  { id: 'requirements', label: 'Requirements', desc: 'Must-have criteria', color: '#F59E0B' },
-  { id: 'constraints', label: 'Constraints', desc: 'Limitations', color: '#EF4444' },
-  { id: 'code', label: 'Code', desc: 'Code snippets', color: '#8B5CF6' },
-  { id: 'examples', label: 'Examples', desc: 'Sample output', color: '#EC4899' },
-  { id: 'tech-stack', label: 'Tech Stack', desc: 'Technologies', color: '#06B6D4' },
-  { id: 'output-instructions', label: 'Output', desc: 'Format instructions', color: '#10B981' },
-  { id: 'files', label: 'Files', desc: 'File references', color: '#6366F1' },
-  { id: 'step', label: 'Step', desc: 'Workflow step', color: '#F97316' },
+// Smart auto-fill suggestions based on task type
+const SMART_SUGGESTIONS: Record<string, string[]> = {
+  'build-app': [
+    'Include a clean, modern UI design',
+    'Add proper error handling for all user inputs',
+    'Make it responsive (works on mobile and desktop)',
+    'Include loading states for better user experience',
+    'Add helpful comments explaining key parts',
+  ],
+  'add-feature': [
+    'Keep existing functionality working',
+    'Match the current code style',
+    'Add comments explaining the new code',
+    'Handle edge cases gracefully',
+    'Update any related documentation',
+  ],
+  'fix-bug': [
+    'Explain what was causing the bug',
+    'Show the fix clearly',
+    'Add validation to prevent similar bugs',
+    'Include a test to verify the fix',
+    'Keep the solution simple and clear',
+  ],
+  'refactor': [
+    'Keep the same functionality',
+    'Improve code readability',
+    'Add clear variable names',
+    'Break large functions into smaller ones',
+    'Add TypeScript types if applicable',
+  ],
+  'explain': [
+    'Use simple, everyday language',
+    'Explain like I\'m a beginner',
+    'Include a visual diagram if helpful',
+    'Break down complex parts step by step',
+    'Give real-world analogies',
+  ],
+  'write-tests': [
+    'Cover the main success case',
+    'Test edge cases (empty input, etc.)',
+    'Test error handling',
+    'Use descriptive test names',
+    'Keep tests simple and focused',
+  ],
+};
+
+// Common project types for smart defaults
+const PROJECT_TYPES = [
+  { id: 'web', label: '🌐 Web App', stacks: ['react', 'nextjs', 'vue', 'svelte'] },
+  { id: 'api', label: '🔌 API/Backend', stacks: ['node', 'python', 'go', 'java'] },
+  { id: 'mobile', label: '📱 Mobile App', stacks: ['react', 'typescript'] },
+  { id: 'cli', label: '💻 Command Line Tool', stacks: ['node', 'python', 'rust', 'go'] },
+  { id: 'script', label: '📜 Script/Automation', stacks: ['python', 'node'] },
 ];
 
 // Community templates
@@ -138,6 +217,7 @@ const COMMUNITY_TEMPLATES = [
     rating: 4.9,
     uses: 2847,
     tags: ['Next.js', 'Supabase', 'Stripe'],
+    difficulty: 'Intermediate',
     prompt: `<task>
 Build a complete SaaS application with the following features
 </task>
@@ -171,12 +251,61 @@ Build a complete SaaS application with the following features
 </output-instructions>`,
   },
   {
+    id: 'beginner-todo',
+    name: 'Beginner-Friendly Todo App',
+    author: 'LearnToCode',
+    rating: 5.0,
+    uses: 5621,
+    tags: ['React', 'Beginner', 'Tutorial'],
+    difficulty: 'Beginner',
+    prompt: `<task>
+Build a simple, beginner-friendly todo list application.
+I'm new to coding, so please explain everything clearly.
+</task>
+
+<context>
+I'm learning to code and want to understand every part of this application.
+Please use simple, clear code with lots of helpful comments.
+</context>
+
+<tech-stack>
+- React (using create-react-app or Vite)
+- Plain CSS (no complex libraries)
+- Local storage to save todos
+</tech-stack>
+
+<features>
+- Add new todos
+- Mark todos as complete
+- Delete todos
+- Filter by all/active/completed
+- Data persists when page refreshes
+</features>
+
+<requirements>
+- Use simple, readable code
+- Add comments explaining what each part does
+- No complex patterns - keep it beginner-friendly
+- Include step-by-step instructions to run the app
+</requirements>
+
+<output-instructions>
+Please provide:
+1. Explanation of what we're building
+2. Step-by-step setup instructions
+3. Each file with detailed comments
+4. Explanation of how the pieces work together
+5. Suggestions for next steps to learn more
+</output-instructions>`,
+  },
+  {
     id: 'api-microservice',
     name: 'REST API Microservice',
     author: 'BackendPro',
     rating: 4.8,
     uses: 1923,
     tags: ['Node.js', 'Express', 'PostgreSQL'],
+    difficulty: 'Intermediate',
     prompt: `<task>
 Create a production-ready REST API microservice
 </task>
@@ -216,6 +345,7 @@ Create a production-ready REST API microservice
     rating: 4.7,
     uses: 1456,
     tags: ['Node.js', 'Commander', 'Chalk'],
+    difficulty: 'Intermediate',
     prompt: `<task>
 Build a command-line tool with the following functionality
 </task>
@@ -251,6 +381,7 @@ Build a command-line tool with the following functionality
     rating: 4.6,
     uses: 1234,
     tags: ['React', 'TypeScript', 'Storybook'],
+    difficulty: 'Advanced',
     prompt: `<task>
 Create a reusable React component library
 </task>
@@ -277,46 +408,13 @@ Create a reusable React component library
 </requirements>`,
   },
   {
-    id: 'data-pipeline',
-    name: 'Data Pipeline',
-    author: 'DataEngineer',
-    rating: 4.5,
-    uses: 987,
-    tags: ['Python', 'Pandas', 'Airflow'],
-    prompt: `<task>
-Build a data processing pipeline
-</task>
-
-<data-sources>
-{{DESCRIBE YOUR DATA SOURCES}}
-</data-sources>
-
-<tech-stack>
-- Python 3.11
-- Pandas for data manipulation
-- SQLAlchemy for database
-- Apache Airflow for orchestration
-</tech-stack>
-
-<transformations>
-{{DESCRIBE DATA TRANSFORMATIONS}}
-</transformations>
-
-<requirements>
-- Error handling and retries
-- Logging and monitoring
-- Incremental processing
-- Data validation
-- Unit tests
-</requirements>`,
-  },
-  {
     id: 'mobile-app',
     name: 'React Native App',
     author: 'MobileDev',
     rating: 4.8,
     uses: 1567,
     tags: ['React Native', 'Expo', 'TypeScript'],
+    difficulty: 'Intermediate',
     prompt: `<task>
 Build a cross-platform mobile app
 </task>
@@ -381,42 +479,59 @@ const BEST_PRACTICES = [
   },
 ];
 
+// XML tags for reference
+const XML_TAGS = [
+  { id: 'task', label: 'Task', desc: 'What you want to build', color: '#4ECDC4' },
+  { id: 'context', label: 'Context', desc: 'Background info', color: '#3EB489' },
+  { id: 'requirements', label: 'Requirements', desc: 'Must-haves', color: '#F59E0B' },
+  { id: 'constraints', label: 'Constraints', desc: 'Limitations', color: '#EF4444' },
+  { id: 'code', label: 'Code', desc: 'Your code', color: '#8B5CF6' },
+  { id: 'examples', label: 'Examples', desc: 'Sample output', color: '#EC4899' },
+  { id: 'tech-stack', label: 'Tech Stack', desc: 'Technologies', color: '#06B6D4' },
+  { id: 'output-instructions', label: 'Output', desc: 'How to respond', color: '#10B981' },
+];
+
 // ============================================================================
 // UTILITY FUNCTIONS
 // ============================================================================
 
-// Calculate prompt quality score
+function generateId(): string {
+  return Math.random().toString(36).substr(2, 9);
+}
+
+function detectLanguage(filename: string): string {
+  const ext = filename.split('.').pop()?.toLowerCase() || '';
+  const langMap: Record<string, string> = {
+    js: 'javascript', jsx: 'javascript', ts: 'typescript', tsx: 'typescript',
+    py: 'python', rb: 'ruby', go: 'go', rs: 'rust', java: 'java', cs: 'csharp',
+    css: 'css', html: 'html', json: 'json', md: 'markdown', yaml: 'yaml',
+    yml: 'yaml', sql: 'sql', sh: 'bash', bash: 'bash',
+  };
+  return langMap[ext] || 'text';
+}
+
 function calculatePromptScore(prompt: string): PromptScore {
   const suggestions: string[] = [];
-  let specificity = 0;
-  let clarity = 0;
-  let completeness = 0;
-  let structure = 0;
+  let specificity = 0, clarity = 0, completeness = 0, structure = 0;
 
   // Check for XML tags (structure)
   const xmlTags = ['<task>', '<context>', '<requirements>', '<output-instructions>'];
   const foundTags = xmlTags.filter(tag => prompt.includes(tag));
   structure = Math.min(100, (foundTags.length / xmlTags.length) * 100 + (prompt.includes('</') ? 20 : 0));
-  if (foundTags.length < 2) {
-    suggestions.push('Add more XML structure tags like <task>, <context>, <requirements>');
-  }
+  if (foundTags.length < 2) suggestions.push('Add more XML structure tags like <task>, <context>, <requirements>');
 
   // Check for specificity
   const specificIndicators = ['specifically', 'exactly', 'must', 'should', 'required', 'include', 'exclude', 'format'];
   const foundSpecific = specificIndicators.filter(ind => prompt.toLowerCase().includes(ind));
   specificity = Math.min(100, (foundSpecific.length / specificIndicators.length) * 100 + (prompt.length > 200 ? 30 : 0));
-  if (specificity < 50) {
-    suggestions.push('Be more specific about what you want - use words like "must", "should", "exactly"');
-  }
+  if (specificity < 50) suggestions.push('Be more specific - use words like "must", "should", "exactly"');
 
   // Check for clarity
   const hasTask = prompt.toLowerCase().includes('task') || prompt.includes('<task>');
   const hasOutput = prompt.toLowerCase().includes('output') || prompt.toLowerCase().includes('format');
   const hasContext = prompt.toLowerCase().includes('context') || prompt.includes('<context>');
   clarity = (hasTask ? 35 : 0) + (hasOutput ? 35 : 0) + (hasContext ? 30 : 0);
-  if (!hasOutput) {
-    suggestions.push('Specify the desired output format');
-  }
+  if (!hasOutput) suggestions.push('Specify the desired output format');
 
   // Check for completeness
   const hasCodeBlock = prompt.includes('```') || prompt.includes('<code>');
@@ -425,52 +540,11 @@ function calculatePromptScore(prompt: string): PromptScore {
   const hasRequirements = prompt.includes('<requirements>') || prompt.toLowerCase().includes('requirements');
   completeness = (hasCodeBlock ? 25 : 0) + (hasTechStack ? 25 : 0) + (hasRequirements ? 25 : 0) +
                  (prompt.length > 300 ? 25 : prompt.length > 150 ? 15 : 5);
-  if (!hasTechStack) {
-    suggestions.push('Mention your tech stack or preferred technologies');
-  }
+  if (!hasTechStack) suggestions.push('Mention your tech stack or preferred technologies');
 
   const overall = Math.round((specificity + clarity + completeness + structure) / 4);
-
-  return {
-    overall,
-    specificity: Math.round(specificity),
-    clarity: Math.round(clarity),
-    completeness: Math.round(completeness),
-    structure: Math.round(structure),
-    suggestions: suggestions.slice(0, 3),
-  };
-}
-
-// Generate unique ID
-function generateId(): string {
-  return Math.random().toString(36).substr(2, 9);
-}
-
-// Detect language from file extension
-function detectLanguage(filename: string): string {
-  const ext = filename.split('.').pop()?.toLowerCase() || '';
-  const langMap: Record<string, string> = {
-    js: 'javascript',
-    jsx: 'javascript',
-    ts: 'typescript',
-    tsx: 'typescript',
-    py: 'python',
-    rb: 'ruby',
-    go: 'go',
-    rs: 'rust',
-    java: 'java',
-    cs: 'csharp',
-    css: 'css',
-    html: 'html',
-    json: 'json',
-    md: 'markdown',
-    yaml: 'yaml',
-    yml: 'yaml',
-    sql: 'sql',
-    sh: 'bash',
-    bash: 'bash',
-  };
-  return langMap[ext] || 'text';
+  return { overall, specificity: Math.round(specificity), clarity: Math.round(clarity),
+           completeness: Math.round(completeness), structure: Math.round(structure), suggestions: suggestions.slice(0, 3) };
 }
 
 // ============================================================================
@@ -492,6 +566,11 @@ export default function ClaudeCodePage() {
   const [generatedPrompt, setGeneratedPrompt] = useState('');
   const [copied, setCopied] = useState(false);
 
+  // Beginner mode state
+  const [showHelp, setShowHelp] = useState(true);
+  const [experienceLevel, setExperienceLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
+  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
+
   // Tab navigation
   const [activeTab, setActiveTab] = useState<'builder' | 'files' | 'chain' | 'templates' | 'history' | 'tips'>('builder');
 
@@ -508,10 +587,6 @@ export default function ClaudeCodePage() {
   const [promptChain, setPromptChain] = useState<PromptChainStep[]>([]);
   const [activeChainStep, setActiveChainStep] = useState<string | null>(null);
 
-  // XML tag builder state
-  const [customTags, setCustomTags] = useState<{id: string, content: string}[]>([]);
-  const [showTagBuilder, setShowTagBuilder] = useState(false);
-
   // Prompt score
   const [promptScore, setPromptScore] = useState<PromptScore | null>(null);
 
@@ -522,20 +597,18 @@ export default function ClaudeCodePage() {
   // Load saved prompts from localStorage
   useEffect(() => {
     const saved = localStorage.getItem('claude-code-saved-prompts');
-    if (saved) {
-      setSavedPrompts(JSON.parse(saved));
-    }
+    if (saved) setSavedPrompts(JSON.parse(saved));
   }, []);
 
   // Generate prompt whenever inputs change
   useEffect(() => {
     if (taskType && taskDescription) {
-      generatePrompt();
+      generatePromptFromInputs();
     } else {
       setGeneratedPrompt('');
       setPromptScore(null);
     }
-  }, [taskType, taskDescription, techStack, outputPref, projectContext, constraints, codeFiles, packageJson, fileTree, customTags]);
+  }, [taskType, taskDescription, techStack, outputPref, projectContext, constraints, codeFiles, packageJson, fileTree, selectedSuggestions, experienceLevel]);
 
   // Calculate score when prompt changes
   useEffect(() => {
@@ -545,111 +618,182 @@ export default function ClaudeCodePage() {
     }
   }, [generatedPrompt]);
 
+  // Auto-select suggestions when task type changes
+  useEffect(() => {
+    if (taskType) {
+      const defaultSuggestions = SMART_SUGGESTIONS[taskType]?.slice(0, 3) || [];
+      setSelectedSuggestions(defaultSuggestions);
+    }
+  }, [taskType]);
+
   // ============================================================================
-  // PROMPT GENERATION
+  // PROMPT GENERATION - BEGINNER FRIENDLY & COMPREHENSIVE
   // ============================================================================
 
-  const generatePrompt = useCallback(() => {
+  const generatePromptFromInputs = useCallback(() => {
     const task = CLAUDE_CODE_TASKS.find(t => t.id === taskType);
     if (!task) return;
 
     const techStackStr = techStack.length > 0
-      ? techStack.map(t => TECH_STACKS.find(ts => ts.id === t)?.label).join(', ')
+      ? techStack.map(t => TECH_STACKS.find(ts => ts.id === t)?.label).filter(Boolean).join(', ')
       : '';
 
-    const outputPrefStr = OUTPUT_PREFS.find(o => o.id === outputPref)?.label || '';
+    const outputPrefInfo = OUTPUT_PREFS.find(o => o.id === outputPref);
 
-    let prompt = `<task>
-${task.label}: ${taskDescription}
-</task>
+    // Build a comprehensive, detailed prompt
+    let prompt = `<task>\n`;
+    prompt += `${task.label}: ${taskDescription}\n`;
+    prompt += `</task>\n\n`;
 
-`;
-
-    // Add project context
+    // Add experience level context - helps Claude adjust complexity
+    prompt += `<context>\n`;
+    prompt += `Experience Level: ${experienceLevel === 'beginner' ? 'I\'m a beginner, please explain things clearly and simply' :
+               experienceLevel === 'intermediate' ? 'I have some coding experience' :
+               'I\'m an experienced developer, be concise'}\n`;
     if (projectContext) {
-      prompt += `<context>
-${projectContext}
-</context>
-
-`;
+      prompt += `\nProject Background:\n${projectContext}\n`;
     }
+    prompt += `</context>\n\n`;
 
-    // Add package.json info
+    // Add package.json info if provided
     if (packageJson) {
-      prompt += `<project-config>
-\`\`\`json
-${packageJson}
-\`\`\`
-</project-config>
-
-`;
+      prompt += `<project-config>\n`;
+      prompt += `\`\`\`json\n${packageJson}\n\`\`\`\n`;
+      prompt += `</project-config>\n\n`;
     }
 
-    // Add file tree
+    // Add file tree if provided
     if (fileTree) {
-      prompt += `<file-structure>
-${fileTree}
-</file-structure>
-
-`;
+      prompt += `<file-structure>\n${fileTree}\n</file-structure>\n\n`;
     }
 
-    // Add code files
+    // Add code files if provided
     if (codeFiles.length > 0) {
-      prompt += `<files>
-`;
+      prompt += `<files>\n`;
       codeFiles.forEach(file => {
-        prompt += `<file name="${file.name}" language="${file.language}">
-\`\`\`${file.language}
-${file.content}
-\`\`\`
-</file>
-
-`;
+        prompt += `<file name="${file.name}" language="${file.language}">\n`;
+        prompt += `\`\`\`${file.language}\n${file.content}\n\`\`\`\n`;
+        prompt += `</file>\n\n`;
       });
-      prompt += `</files>
-
-`;
+      prompt += `</files>\n\n`;
     }
 
-    // Add tech stack
+    // Add tech stack with context
     if (techStackStr) {
-      prompt += `<tech-stack>
-${techStackStr}
-</tech-stack>
-
-`;
+      prompt += `<tech-stack>\n`;
+      prompt += `Technologies to use: ${techStackStr}\n`;
+      if (experienceLevel === 'beginner') {
+        prompt += `Please use the simplest patterns for these technologies.\n`;
+      }
+      prompt += `</tech-stack>\n\n`;
     }
 
-    // Add custom tags
-    customTags.forEach(tag => {
-      if (tag.content) {
-        prompt += `<${tag.id}>
-${tag.content}
-</${tag.id}>
+    // Build comprehensive requirements based on task type
+    prompt += `<requirements>\n`;
 
-`;
-      }
-    });
+    // Add selected suggestions
+    if (selectedSuggestions.length > 0) {
+      selectedSuggestions.forEach(suggestion => {
+        prompt += `- ${suggestion}\n`;
+      });
+    }
 
-    // Add requirements
-    prompt += `<requirements>
-- Output Format: ${outputPrefStr}
-${constraints ? `- Constraints: ${constraints}` : ''}
-- Follow best practices and modern patterns
-- Include error handling where appropriate
-- Write clean, maintainable code
-</requirements>
+    // Add task-specific requirements
+    switch (taskType) {
+      case 'build-app':
+        prompt += `- Create a complete, working application\n`;
+        prompt += `- Include all necessary files and configurations\n`;
+        prompt += `- Add proper error handling\n`;
+        prompt += `- Make the UI clean and user-friendly\n`;
+        if (experienceLevel === 'beginner') {
+          prompt += `- Keep the code simple and well-organized\n`;
+          prompt += `- Add helpful comments explaining key parts\n`;
+        }
+        break;
+      case 'add-feature':
+        prompt += `- Keep existing functionality working\n`;
+        prompt += `- Match the current code style and patterns\n`;
+        prompt += `- Handle edge cases gracefully\n`;
+        break;
+      case 'fix-bug':
+        prompt += `- Identify the root cause of the issue\n`;
+        prompt += `- Provide a clear fix with explanation\n`;
+        prompt += `- Add validation to prevent similar issues\n`;
+        prompt += `- Explain why this fix works\n`;
+        break;
+      case 'refactor':
+        prompt += `- Maintain the exact same functionality\n`;
+        prompt += `- Improve code readability and organization\n`;
+        prompt += `- Use clear, descriptive names\n`;
+        prompt += `- Follow best practices for the language/framework\n`;
+        break;
+      case 'explain':
+        prompt += `- Use simple, everyday language\n`;
+        prompt += `- Break down complex parts step by step\n`;
+        prompt += `- Give real-world analogies when helpful\n`;
+        prompt += `- Explain WHY things work, not just what they do\n`;
+        break;
+      case 'write-tests':
+        prompt += `- Cover the main success scenarios\n`;
+        prompt += `- Test edge cases (empty input, null values, etc.)\n`;
+        prompt += `- Test error handling\n`;
+        prompt += `- Use descriptive test names that explain what's being tested\n`;
+        break;
+    }
 
-<output-instructions>
-${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Focus on working, complete code.' :
-  outputPref === 'explained' ? 'Include inline comments explaining key decisions. Add a brief summary at the end.' :
-  outputPref === 'step-by-step' ? 'Break this down into numbered steps. Explain each step before showing the code.' :
-  'Show changes in diff format (+/- lines). Highlight what was added/modified.'}
-</output-instructions>`;
+    // Add constraints if provided
+    if (constraints) {
+      prompt += `\nConstraints:\n- ${constraints}\n`;
+    }
+
+    prompt += `</requirements>\n\n`;
+
+    // Add comprehensive output instructions based on preference and experience
+    prompt += `<output-instructions>\n`;
+
+    switch (outputPref) {
+      case 'code-only':
+        prompt += `Provide clean, working code with minimal commentary.\n`;
+        prompt += `Focus on complete, runnable code.\n`;
+        break;
+      case 'explained':
+        prompt += `Please provide:\n`;
+        prompt += `1. A brief overview of the approach\n`;
+        prompt += `2. Complete code with inline comments explaining key decisions\n`;
+        prompt += `3. A summary of what the code does\n`;
+        if (experienceLevel === 'beginner') {
+          prompt += `4. Any gotchas or common mistakes to avoid\n`;
+          prompt += `5. Suggested next steps for learning more\n`;
+        }
+        break;
+      case 'step-by-step':
+        prompt += `Please break this down into clear, numbered steps:\n`;
+        prompt += `1. Start with an overview of what we'll build\n`;
+        prompt += `2. For each step, explain WHAT we're doing and WHY\n`;
+        prompt += `3. Show the code for that step\n`;
+        prompt += `4. Explain how it connects to previous steps\n`;
+        prompt += `5. End with a summary and how to run/test the result\n`;
+        break;
+      case 'diff':
+        prompt += `Show changes in diff format:\n`;
+        prompt += `- Use +/- to show added/removed lines\n`;
+        prompt += `- Highlight what was modified and why\n`;
+        prompt += `- Provide context around the changes\n`;
+        break;
+    }
+
+    // Add experience-level specific instructions
+    if (experienceLevel === 'beginner') {
+      prompt += `\nSince I'm a beginner:\n`;
+      prompt += `- Please explain any technical terms you use\n`;
+      prompt += `- Point out common mistakes I should avoid\n`;
+      prompt += `- Suggest resources if I want to learn more\n`;
+    }
+
+    prompt += `</output-instructions>`;
 
     setGeneratedPrompt(prompt);
-  }, [taskType, taskDescription, techStack, outputPref, projectContext, constraints, codeFiles, packageJson, fileTree, customTags]);
+  }, [taskType, taskDescription, techStack, outputPref, projectContext, constraints, codeFiles, packageJson, fileTree, selectedSuggestions, experienceLevel]);
 
   // ============================================================================
   // HANDLERS
@@ -672,28 +816,26 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
     setCodeFiles([]);
     setPackageJson('');
     setFileTree('');
-    setCustomTags([]);
+    setSelectedSuggestions([]);
     setPromptScore(null);
   };
 
   const toggleTechStack = (id: string) => {
-    setTechStack(prev =>
-      prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
+    setTechStack(prev => prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]);
+  };
+
+  const toggleSuggestion = (suggestion: string) => {
+    setSelectedSuggestions(prev =>
+      prev.includes(suggestion) ? prev.filter(s => s !== suggestion) : [...prev, suggestion]
     );
   };
 
   const handleSavePrompt = () => {
     if (!generatedPrompt || !promptName) return;
-
     const newPrompt: SavedPrompt = {
-      id: generateId(),
-      name: promptName,
-      prompt: generatedPrompt,
-      taskType,
-      createdAt: new Date().toISOString(),
-      isFavorite: false,
+      id: generateId(), name: promptName, prompt: generatedPrompt,
+      taskType, createdAt: new Date().toISOString(), isFavorite: false,
     };
-
     const updated = [newPrompt, ...savedPrompts];
     setSavedPrompts(updated);
     localStorage.setItem('claude-code-saved-prompts', JSON.stringify(updated));
@@ -701,9 +843,7 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
   };
 
   const handleToggleFavorite = (id: string) => {
-    const updated = savedPrompts.map(p =>
-      p.id === id ? { ...p, isFavorite: !p.isFavorite } : p
-    );
+    const updated = savedPrompts.map(p => p.id === id ? { ...p, isFavorite: !p.isFavorite } : p);
     setSavedPrompts(updated);
     localStorage.setItem('claude-code-saved-prompts', JSON.stringify(updated));
   };
@@ -720,21 +860,14 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
   };
 
   const handleAddCodeFile = () => {
-    setCodeFiles(prev => [...prev, {
-      id: generateId(),
-      name: 'untitled.ts',
-      content: '',
-      language: 'typescript',
-    }]);
+    setCodeFiles(prev => [...prev, { id: generateId(), name: 'untitled.ts', content: '', language: 'typescript' }]);
   };
 
   const handleUpdateCodeFile = (id: string, updates: Partial<CodeFile>) => {
     setCodeFiles(prev => prev.map(f => {
       if (f.id === id) {
         const updated = { ...f, ...updates };
-        if (updates.name) {
-          updated.language = detectLanguage(updates.name);
-        }
+        if (updates.name) updated.language = detectLanguage(updates.name);
         return updated;
       }
       return f;
@@ -746,27 +879,18 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
   };
 
   const handleAddChainStep = () => {
-    const newStep: PromptChainStep = {
-      id: generateId(),
-      name: `Step ${promptChain.length + 1}`,
-      prompt: '',
-      order: promptChain.length,
-    };
+    const newStep: PromptChainStep = { id: generateId(), name: `Step ${promptChain.length + 1}`, prompt: '', order: promptChain.length };
     setPromptChain(prev => [...prev, newStep]);
     setActiveChainStep(newStep.id);
   };
 
   const handleUpdateChainStep = (id: string, updates: Partial<PromptChainStep>) => {
-    setPromptChain(prev => prev.map(s =>
-      s.id === id ? { ...s, ...updates } : s
-    ));
+    setPromptChain(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
   };
 
   const handleRemoveChainStep = (id: string) => {
     setPromptChain(prev => prev.filter(s => s.id !== id));
-    if (activeChainStep === id) {
-      setActiveChainStep(null);
-    }
+    if (activeChainStep === id) setActiveChainStep(null);
   };
 
   const handleCopyChain = async () => {
@@ -779,24 +903,7 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleAddCustomTag = (tagId: string) => {
-    if (!customTags.find(t => t.id === tagId)) {
-      setCustomTags(prev => [...prev, { id: tagId, content: '' }]);
-    }
-  };
-
-  const handleUpdateCustomTag = (tagId: string, content: string) => {
-    setCustomTags(prev => prev.map(t =>
-      t.id === tagId ? { ...t, content } : t
-    ));
-  };
-
-  const handleRemoveCustomTag = (tagId: string) => {
-    setCustomTags(prev => prev.filter(t => t.id !== tagId));
-  };
-
   const handleOpenInClaude = () => {
-    // Encode prompt for URL and open claude.ai
     const encodedPrompt = encodeURIComponent(generatedPrompt);
     window.open(`https://claude.ai/new?q=${encodedPrompt}`, '_blank');
   };
@@ -849,27 +956,49 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
         </div>
       </nav>
 
-      {/* Hero */}
+      {/* Hero - Beginner Friendly Introduction */}
       <section className="relative overflow-hidden border-b border-[var(--border-color)]">
         <div className="absolute inset-0 bg-gradient-to-br from-[#4ECDC4]/10 via-transparent to-[#3EB489]/10" />
         <div className="max-w-7xl mx-auto px-6 py-10 relative">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(78,205,196,0.15)] border border-[rgba(78,205,196,0.3)] text-[#4ECDC4] text-sm font-medium mb-4">
               <span className="text-lg">⚡</span>
-              The Ultimate Claude Code Prompt Builder
+              No Prompt Engineering Experience Needed
             </div>
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--foreground)] mb-4 leading-tight">
-              Build{' '}
+              Tell Claude What You Need,{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4ECDC4] to-[#3EB489]">
-                Perfect Prompts
+                We'll Write the Prompt
               </span>
-              {' '}for Claude Code
             </h1>
 
-            <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-              Upload your codebase, build prompt chains, use community templates, and get AI-powered scoring.
+            <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto mb-6">
+              Just answer a few simple questions about what you want to build.
+              We'll create a detailed, professional prompt that gets you better results.
             </p>
+
+            {/* Experience Level Selector */}
+            <div className="inline-flex items-center gap-2 p-1 rounded-xl bg-[var(--muted)] border border-[var(--border-color)]">
+              <span className="text-sm text-[var(--text-muted)] px-2">I am a:</span>
+              {[
+                { id: 'beginner', label: '🌱 Beginner' },
+                { id: 'intermediate', label: '🌿 Intermediate' },
+                { id: 'advanced', label: '🌳 Advanced' },
+              ].map((level) => (
+                <button
+                  key={level.id}
+                  onClick={() => setExperienceLevel(level.id as any)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                    experienceLevel === level.id
+                      ? 'bg-[#4ECDC4] text-[#0a1929]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
+                  }`}
+                >
+                  {level.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -911,69 +1040,113 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* ================================================================== */}
-        {/* BUILDER TAB */}
+        {/* BUILDER TAB - BEGINNER FRIENDLY */}
         {/* ================================================================== */}
         {activeTab === 'builder' && (
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Left: Builder Form */}
             <div className="space-y-6">
-              {/* Task Type Selection */}
+              {/* Step 1: Task Type Selection */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-2">
                   <h3 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-[#4ECDC4] text-[#0a1929] flex items-center justify-center text-xs font-bold">1</span>
+                    <span className="w-8 h-8 rounded-full bg-[#4ECDC4] text-[#0a1929] flex items-center justify-center text-sm font-bold">1</span>
                     What do you want to do?
                   </h3>
                   <button onClick={handleReset} className="text-sm text-[var(--text-muted)] hover:text-[#4ECDC4]">
-                    Reset All
+                    Start Over
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {showHelp && (
+                  <p className="text-sm text-[var(--text-muted)] mb-4 ml-10">
+                    Pick the option that best describes your goal. Don't worry, you can always change it!
+                  </p>
+                )}
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {CLAUDE_CODE_TASKS.map((task) => (
                     <button
                       key={task.id}
-                      onClick={() => setTaskType(task.id)}
-                      className={`p-3 rounded-xl border-2 text-left transition-all ${
+                      onClick={() => {
+                        setTaskType(task.id);
+                        setTaskDescription(task.defaultDescription);
+                      }}
+                      className={`p-4 rounded-xl border-2 text-left transition-all ${
                         taskType === task.id
                           ? 'border-[#4ECDC4] bg-[rgba(78,205,196,0.1)]'
                           : 'border-[var(--border-color)] hover:border-[#4ECDC4]/50'
                       }`}
                     >
-                      <div className="text-2xl mb-1">{task.icon}</div>
+                      <div className="text-2xl mb-2">{task.icon}</div>
                       <div className="font-medium text-sm text-[var(--foreground)]">{task.label}</div>
+                      <div className="text-xs text-[var(--text-muted)] mt-1">{task.description}</div>
                     </button>
                   ))}
                 </div>
 
+                {/* Task Description */}
                 {taskType && (
-                  <div className="mt-4">
-                    <label className="block text-sm text-[var(--text-secondary)] mb-2">
-                      Describe what you want:
-                    </label>
+                  <div className="mt-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-medium text-[var(--foreground)]">
+                        Describe what you want (be specific!)
+                      </label>
+                      <button
+                        onClick={() => setShowHelp(!showHelp)}
+                        className="text-xs text-[#4ECDC4] hover:underline"
+                      >
+                        {showHelp ? 'Hide Tips' : 'Show Tips'}
+                      </button>
+                    </div>
+
+                    {showHelp && (
+                      <div className="mb-3 p-3 rounded-lg bg-[rgba(78,205,196,0.1)] border border-[rgba(78,205,196,0.2)]">
+                        <p className="text-xs text-[#4ECDC4] mb-2">💡 Good examples:</p>
+                        <ul className="text-xs text-[var(--text-muted)] space-y-1">
+                          {CLAUDE_CODE_TASKS.find(t => t.id === taskType)?.examples.map((ex, i) => (
+                            <li key={i} className="cursor-pointer hover:text-[var(--foreground)]" onClick={() => setTaskDescription(ex)}>
+                              • {ex}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
                     <textarea
                       value={taskDescription}
                       onChange={(e) => setTaskDescription(e.target.value)}
-                      placeholder={CLAUDE_CODE_TASKS.find(t => t.id === taskType)?.examples[0] || 'Describe your task...'}
-                      className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none resize-none"
-                      rows={3}
+                      placeholder="Describe in detail what you want to accomplish..."
+                      className="w-full p-4 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none resize-none"
+                      rows={4}
                     />
+                    <p className="text-xs text-[var(--text-muted)] mt-2">
+                      💡 Tip: The more details you provide, the better the results will be!
+                    </p>
                   </div>
                 )}
               </div>
 
-              {/* Tech Stack */}
+              {/* Step 2: Tech Stack */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
-                <h3 className="font-semibold text-[var(--foreground)] mb-4 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#3EB489] text-[#0a1929] flex items-center justify-center text-xs font-bold">2</span>
-                  Tech Stack
+                <h3 className="font-semibold text-[var(--foreground)] mb-2 flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-full bg-[#3EB489] text-[#0a1929] flex items-center justify-center text-sm font-bold">2</span>
+                  What technologies do you want to use?
                 </h3>
+
+                {showHelp && (
+                  <p className="text-sm text-[var(--text-muted)] mb-4 ml-10">
+                    Select the technologies you want Claude to use. Not sure? Leave blank and Claude will choose for you.
+                  </p>
+                )}
+
                 <div className="flex flex-wrap gap-2">
                   {TECH_STACKS.map((tech) => (
                     <button
                       key={tech.id}
                       onClick={() => toggleTechStack(tech.id)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all ${
+                      title={tech.desc}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-all ${
                         techStack.includes(tech.id)
                           ? 'bg-[#4ECDC4] text-[#0a1929]'
                           : 'bg-[var(--muted)] text-[var(--text-secondary)] hover:bg-[var(--card)]'
@@ -986,104 +1159,93 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
                 </div>
               </div>
 
-              {/* Output Preference */}
+              {/* Step 3: Output Preference */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
-                <h3 className="font-semibold text-[var(--foreground)] mb-4 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#5ED4CB] text-[#0a1929] flex items-center justify-center text-xs font-bold">3</span>
-                  Output Format
+                <h3 className="font-semibold text-[var(--foreground)] mb-2 flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-full bg-[#5ED4CB] text-[#0a1929] flex items-center justify-center text-sm font-bold">3</span>
+                  How should Claude explain the code?
                 </h3>
-                <div className="grid grid-cols-2 gap-2">
+
+                {showHelp && (
+                  <p className="text-sm text-[var(--text-muted)] mb-4 ml-10">
+                    Choose how detailed you want the explanation to be.
+                  </p>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {OUTPUT_PREFS.map((pref) => (
                     <button
                       key={pref.id}
                       onClick={() => setOutputPref(pref.id)}
-                      className={`p-3 rounded-xl border-2 text-left transition-all ${
+                      className={`p-4 rounded-xl border-2 text-left transition-all ${
                         outputPref === pref.id
                           ? 'border-[#4ECDC4] bg-[rgba(78,205,196,0.1)]'
                           : 'border-[var(--border-color)] hover:border-[#4ECDC4]/50'
                       }`}
                     >
                       <div className="font-medium text-sm text-[var(--foreground)]">{pref.label}</div>
-                      <div className="text-xs text-[var(--text-muted)]">{pref.desc}</div>
+                      <div className="text-xs text-[var(--text-muted)] mt-1">{pref.desc}</div>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* XML Tag Builder */}
-              <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-[#F59E0B] text-[#0a1929] flex items-center justify-center text-xs font-bold">4</span>
-                    Custom Sections
+              {/* Step 4: Smart Suggestions */}
+              {taskType && SMART_SUGGESTIONS[taskType] && (
+                <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
+                  <h3 className="font-semibold text-[var(--foreground)] mb-2 flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-full bg-[#F59E0B] text-[#0a1929] flex items-center justify-center text-sm font-bold">4</span>
+                    What else should Claude know?
                   </h3>
-                  <button
-                    onClick={() => setShowTagBuilder(!showTagBuilder)}
-                    className="text-sm text-[#4ECDC4] hover:underline"
-                  >
-                    {showTagBuilder ? 'Hide Tags' : 'Add Tags'}
-                  </button>
-                </div>
 
-                {showTagBuilder && (
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    {XML_TAGS.filter(t => !customTags.find(ct => ct.id === t.id)).map((tag) => (
-                      <button
-                        key={tag.id}
-                        onClick={() => handleAddCustomTag(tag.id)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all bg-[var(--muted)] text-[var(--text-secondary)] hover:bg-[var(--card)]"
-                        style={{ borderLeft: `3px solid ${tag.color}` }}
+                  {showHelp && (
+                    <p className="text-sm text-[var(--text-muted)] mb-4 ml-10">
+                      Toggle on any of these to include them in your prompt. These are best practices for your task.
+                    </p>
+                  )}
+
+                  <div className="space-y-2">
+                    {SMART_SUGGESTIONS[taskType].map((suggestion, i) => (
+                      <label
+                        key={i}
+                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
+                          selectedSuggestions.includes(suggestion)
+                            ? 'bg-[rgba(78,205,196,0.1)] border border-[#4ECDC4]'
+                            : 'bg-[var(--muted)] border border-transparent hover:bg-[var(--card)]'
+                        }`}
                       >
-                        <span>{tag.label}</span>
-                        <span className="text-[var(--text-muted)]">+</span>
-                      </button>
+                        <input
+                          type="checkbox"
+                          checked={selectedSuggestions.includes(suggestion)}
+                          onChange={() => toggleSuggestion(suggestion)}
+                          className="w-4 h-4 rounded text-[#4ECDC4] focus:ring-[#4ECDC4]"
+                        />
+                        <span className={`text-sm ${
+                          selectedSuggestions.includes(suggestion)
+                            ? 'text-[var(--foreground)]'
+                            : 'text-[var(--text-secondary)]'
+                        }`}>
+                          {suggestion}
+                        </span>
+                      </label>
                     ))}
                   </div>
-                )}
+                </div>
+              )}
 
-                {customTags.length > 0 && (
-                  <div className="space-y-3">
-                    {customTags.map((tag) => {
-                      const tagInfo = XML_TAGS.find(t => t.id === tag.id);
-                      return (
-                        <div key={tag.id} className="relative">
-                          <div className="flex items-center justify-between mb-1">
-                            <label className="text-sm font-medium text-[var(--text-secondary)]" style={{ color: tagInfo?.color }}>
-                              &lt;{tag.id}&gt;
-                            </label>
-                            <button
-                              onClick={() => handleRemoveCustomTag(tag.id)}
-                              className="text-xs text-[var(--text-muted)] hover:text-red-500"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                          <textarea
-                            value={tag.content}
-                            onChange={(e) => handleUpdateCustomTag(tag.id, e.target.value)}
-                            placeholder={tagInfo?.desc || `Content for ${tag.id}...`}
-                            className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none resize-none text-sm"
-                            rows={2}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+              {/* Optional: Additional Context */}
+              <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
+                <h3 className="font-semibold text-[var(--foreground)] mb-2 flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-full bg-[#6366F1] text-white flex items-center justify-center text-sm font-bold">5</span>
+                  Any additional details? (Optional)
+                </h3>
 
-                {customTags.length === 0 && !showTagBuilder && (
-                  <p className="text-sm text-[var(--text-muted)]">
-                    Add custom XML sections to structure your prompt
+                {showHelp && (
+                  <p className="text-sm text-[var(--text-muted)] mb-4 ml-10">
+                    Add any extra context about your project or specific requirements.
                   </p>
                 )}
-              </div>
 
-              {/* Project Context */}
-              <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
-                <h3 className="font-semibold text-[var(--foreground)] mb-4 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#6366F1] text-white flex items-center justify-center text-xs font-bold">5</span>
-                  Context & Constraints
-                </h3>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm text-[var(--text-secondary)] mb-2">
@@ -1092,20 +1254,20 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
                     <textarea
                       value={projectContext}
                       onChange={(e) => setProjectContext(e.target.value)}
-                      placeholder="Describe your project, codebase structure, conventions..."
+                      placeholder="Tell Claude about your project, what you've already built, your coding style preferences..."
                       className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none resize-none"
                       rows={2}
                     />
                   </div>
                   <div>
                     <label className="block text-sm text-[var(--text-secondary)] mb-2">
-                      Constraints
+                      Any Restrictions?
                     </label>
                     <input
                       type="text"
                       value={constraints}
                       onChange={(e) => setConstraints(e.target.value)}
-                      placeholder="e.g., No external dependencies, Must use TypeScript..."
+                      placeholder="e.g., No external libraries, Must work offline, Keep it simple..."
                       className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none"
                     />
                   </div>
@@ -1119,11 +1281,10 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
               {promptScore && (
                 <div className="p-4 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-[var(--foreground)]">Prompt Score</h3>
+                    <h3 className="font-semibold text-[var(--foreground)]">Prompt Quality Score</h3>
                     <div className={`text-2xl font-bold ${
                       promptScore.overall >= 80 ? 'text-green-500' :
-                      promptScore.overall >= 60 ? 'text-yellow-500' :
-                      'text-red-500'
+                      promptScore.overall >= 60 ? 'text-yellow-500' : 'text-red-500'
                     }`}>
                       {promptScore.overall}/100
                     </div>
@@ -1133,7 +1294,7 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
                       { label: 'Specific', value: promptScore.specificity },
                       { label: 'Clear', value: promptScore.clarity },
                       { label: 'Complete', value: promptScore.completeness },
-                      { label: 'Structure', value: promptScore.structure },
+                      { label: 'Structured', value: promptScore.structure },
                     ].map((item) => (
                       <div key={item.label} className="text-center">
                         <div className="text-xs text-[var(--text-muted)]">{item.label}</div>
@@ -1141,8 +1302,7 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
                           <div
                             className={`h-full rounded-full ${
                               item.value >= 70 ? 'bg-green-500' :
-                              item.value >= 40 ? 'bg-yellow-500' :
-                              'bg-red-500'
+                              item.value >= 40 ? 'bg-yellow-500' : 'bg-red-500'
                             }`}
                             style={{ width: `${item.value}%` }}
                           />
@@ -1151,10 +1311,11 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
                     ))}
                   </div>
                   {promptScore.suggestions.length > 0 && (
-                    <div className="space-y-1">
+                    <div className="space-y-1 pt-2 border-t border-[var(--border-color)]">
+                      <p className="text-xs font-medium text-[var(--text-secondary)]">💡 Tips to improve:</p>
                       {promptScore.suggestions.map((suggestion, i) => (
                         <div key={i} className="flex items-start gap-2 text-xs text-[var(--text-muted)]">
-                          <span className="text-yellow-500">💡</span>
+                          <span>•</span>
                           {suggestion}
                         </div>
                       ))}
@@ -1165,11 +1326,22 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
 
               {/* Preview Header */}
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-[var(--foreground)]">Generated Prompt</h2>
+                <h2 className="text-xl font-bold text-[var(--foreground)]">Your Prompt</h2>
                 <span className="text-xs text-[var(--text-muted)] px-2 py-1 rounded-lg bg-[var(--muted)]">
                   {generatedPrompt.length} chars · ~{Math.ceil(generatedPrompt.length / 4)} tokens
                 </span>
               </div>
+
+              {/* What is a prompt - for beginners */}
+              {showHelp && !generatedPrompt && (
+                <div className="p-4 rounded-xl bg-gradient-to-br from-[#4ECDC4]/10 to-[#3EB489]/10 border border-[#4ECDC4]/30">
+                  <h4 className="font-medium text-[var(--foreground)] mb-2">🤔 What's a prompt?</h4>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    A prompt is the instructions you give to Claude. The better your prompt,
+                    the better Claude understands what you want. We're building one for you!
+                  </p>
+                </div>
+              )}
 
               {/* Preview Content */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)] max-h-[500px] overflow-auto">
@@ -1180,8 +1352,11 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
                 ) : (
                   <div className="flex flex-col items-center justify-center h-48 text-center">
                     <div className="text-4xl mb-4">⚡</div>
-                    <p className="text-[var(--text-muted)]">
-                      Select a task type and describe what you want
+                    <p className="text-[var(--foreground)] font-medium mb-2">
+                      Select a task to get started
+                    </p>
+                    <p className="text-sm text-[var(--text-muted)]">
+                      Your professional prompt will appear here as you fill in the form
                     </p>
                   </div>
                 )}
@@ -1203,7 +1378,7 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
                       ) : (
                         <>
                           <Icons.copy className="w-5 h-5" />
-                          Copy
+                          Copy Prompt
                         </>
                       )}
                     </button>
@@ -1221,7 +1396,7 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
                       type="text"
                       value={promptName}
                       onChange={(e) => setPromptName(e.target.value)}
-                      placeholder="Name this prompt..."
+                      placeholder="Name this prompt to save it..."
                       className="flex-1 px-3 py-2 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none text-sm"
                     />
                     <button
@@ -1245,9 +1420,9 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-[var(--foreground)]">Code Files & Context</h2>
+                <h2 className="text-2xl font-bold text-[var(--foreground)]">Add Your Code Files</h2>
                 <p className="text-[var(--text-secondary)]">
-                  Upload your codebase files to include them in your prompt
+                  {showHelp ? 'Paste code files here so Claude understands your project better' : 'Upload codebase context'}
                 </p>
               </div>
               <button
@@ -1259,16 +1434,30 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
               </button>
             </div>
 
+            {showHelp && (
+              <div className="p-4 rounded-xl bg-gradient-to-br from-[#4ECDC4]/10 to-[#3EB489]/10 border border-[#4ECDC4]/30">
+                <h4 className="font-medium text-[var(--foreground)] mb-2">💡 When should I add code files?</h4>
+                <ul className="text-sm text-[var(--text-secondary)] space-y-1">
+                  <li>• <strong>Adding a feature</strong>: Add the files you want to modify</li>
+                  <li>• <strong>Fixing a bug</strong>: Add the files where the bug occurs</li>
+                  <li>• <strong>Explaining code</strong>: Add the code you want explained</li>
+                </ul>
+              </div>
+            )}
+
             <div className="grid lg:grid-cols-2 gap-6">
               {/* Package.json */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
-                <h3 className="font-semibold text-[var(--foreground)] mb-4 flex items-center gap-2">
+                <h3 className="font-semibold text-[var(--foreground)] mb-2 flex items-center gap-2">
                   📦 package.json
                 </h3>
+                <p className="text-sm text-[var(--text-muted)] mb-4">
+                  Paste your package.json so Claude knows your dependencies
+                </p>
                 <textarea
                   value={packageJson}
                   onChange={(e) => setPackageJson(e.target.value)}
-                  placeholder='Paste your package.json here to include project dependencies...'
+                  placeholder='Paste your package.json contents here...'
                   className="w-full p-3 rounded-xl bg-[var(--muted)] border border-[var(--border-color)] text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-[#4ECDC4] focus:outline-none resize-none font-mono text-sm"
                   rows={8}
                 />
@@ -1276,9 +1465,12 @@ ${outputPref === 'code-only' ? 'Provide only the code with minimal comments. Foc
 
               {/* File Tree */}
               <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
-                <h3 className="font-semibold text-[var(--foreground)] mb-4 flex items-center gap-2">
-                  🌳 File Structure
+                <h3 className="font-semibold text-[var(--foreground)] mb-2 flex items-center gap-2">
+                  🌳 Project Structure
                 </h3>
+                <p className="text-sm text-[var(--text-muted)] mb-4">
+                  Paste your folder structure so Claude understands your project layout
+                </p>
                 <textarea
                   value={fileTree}
                   onChange={(e) => setFileTree(e.target.value)}
@@ -1304,14 +1496,15 @@ src/
               {codeFiles.length === 0 ? (
                 <div className="p-8 rounded-2xl border-2 border-dashed border-[var(--border-color)] text-center">
                   <div className="text-4xl mb-4">📄</div>
+                  <p className="text-[var(--foreground)] font-medium mb-2">No code files added yet</p>
                   <p className="text-[var(--text-muted)] mb-4">
-                    No files added yet. Add files to include them in your prompt context.
+                    Add files to give Claude context about your existing code
                   </p>
                   <button
                     onClick={handleAddCodeFile}
                     className="px-4 py-2 rounded-xl bg-[var(--muted)] text-[var(--text-secondary)] hover:text-[#4ECDC4] transition-colors"
                   >
-                    Add First File
+                    Add Your First File
                   </button>
                 </div>
               ) : (
@@ -1360,7 +1553,7 @@ src/
               <div>
                 <h2 className="text-2xl font-bold text-[var(--foreground)]">Prompt Chain</h2>
                 <p className="text-[var(--text-secondary)]">
-                  Build multi-step workflows for complex tasks
+                  {showHelp ? 'Break big tasks into smaller steps for better results' : 'Build multi-step workflows'}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -1370,7 +1563,7 @@ src/
                     className="px-4 py-2 rounded-xl border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[#4ECDC4] hover:border-[#4ECDC4] transition-colors flex items-center gap-2"
                   >
                     <Icons.copy className="w-4 h-4" />
-                    Copy Chain
+                    Copy All
                   </button>
                 )}
                 <button
@@ -1383,11 +1576,27 @@ src/
               </div>
             </div>
 
+            {showHelp && (
+              <div className="p-4 rounded-xl bg-gradient-to-br from-[#4ECDC4]/10 to-[#3EB489]/10 border border-[#4ECDC4]/30">
+                <h4 className="font-medium text-[var(--foreground)] mb-2">💡 What's a prompt chain?</h4>
+                <p className="text-sm text-[var(--text-secondary)] mb-2">
+                  Instead of asking Claude to do everything at once, break it into steps:
+                </p>
+                <ol className="text-sm text-[var(--text-secondary)] space-y-1 list-decimal list-inside">
+                  <li>Step 1: "Design the database schema"</li>
+                  <li>Step 2: "Create the API endpoints"</li>
+                  <li>Step 3: "Build the frontend"</li>
+                  <li>Step 4: "Add tests"</li>
+                </ol>
+              </div>
+            )}
+
             {promptChain.length === 0 ? (
               <div className="p-8 rounded-2xl border-2 border-dashed border-[var(--border-color)] text-center">
                 <div className="text-4xl mb-4">🔗</div>
+                <p className="text-[var(--foreground)] font-medium mb-2">No steps yet</p>
                 <p className="text-[var(--text-muted)] mb-4">
-                  Create a prompt chain for multi-step workflows like: Design → Build → Test → Deploy
+                  Create a chain of prompts for complex, multi-step tasks
                 </p>
                 <button
                   onClick={handleAddChainStep}
@@ -1481,9 +1690,21 @@ src/
             <div>
               <h2 className="text-2xl font-bold text-[var(--foreground)]">Community Templates</h2>
               <p className="text-[var(--text-secondary)]">
-                Battle-tested prompts from the community
+                {showHelp ? 'Pre-made prompts that work great - just fill in the blanks!' : 'Battle-tested prompts from the community'}
               </p>
             </div>
+
+            {showHelp && (
+              <div className="p-4 rounded-xl bg-gradient-to-br from-[#4ECDC4]/10 to-[#3EB489]/10 border border-[#4ECDC4]/30">
+                <h4 className="font-medium text-[var(--foreground)] mb-2">💡 How to use templates</h4>
+                <ol className="text-sm text-[var(--text-secondary)] space-y-1 list-decimal list-inside">
+                  <li>Pick a template that matches what you want to build</li>
+                  <li>Click "Use Template" to load it</li>
+                  <li>Replace the {'{{PLACEHOLDERS}}'} with your specific details</li>
+                  <li>Copy and paste into Claude!</li>
+                </ol>
+              </div>
+            )}
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {COMMUNITY_TEMPLATES.map((template) => (
@@ -1492,7 +1713,16 @@ src/
                   className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)] hover:border-[#4ECDC4]/50 transition-all"
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold text-[var(--foreground)]">{template.name}</h3>
+                    <div>
+                      <h3 className="font-semibold text-[var(--foreground)]">{template.name}</h3>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        template.difficulty === 'Beginner' ? 'bg-green-500/20 text-green-500' :
+                        template.difficulty === 'Intermediate' ? 'bg-yellow-500/20 text-yellow-500' :
+                        'bg-red-500/20 text-red-500'
+                      }`}>
+                        {template.difficulty}
+                      </span>
+                    </div>
                     <div className="flex items-center gap-1 text-yellow-500 text-sm">
                       ⭐ {template.rating}
                     </div>
@@ -1535,22 +1765,23 @@ src/
         {activeTab === 'history' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-[var(--foreground)]">Saved Prompts</h2>
+              <h2 className="text-2xl font-bold text-[var(--foreground)]">Your Saved Prompts</h2>
               <p className="text-[var(--text-secondary)]">
-                Your saved and favorite prompts
+                {showHelp ? 'Prompts you\'ve saved for later use' : 'Your prompt library'}
               </p>
             </div>
 
             {savedPrompts.length === 0 ? (
               <div className="p-8 rounded-2xl border-2 border-dashed border-[var(--border-color)] text-center">
                 <div className="text-4xl mb-4">📚</div>
+                <p className="text-[var(--foreground)] font-medium mb-2">No saved prompts yet</p>
                 <p className="text-[var(--text-muted)]">
-                  No saved prompts yet. Build a prompt and save it to see it here.
+                  Build a prompt and click "Save" to add it here
                 </p>
               </div>
             ) : (
               <div className="space-y-4">
-                {/* Favorites Section */}
+                {/* Favorites */}
                 {savedPrompts.filter(p => p.isFavorite).length > 0 && (
                   <div>
                     <h3 className="font-semibold text-[var(--foreground)] mb-3 flex items-center gap-2">
@@ -1558,39 +1789,19 @@ src/
                     </h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       {savedPrompts.filter(p => p.isFavorite).map((prompt) => (
-                        <div
-                          key={prompt.id}
-                          className="p-4 rounded-xl bg-[var(--card)] border border-[#4ECDC4]/30"
-                        >
+                        <div key={prompt.id} className="p-4 rounded-xl bg-[var(--card)] border border-[#4ECDC4]/30">
                           <div className="flex items-start justify-between mb-2">
                             <h4 className="font-medium text-[var(--foreground)]">{prompt.name}</h4>
                             <div className="flex items-center gap-1">
-                              <button
-                                onClick={() => handleToggleFavorite(prompt.id)}
-                                className="p-1 text-yellow-500"
-                              >
-                                ⭐
-                              </button>
-                              <button
-                                onClick={() => handleDeletePrompt(prompt.id)}
-                                className="p-1 text-[var(--text-muted)] hover:text-red-500"
-                              >
+                              <button onClick={() => handleToggleFavorite(prompt.id)} className="p-1 text-yellow-500">⭐</button>
+                              <button onClick={() => handleDeletePrompt(prompt.id)} className="p-1 text-[var(--text-muted)] hover:text-red-500">
                                 <Icons.x className="w-4 h-4" />
                               </button>
                             </div>
                           </div>
-                          <p className="text-xs text-[var(--text-muted)] mb-2">
-                            {new Date(prompt.createdAt).toLocaleDateString()}
-                          </p>
-                          <p className="text-sm text-[var(--text-secondary)] line-clamp-2 mb-3">
-                            {prompt.prompt.substring(0, 150)}...
-                          </p>
-                          <button
-                            onClick={() => handleLoadPrompt(prompt)}
-                            className="text-sm text-[#4ECDC4] hover:underline"
-                          >
-                            Load Prompt →
-                          </button>
+                          <p className="text-xs text-[var(--text-muted)] mb-2">{new Date(prompt.createdAt).toLocaleDateString()}</p>
+                          <p className="text-sm text-[var(--text-secondary)] line-clamp-2 mb-3">{prompt.prompt.substring(0, 150)}...</p>
+                          <button onClick={() => handleLoadPrompt(prompt)} className="text-sm text-[#4ECDC4] hover:underline">Load Prompt →</button>
                         </div>
                       ))}
                     </div>
@@ -1599,45 +1810,26 @@ src/
 
                 {/* All Prompts */}
                 <div>
-                  <h3 className="font-semibold text-[var(--foreground)] mb-3">
-                    All Saved ({savedPrompts.length})
-                  </h3>
+                  <h3 className="font-semibold text-[var(--foreground)] mb-3">All Saved ({savedPrompts.length})</h3>
                   <div className="space-y-2">
                     {savedPrompts.map((prompt) => (
-                      <div
-                        key={prompt.id}
-                        className="p-4 rounded-xl bg-[var(--card)] border border-[var(--border-color)] flex items-center justify-between"
-                      >
+                      <div key={prompt.id} className="p-4 rounded-xl bg-[var(--card)] border border-[var(--border-color)] flex items-center justify-between">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <h4 className="font-medium text-[var(--foreground)]">{prompt.name}</h4>
                             {prompt.isFavorite && <span className="text-yellow-500">⭐</span>}
                           </div>
-                          <p className="text-xs text-[var(--text-muted)]">
-                            {new Date(prompt.createdAt).toLocaleDateString()} · {prompt.taskType}
-                          </p>
+                          <p className="text-xs text-[var(--text-muted)]">{new Date(prompt.createdAt).toLocaleDateString()} · {prompt.taskType}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleToggleFavorite(prompt.id)}
-                            className={`p-2 rounded-lg transition-colors ${
-                              prompt.isFavorite
-                                ? 'text-yellow-500'
-                                : 'text-[var(--text-muted)] hover:text-yellow-500'
-                            }`}
+                            className={`p-2 rounded-lg transition-colors ${prompt.isFavorite ? 'text-yellow-500' : 'text-[var(--text-muted)] hover:text-yellow-500'}`}
                           >
                             {prompt.isFavorite ? '⭐' : '☆'}
                           </button>
-                          <button
-                            onClick={() => handleLoadPrompt(prompt)}
-                            className="px-3 py-1 rounded-lg bg-[var(--muted)] text-[var(--text-secondary)] hover:text-[#4ECDC4] text-sm"
-                          >
-                            Load
-                          </button>
-                          <button
-                            onClick={() => handleDeletePrompt(prompt.id)}
-                            className="p-2 rounded-lg text-[var(--text-muted)] hover:text-red-500 hover:bg-[var(--muted)]"
-                          >
+                          <button onClick={() => handleLoadPrompt(prompt)} className="px-3 py-1 rounded-lg bg-[var(--muted)] text-[var(--text-secondary)] hover:text-[#4ECDC4] text-sm">Load</button>
+                          <button onClick={() => handleDeletePrompt(prompt.id)} className="p-2 rounded-lg text-[var(--text-muted)] hover:text-red-500 hover:bg-[var(--muted)]">
                             <Icons.x className="w-4 h-4" />
                           </button>
                         </div>
@@ -1656,24 +1848,17 @@ src/
         {activeTab === 'tips' && (
           <div className="space-y-8">
             <div className="max-w-3xl">
-              <h2 className="text-2xl font-bold text-[var(--foreground)] mb-4">
-                Pro Tips for Claude Code
-              </h2>
+              <h2 className="text-2xl font-bold text-[var(--foreground)] mb-4">Pro Tips for Better Prompts</h2>
               <p className="text-[var(--text-secondary)]">
-                Master these techniques to get better results every time.
+                {showHelp ? 'Learn these tips to get amazing results from Claude every time!' : 'Master these techniques for better results.'}
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {BEST_PRACTICES.map((practice, i) => (
-                <div
-                  key={i}
-                  className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)] hover:border-[#4ECDC4]/50 transition-colors"
-                >
+                <div key={i} className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)] hover:border-[#4ECDC4]/50 transition-colors">
                   <div className="text-3xl mb-3">{practice.icon}</div>
-                  <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
-                    {practice.title}
-                  </h3>
+                  <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">{practice.title}</h3>
                   <p className="text-sm text-[var(--text-secondary)]">{practice.tip}</p>
                 </div>
               ))}
@@ -1681,29 +1866,49 @@ src/
 
             {/* XML Tags Reference */}
             <div className="p-6 rounded-2xl bg-gradient-to-br from-[#4ECDC4]/10 to-[#3EB489]/10 border border-[#4ECDC4]/30">
-              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4 flex items-center gap-2">
-                🏷️ XML Tags Reference
-              </h3>
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">🏷️ XML Tags Cheat Sheet</h3>
               <p className="text-sm text-[var(--text-secondary)] mb-4">
-                Claude Code responds particularly well to these XML-style tags:
+                Claude works best when you organize your prompts with these tags:
               </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
                 {XML_TAGS.map((tag) => (
-                  <div
-                    key={tag.id}
-                    className="flex items-center gap-3 p-3 rounded-lg bg-[var(--background)]"
-                    style={{ borderLeft: `3px solid ${tag.color}` }}
-                  >
+                  <div key={tag.id} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--background)]" style={{ borderLeft: `3px solid ${tag.color}` }}>
                     <div>
-                      <code className="text-sm font-mono" style={{ color: tag.color }}>
-                        &lt;{tag.id}&gt;
-                      </code>
+                      <code className="text-sm font-mono" style={{ color: tag.color }}>&lt;{tag.id}&gt;</code>
                       <p className="text-xs text-[var(--text-muted)]">{tag.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Common Mistakes for Beginners */}
+            {showHelp && (
+              <div className="p-6 rounded-2xl bg-[var(--card)] border border-[var(--border-color)]">
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">❌ Common Mistakes to Avoid</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {[
+                    { bad: '"Make me a website"', good: '"Create a React landing page with a hero section, features grid, and contact form using Tailwind CSS"', reason: 'Too vague' },
+                    { bad: '"Fix my code"', good: '"Fix this function - it should return the sum but returns undefined. Here\'s the code: [code]"', reason: 'No context' },
+                    { bad: '"Make it better"', good: '"Refactor this function to use async/await instead of callbacks, and add error handling"', reason: 'Not specific' },
+                    { bad: '"Help"', good: '"I\'m getting a TypeError when calling this function. Here\'s the error and my code: [details]"', reason: 'Need details' },
+                  ].map((example, i) => (
+                    <div key={i} className="p-4 rounded-xl bg-[var(--muted)]">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-red-500">❌</span>
+                        <span className="text-sm text-[var(--text-muted)]">{example.reason}</span>
+                      </div>
+                      <p className="text-sm text-red-400 font-mono mb-2">{example.bad}</p>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-green-500">✓</span>
+                        <span className="text-sm text-[var(--text-muted)]">Better</span>
+                      </div>
+                      <p className="text-sm text-green-400 font-mono">{example.good}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -1714,7 +1919,7 @@ src/
           <div className="flex items-center gap-2 text-[var(--text-muted)]">
             <span className="text-[#4ECDC4] font-semibold">PromptForge</span>
             <span>•</span>
-            <span>Claude Code Prompt Builder</span>
+            <span>Making prompt engineering easy for everyone</span>
           </div>
           <div className="flex items-center gap-4 text-sm text-[var(--text-muted)]">
             <Link href="/" className="hover:text-[var(--foreground)] transition-colors">Home</Link>
